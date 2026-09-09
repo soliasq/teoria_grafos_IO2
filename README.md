@@ -10,11 +10,6 @@ Asignatura: Investigación Operativa II / Estructuras Discretas<br>
 Docente: M.Sc. Ing. Juan Carlos Catunta Choquecalle<br>
 Gestión 202</p>
 
-<p align="center">
-  <img align="center" width="auto" src="https://github.com/soliasq/soliasq/assets/5314272/9f87757f-836e-4b79-bfa5-b12b3d1fb72c"/>
-  <!--![me](https://github.com/soliasq/soliasq/assets/5314272/9f87757f-836e-4b79-bfa5-b12b3d1fb72c)-->
-  <h3 align="center">📘 Práctica Integradora · Teoría de Grafos</h3>
-  
 ```js
 const proyecto = {
   título: "Diseño e implementación de un sistema funcional para resolver una problemática real mediante teoría de grafos",
@@ -26,7 +21,7 @@ const proyecto = {
   herramientas: ["NetworkX", "Graphviz", "Cytoscape.js", "vis.js", "D3.js"]
 }    
 <p align="center"> <strong> Accede al índice completo :</strong> 👇!</p><p align="center"> <a href="#estructura-del-proyecto" alt="Índice" target="_blank"> <img align="center" src="https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/googledocs.svg" alt="Índice" height="28px" width="28px"/> </a>&nbsp;&nbsp;&nbsp; <a href="#parte-i-investigación" target="_blank" style="margin-right:4px"> <img align="center" src="https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/googlesearchconsole.svg" alt="Investigación" height="28px" width="28px" /> </a>&nbsp;&nbsp;&nbsp; <a href="#parte-iii-algoritmos" target="_blank"> <img align="center" src="https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/algorithm.svg" alt="Algoritmos" height="28px" width="28px" /> </a>&nbsp;&nbsp;&nbsp; <a href="#parte-iv-sistema-funcional" target="_blank"> <img align="center" src="https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/codefactor.svg" alt="Sistema" height="28px" width="28px" /> </a>&nbsp;&nbsp;&nbsp; <a href="#casos-de-prueba" target="blank"> <img align="center" src="https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/testinglibrary.svg" alt="Pruebas" height="28px" width="28px" /> </a> </p> <hr>
-📋 Índice de la práctica
+<h1 align="center">📋 Índice de la práctica</h1>
 Título de la práctica – Diseño e implementación de un sistema funcional para resolver una problemática real mediante teoría de grafos.
 
 Modalidad de trabajo – Individual o equipos de hasta 10 estudiantes.
@@ -41,19 +36,19 @@ Objetivos específicos – 9 puntos clave (identificar, construir, implementar, 
 
 Conocimientos que se deben integrar – 11 temas (conceptos fundamentales, grafos dirigidos/no dirigidos, ponderados/no ponderados, listas/matrices de adyacencia, grado, caminos, ciclos, conectividad, DFS, BFS, Dijkstra, Kruskal, Prim).
 
-🔍 Parte I: Investigación de la problemática
+<h1 align="center">🔍 Parte I: Investigación de la problemática</h1>
 8.1. Actividades (7 pasos)
 
 8.2. Evidencias obligatorias (entrevista, fotografías, tabla de datos, fecha, lugar, responsable)
 
-🧩 Parte II: Construcción del grafo
+<h1 align="center">🧩 Parte II: Construcción del grafo</h1>
 9.1. Definición formal – G=(V,E), w(e) ≥ 0
 
 9.2. Requerimientos del modelo – |V| ≥ 10, |E| ≥ 15
 
 9.3. Representación obligatoria – gráfica, listas de vértices/aristas, matriz de adyacencia o pesos
 
-⚙️ Parte III: Aplicación de algoritmos
+<h1 align="center">⚙️ Parte III: Aplicación de algoritmos</h1>
 10.1. Búsqueda en profundidad (DFS) – orden, aristas, componentes, ciclos
 
 10.2. Búsqueda en amplitud (BFS) – niveles, camino mínimo, cola
@@ -66,14 +61,14 @@ Conocimientos que se deben integrar – 11 temas (conceptos fundamentales, grafo
 
 10.6. Comparación Kruskal vs Prim – tabla, costos iguales (si ambas soluciones son óptimas)
 
-🖥️ Parte IV: Desarrollo del sistema funcional
+<h1 align="center">🖥️ Parte IV: Desarrollo del sistema funcional</h1>
 11.1. Nombre sugerido – Sistema Inteligente de Análisis y Optimización de Redes
 
 11.2. Tipo de aplicación – web, escritorio, móvil o multiplataforma
 
 11.3. Tecnologías sugeridas – Python (Streamlit, Flask, Django, Tkinter), Java (JavaFX, Swing, Spring Boot), JavaScript/TypeScript (React, Vue, Angular, Node.js), C# (.NET), PHP (Laravel), Kotlin/Flutter (móvil). Librerías: NetworkX, Graphviz, Cytoscape.js, vis.js, D3.js
 
-📋 Funcionalidades mínimas (17 ítems)
+<h1 align="center">📋 Funcionalidades mínimas (17 ítems)</h1>
 Registrar, modificar y eliminar vértices y aristas.
 
 Asignar pesos.
@@ -98,51 +93,64 @@ Generar reporte con resultados y recomendaciones.
 
 Reiniciar análisis o cargar nuevo grafo.
 
-📥 Entradas y salidas del sistema
+<h1 align="center">📥 Entradas y salidas del sistema</h1>
 13.1. Entradas mínimas: nombre/código de vértices, descripción, origen, destino, aristas, pesos, tipo de grafo, algoritmo.
 
 13.2. Salidas mínimas: grafo completo, matriz/lista de adyacencia, DFS, BFS, Dijkstra (camino y costo), MST (Kruskal y Prim), costo total, comparación, recomendaciones.
 
-🧪 Casos de prueba obligatorios (10 casos)
+<h1 align="center">🧪 Casos de prueba obligatorios (10 casos)</h1>
 Grafo real investigado, grafo conexo con diferentes pesos, nodo aislado, grafo no conexo, múltiples caminos, pesos repetidos, arista duplicada, peso negativo en Dijkstra, comparación Kruskal/Prim, modificación de arista.
 
-✅ Validación manual
+<h1 align="center">✅ Validación manual</h1>
 Resolver manualmente con un grafo de 5–7 nodos: DFS, BFS, Dijkstra, Kruskal y Prim. Comparar con los resultados del sistema.
 
-📸 Evidencias del proceso de desarrollo (11 ítems)
+<h1 align="center">📸 Evidencias del proceso de desarrollo (11 ítems)</h1>
 Planteamiento inicial, recopilación de datos, boceto del grafo, prototipo de interfaz, historial de código, repositorio Git, registro de errores, casos de prueba, capturas, video de demostración, declaración de herramientas.
 
-🤖 Uso responsable de inteligencia artificial
-Declaración de herramientas utilizadas.
+<h1 align="center">🤖 Uso responsable de inteligencia artificial
+Declaración de herramientas utilizadas.</h1>
 
-📁 Estructura sugerida del proyecto
-Organización de carpetas y archivos.
+<h1 align="center">📁 Estructura sugerida del proyecto
+Organización de carpetas y archivos.</h1>
 
-📄 Formato sugerido de los datos
-19.1. Archivo de vértices (CSV/JSON)
+<h1 align="center">📄 Formato sugerido de los datos
+19.1. Archivo de vértices (CSV/JSON)</h1>
 
 19.2. Archivo de aristas (CSV/JSON)
 
-🏁 Producto final esperado
-Sistema funcional + informe completo.
+<h1 align="center">🏁 Producto final esperado
+Sistema funcional + informe completo.</h1>
 
-📝 Estructura del informe
-Guía para la documentación.
+<h1 align="center">📝 Estructura del informe
+Guía para la documentación.</h1>
 
-🎤 Defensa y demostración
-Presentación del proyecto.
+<h1 align="center">🎤 Defensa y demostración
+Presentación del proyecto.</h1>
 
-❓ Preguntas orientadoras para el análisis
-Reflexión sobre el problema y la solución.
+<h1 align="center">❓ Preguntas orientadoras para el análisis
+Reflexión sobre el problema y la solución.</h1>
 
-🎯 Conclusión esperada
-Cierre del proyecto.
+<h1 align="center">🎯 Conclusión esperada
+Cierre del proyecto.</h1>
 
-✅ Criterios de aprobación
-Evaluación del trabajo.
+<h1 align="center">✅ Criterios de aprobación
+Evaluación del trabajo.</h1>
 
-📚 Referencias bibliográficas sugeridas
-Bibliografía recomendada.
+<h1 align="center">📚 Referencias bibliográficas sugeridas
+Bibliografía recomendada.</h1>
+
+
+
+
+
+
+
+<p align="center">
+  <img align="center" width="auto" src="https://github.com/soliasq/soliasq/assets/5314272/9f87757f-836e-4b79-bfa5-b12b3d1fb72c"/>
+  <!--![me](https://github.com/soliasq/soliasq/assets/5314272/9f87757f-836e-4b79-bfa5-b12b3d1fb72c)-->
+  <h3 align="center">📘 Práctica Integradora · Teoría de Grafos</h3>
+  
+
 
 
 <p align="center">
