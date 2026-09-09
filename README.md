@@ -1,7 +1,7 @@
-# teoria_grafos_IO2
+<div align="center">  # teoria_grafos_IO2
 <h1 align="center">Práctica Integradora</h1>
-<strong align="center">Sistema de Solución de Problemas Reales<br>
-mediante Teoría de Grafos</strong>
+<strong Sistema de Solución de Problemas Reales<br>
+mediante Teoría de Grafos</strong></div>
 <p align="center">Aplicación de:
 Construcción de grafos, búsqueda en profundidad,<br>
 búsqueda en amplitud, algoritmo de Dijkstra,<br>
