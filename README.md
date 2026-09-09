@@ -1,14 +1,14 @@
 # teoria_grafos_IO2
-Práctica Integradora
-Sistema de Solución de Problemas Reales
-mediante Teoría de Grafos
-Aplicación de:
-Construcción de grafos, búsqueda en profundidad,
-búsqueda en amplitud, algoritmo de Dijkstra,
-algoritmo de Kruskal y algoritmo de Prim
-Asignatura: Investigación Operativa II / Estructuras Discretas
-Docente: M.Sc. Ing. Juan Carlos Catunta Choquecalle
-Gestión 202
+<h1>Práctica Integradora</h1>
+<strong>Sistema de Solución de Problemas Reales<br>
+mediante Teoría de Grafos</strong>
+<p align="center">Aplicación de:
+Construcción de grafos, búsqueda en profundidad,<br>
+búsqueda en amplitud, algoritmo de Dijkstra,<br>
+algoritmo de Kruskal y algoritmo de Prim<br>
+Asignatura: Investigación Operativa II / Estructuras Discretas<br>
+Docente: M.Sc. Ing. Juan Carlos Catunta Choquecalle<br>
+Gestión 202</p>
 <p align="center">
   <img align="center" width="auto" src="https://github.com/soliasq/soliasq/assets/5314272/9f87757f-836e-4b79-bfa5-b12b3d1fb72c"/>
   <!--![me](https://github.com/soliasq/soliasq/assets/5314272/9f87757f-836e-4b79-bfa5-b12b3d1fb72c)-->
