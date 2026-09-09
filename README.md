@@ -1,6 +1,6 @@
 # teoria_grafos_IO2
-<h1>Práctica Integradora</h1>
-<strong>Sistema de Solución de Problemas Reales<br>
+<h1 align="center">Práctica Integradora</h1>
+<strong align="center">Sistema de Solución de Problemas Reales<br>
 mediante Teoría de Grafos</strong>
 <p align="center">Aplicación de:
 Construcción de grafos, búsqueda en profundidad,<br>
