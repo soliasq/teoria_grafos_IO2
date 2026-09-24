@@ -302,6 +302,27 @@ body.modo-agregar-nodo #map::before{content:'';position:absolute;top:0;left:0;wi
 
 <div class="toast-container" id="toastContainer"></div>
 
+<div class="modal-overlay" id="modalComparacion">
+    <div class="modal-content" style="max-width:1000px;padding:0;overflow:hidden;">
+        <div style="padding:22px 30px 14px 30px;border-bottom:3px solid #d69e2e;">
+            <h2 style="margin:0;border:none;padding:0;color:#1a365d;font-size:20px;display:flex;align-items:center;gap:12px;">
+                <i class="fas fa-balance-scale" style="color:#d69e2e;"></i> Comparación de Algoritmos
+            </h2>
+        </div>
+        <div id="comparacion-body" style="padding:20px 30px 28px 30px;max-height:75vh;overflow-y:auto;">
+            <div style="text-align:center;padding:40px;color:#8899aa;">
+                <i class="fas fa-spinner fa-spin" style="font-size:40px;color:#d69e2e;"></i>
+                <p style="margin-top:12px;">Ejecutando algoritmos...</p>
+            </div>
+        </div>
+        <div style="padding:16px 30px;border-top:1px solid #e2e8f0;text-align:right;background:#f7fafc;">
+            <button class="close-btn" onclick="cerrarModal('modalComparacion')">
+                <i class="fas fa-times"></i> Cerrar
+            </button>
+        </div>
+    </div>
+</div>
+
 <div class="modal-overlay" id="modalAcercaDe">
     <div class="modal-content" style="max-width:950px;padding:0;overflow:hidden;">
 
@@ -1762,11 +1783,152 @@ function mostrarAnalisis(tipo, event) {
 
 function abrirComparacion() {
     if (!datosCargados) { mostrarToast('Cargue datos primero', 'warning'); return; }
-    mostrarToast('Ejecutando Kruskal y Prim...', 'info');
+    document.getElementById('modalComparacion').classList.add('active');
+    var body = document.getElementById('comparacion-body');
+    body.innerHTML = '<div style="text-align:center;padding:40px;color:#8899aa;"><i class="fas fa-spinner fa-spin" style="font-size:40px;color:#d69e2e;"></i><p style="margin-top:12px;">Ejecutando algoritmos...</p></div>';
+
     setTimeout(function() {
-        runKruskal();
-        setTimeout(function() { runPrim(Object.keys(redSalud)[0]); }, 1500);
-    }, 500);
+        var src = document.getElementById('origen').value || Object.keys(redSalud)[0];
+        var dst = document.getElementById('destino').value || Object.keys(redSalud)[Object.keys(redSalud).length - 1];
+
+        // BFS
+        var bfsNiveles = {}, bfsVisited = new Set([src]), bfsQueue = [src], bfsCount = 0;
+        bfsNiveles[src] = 0;
+        while (bfsQueue.length > 0) {
+            var u = bfsQueue.shift(); bfsCount++;
+            Object.keys(adyacencia[u] || {}).forEach(function(v) {
+                if (!bfsVisited.has(v)) { bfsVisited.add(v); bfsNiveles[v] = bfsNiveles[u] + 1; bfsQueue.push(v); }
+            });
+        }
+
+        // DFS
+        var dfsCount = 0, dfsVisited = new Set();
+        function dfsRec(n) {
+            dfsVisited.add(n); dfsCount++;
+            Object.keys(adyacencia[n] || {}).forEach(function(v) { if (!dfsVisited.has(v)) dfsRec(v); });
+        }
+        dfsRec(src);
+
+        // Dijkstra
+        var dist = {}, prev = {}, unvisited = new Set();
+        Object.keys(redSalud).forEach(function(n) { dist[n] = Infinity; prev[n] = null; unvisited.add(n); });
+        dist[src] = 0;
+        while (unvisited.size > 0) {
+            var u2 = null, minD = Infinity;
+            unvisited.forEach(function(n) { if (dist[n] < minD) { minD = dist[n]; u2 = n; } });
+            if (u2 === null || dist[u2] === Infinity) break;
+            unvisited.delete(u2);
+            for (var v2 in adyacencia[u2]) {
+                if (unvisited.has(v2)) {
+                    var alt = dist[u2] + getPeso(u2, v2);
+                    if (alt < dist[v2]) { dist[v2] = alt; prev[v2] = u2; }
+                }
+            }
+        }
+        var dijkstraCosto = dist[dst];
+        var dijkstraPath = [], curr = dst;
+        while (curr) { dijkstraPath.unshift(curr); curr = prev[curr]; }
+        if (dijkstraPath[0] !== src) { dijkstraPath = []; dijkstraCosto = 0; }
+
+        // Kruskal
+        var edges = [], procK = {};
+        Object.keys(adyacencia).forEach(function(u) {
+            Object.keys(adyacencia[u]).forEach(function(v) {
+                var k = [u, v].sort().join('-');
+                if (!procK[k]) { procK[k] = true; edges.push({u:u, v:v, w:getPeso(u, v)}); }
+            });
+        });
+        edges.sort(function(a, b) { return a.w - b.w; });
+        var parent = {};
+        Object.keys(redSalud).forEach(function(n) { parent[n] = n; });
+        function find(x) { while (parent[x] !== x) { parent[x] = parent[parent[x]]; x = parent[x]; } return x; }
+        function union(a, b) { var ra = find(a), rb = find(b); if (ra === rb) return false; parent[ra] = rb; return true; }
+        var kruskalMST = [], kruskalTotal = 0;
+        edges.forEach(function(e) { if (union(e.u, e.v)) { kruskalMST.push(e); kruskalTotal += e.w; } });
+
+        // Prim
+        var visited2 = new Set([src]), primMST = [], primTotal = 0;
+        while (visited2.size < Object.keys(redSalud).length) {
+            var minE = null;
+            visited2.forEach(function(u) {
+                for (var v in adyacencia[u]) {
+                    if (!visited2.has(v)) {
+                        var w = getPeso(u, v);
+                        if (!minE || w < minE.w) minE = {u:u, v:v, w:w};
+                    }
+                }
+            });
+            if (!minE) break;
+            visited2.add(minE.v); primMST.push(minE); primTotal += minE.w;
+        }
+
+        var u3 = getUnidad();
+        var totalNodos = Object.keys(redSalud).length;
+        var totalAristas = edges.length;
+        var html = '';
+
+        // Tarjetas
+        html += '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px;">';
+        html += '<div style="background:linear-gradient(135deg,#0066FF,#3182ce);color:white;padding:14px;border-radius:10px;text-align:center;"><div style="font-size:10px;text-transform:uppercase;font-weight:800;opacity:0.9;">BFS</div><div style="font-size:24px;font-weight:800;margin-top:4px;">' + bfsCount + '</div><div style="font-size:10px;opacity:0.8;">nodos</div></div>';
+        html += '<div style="background:linear-gradient(135deg,#00CC44,#38a169);color:white;padding:14px;border-radius:10px;text-align:center;"><div style="font-size:10px;text-transform:uppercase;font-weight:800;opacity:0.9;">DFS</div><div style="font-size:24px;font-weight:800;margin-top:4px;">' + dfsCount + '</div><div style="font-size:10px;opacity:0.8;">nodos</div></div>';
+        html += '<div style="background:linear-gradient(135deg,#FF6600,#dd6b20);color:white;padding:14px;border-radius:10px;text-align:center;"><div style="font-size:10px;text-transform:uppercase;font-weight:800;opacity:0.9;">Dijkstra</div><div style="font-size:24px;font-weight:800;margin-top:4px;">' + dijkstraCosto.toFixed(1) + '</div><div style="font-size:10px;opacity:0.8;">' + u3 + '</div></div>';
+        html += '<div style="background:linear-gradient(135deg,#8800FF,#805ad5);color:white;padding:14px;border-radius:10px;text-align:center;"><div style="font-size:10px;text-transform:uppercase;font-weight:800;opacity:0.9;">Kruskal</div><div style="font-size:24px;font-weight:800;margin-top:4px;">' + kruskalTotal.toFixed(1) + '</div><div style="font-size:10px;opacity:0.8;">' + u3 + '</div></div>';
+        html += '<div style="background:linear-gradient(135deg,#FF0033,#e53e3e);color:white;padding:14px;border-radius:10px;text-align:center;"><div style="font-size:10px;text-transform:uppercase;font-weight:800;opacity:0.9;">Prim</div><div style="font-size:24px;font-weight:800;margin-top:4px;">' + primTotal.toFixed(1) + '</div><div style="font-size:10px;opacity:0.8;">' + u3 + '</div></div>';
+        html += '</div>';
+
+        // Tabla
+        html += '<h3 style="color:#1a365d;font-size:14px;margin:20px 0 10px 0;"><i class="fas fa-table" style="color:#d69e2e;"></i> Tabla Comparativa</h3>';
+        html += '<table style="width:100%;border-collapse:collapse;font-size:12px;background:white;border-radius:8px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.05);">';
+        html += '<thead><tr style="background:#1a365d;color:white;"><th style="padding:10px;text-align:left;">Algoritmo</th><th style="padding:10px;">Tipo</th><th style="padding:10px;">Resultado</th><th style="padding:10px;">Unidad</th><th style="padding:10px;">Uso</th></tr></thead><tbody>';
+        html += '<tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:10px;font-weight:800;color:#0066FF;">BFS</td><td style="padding:10px;text-align:center;">Amplitud</td><td style="padding:10px;text-align:center;font-weight:800;">' + bfsCount + '</td><td style="padding:10px;text-align:center;">nodos</td><td style="padding:10px;font-size:11px;color:#4a5568;">Explorar red</td></tr>';
+        html += '<tr style="border-bottom:1px solid #e2e8f0;background:#f7fafc;"><td style="padding:10px;font-weight:800;color:#00CC44;">DFS</td><td style="padding:10px;text-align:center;">Profundidad</td><td style="padding:10px;text-align:center;font-weight:800;">' + dfsCount + '</td><td style="padding:10px;text-align:center;">nodos</td><td style="padding:10px;font-size:11px;color:#4a5568;">Caminos alt.</td></tr>';
+        html += '<tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:10px;font-weight:800;color:#FF6600;">Dijkstra</td><td style="padding:10px;text-align:center;">Ruta min</td><td style="padding:10px;text-align:center;font-weight:800;">' + dijkstraCosto.toFixed(2) + '</td><td style="padding:10px;text-align:center;">' + u3 + '</td><td style="padding:10px;font-size:11px;color:#4a5568;">Ruta optima</td></tr>';
+        html += '<tr style="border-bottom:1px solid #e2e8f0;background:#f7fafc;"><td style="padding:10px;font-weight:800;color:#8800FF;">Kruskal</td><td style="padding:10px;text-align:center;">MST global</td><td style="padding:10px;text-align:center;font-weight:800;">' + kruskalTotal.toFixed(2) + '</td><td style="padding:10px;text-align:center;">' + u3 + '</td><td style="padding:10px;font-size:11px;color:#4a5568;">Red global</td></tr>';
+        html += '<tr><td style="padding:10px;font-weight:800;color:#FF0033;">Prim</td><td style="padding:10px;text-align:center;">MST local</td><td style="padding:10px;text-align:center;font-weight:800;">' + primTotal.toFixed(2) + '</td><td style="padding:10px;text-align:center;">' + u3 + '</td><td style="padding:10px;font-size:11px;color:#4a5568;">Red desde origen</td></tr>';
+        html += '</tbody></table>';
+
+        // Ruta
+        html += '<h3 style="color:#1a365d;font-size:14px;margin:24px 0 10px 0;"><i class="fas fa-route" style="color:#d69e2e;"></i> Ruta Óptima (Dijkstra)</h3>';
+        if (dijkstraPath.length > 0) {
+            html += '<div style="background:linear-gradient(135deg,#fff7ed,#fed7aa);padding:16px;border-radius:10px;border-left:4px solid #FF6600;">';
+            html += '<div style="font-size:11px;color:#92400e;font-weight:700;margin-bottom:6px;">De ' + src + ' a ' + dst + '</div>';
+            html += '<div style="font-size:14px;font-weight:800;color:#7c2d12;line-height:1.6;word-break:break-word;">' + dijkstraPath.join(' → ') + '</div>';
+            html += '<div style="margin-top:10px;font-size:13px;color:#7c2d12;"><b>Nodos:</b> ' + dijkstraPath.length + ' | <b>Costo:</b> ' + dijkstraCosto.toFixed(2) + ' ' + u3 + '</div></div>';
+        } else {
+            html += '<div style="background:#f7fafc;padding:16px;border-radius:10px;color:#8899aa;text-align:center;">Sin ruta entre ' + src + ' y ' + dst + '</div>';
+        }
+
+        // MST
+        html += '<h3 style="color:#1a365d;font-size:14px;margin:24px 0 10px 0;"><i class="fas fa-tree" style="color:#d69e2e;"></i> MST: Kruskal vs Prim</h3>';
+        html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">';
+        html += '<div style="background:linear-gradient(135deg,#f3e8ff,#e9d8fd);padding:16px;border-radius:10px;border-left:4px solid #8800FF;"><div style="font-size:12px;font-weight:800;color:#553c9a;margin-bottom:8px;">🌳 KRUSKAL</div><div style="font-size:11px;color:#4a5568;line-height:1.8;"><b>Aristas MST:</b> ' + kruskalMST.length + '<br><b>Costo:</b> ' + kruskalTotal.toFixed(2) + ' ' + u3 + '<br><b>Evaluadas:</b> ' + edges.length + '<br><b>Descartadas:</b> ' + (edges.length - kruskalMST.length) + '</div></div>';
+        html += '<div style="background:linear-gradient(135deg,#fee2e2,#fecaca);padding:16px;border-radius:10px;border-left:4px solid #FF0033;"><div style="font-size:12px;font-weight:800;color:#991b1b;margin-bottom:8px;">🌱 PRIM (desde ' + src + ')</div><div style="font-size:11px;color:#4a5568;line-height:1.8;"><b>Aristas MST:</b> ' + primMST.length + '<br><b>Costo:</b> ' + primTotal.toFixed(2) + ' ' + u3 + '<br><b>Inicio:</b> ' + src + '<br><b>Iteraciones:</b> ' + primMST.length + '</div></div>';
+        html += '</div>';
+
+        // Conclusión
+        var diff = Math.abs(kruskalTotal - primTotal);
+        html += '<div style="margin-top:20px;background:linear-gradient(135deg,#f0fdf4,#dcfce7);padding:16px;border-radius:10px;border-left:4px solid #38a169;">';
+        html += '<div style="font-size:12px;font-weight:800;color:#166534;margin-bottom:6px;">💡 CONCLUSIÓN</div>';
+        html += '<div style="font-size:12px;color:#166534;line-height:1.6;">';
+        if (diff < 0.01) html += '<b>Ambos algoritmos dan el mismo resultado</b> (' + kruskalTotal.toFixed(2) + ' ' + u3 + '). La red es óptima.';
+        else {
+            html += 'Diferencia: <b>' + diff.toFixed(2) + ' ' + u3 + '</b>. ';
+            html += kruskalTotal < primTotal ? 'Kruskal obtiene menor costo.' : 'Prim obtiene menor costo.';
+        }
+        html += '<br><b>Total nodos:</b> ' + totalNodos + ' | <b>Total aristas:</b> ' + totalAristas;
+        html += '</div></div>';
+
+        body.innerHTML = html;
+
+        actualizarGrafico('BFS', bfsCount);
+        actualizarGrafico('DFS', dfsCount);
+        actualizarGrafico('Dijkstra', dijkstraCosto);
+        actualizarGrafico('Kruskal', kruskalTotal);
+        actualizarGrafico('Prim', primTotal);
+
+        mostrarToast('Comparación lista', 'success');
+        agregarAlHistorial('Comparación de 5 algoritmos ejecutada', 'algorithm');
+    }, 400);
 }
 
 function initChart() {
@@ -1841,18 +2003,416 @@ function generarInforme() {
 }
 
 function exportarPDF() {
-    if (!datosCargados) { mostrarToast('Cargue datos', 'warning'); return; }
-    var jspdf = window.jspdf;
-    var doc = new jspdf.jsPDF();
-    doc.setFillColor(26, 54, 93);
-    doc.rect(0, 0, 210, 297, 'F');
+    if (!datosCargados) { mostrarToast('Cargue datos primero', 'warning'); return; }
+    var jsPDF = window.jspdf.jsPDF;
+    var doc = new jsPDF('p', 'mm', 'a4');
+    var W = 210, H = 297;
+    var pagina = 1;
+
+    // ===== COLORES =====
+    var AZUL = [26, 54, 93];
+    var DORADO = [214, 158, 46];
+    var GRIS = [100, 116, 139];
+    var VERDE = [56, 161, 105];
+    var ROJO = [229, 62, 62];
+    var MORADO = [128, 90, 213];
+    var NARANJA = [237, 137, 54];
+
+    // ============ EJECUTAR ALGORITMOS ============
+    var src = document.getElementById('origen').value || Object.keys(redSalud)[0];
+    var dst = document.getElementById('destino').value || Object.keys(redSalud)[Object.keys(redSalud).length - 1];
+    var V = Object.keys(redSalud).length;
+    var E = Object.values(adyacencia).reduce(function(s, x) { return s + Object.keys(x).length; }, 0) / 2;
+    var densidad = V > 1 ? (2 * E) / (V * (V - 1)) : 0;
+
+    // BFS
+    var bfsV = new Set([src]), bfsQ = [src], bfsCount = 0, bfsNiveles = {};
+    bfsNiveles[src] = 0;
+    while (bfsQ.length > 0) {
+        var u = bfsQ.shift(); bfsCount++;
+        Object.keys(adyacencia[u] || {}).forEach(function(v) {
+            if (!bfsV.has(v)) { bfsV.add(v); bfsNiveles[v] = bfsNiveles[u] + 1; bfsQ.push(v); }
+        });
+    }
+
+    // DFS
+    var dfsV = new Set(), dfsCount = 0;
+    (function dfsRec(n) {
+        dfsV.add(n); dfsCount++;
+        Object.keys(adyacencia[n] || {}).forEach(function(v) { if (!dfsV.has(v)) dfsRec(v); });
+    })(src);
+
+    // Dijkstra
+    var dist = {}, prev = {}, unv = new Set();
+    Object.keys(redSalud).forEach(function(n) { dist[n] = Infinity; prev[n] = null; unv.add(n); });
+    dist[src] = 0;
+    while (unv.size > 0) {
+        var u2 = null, minD = Infinity;
+        unv.forEach(function(n) { if (dist[n] < minD) { minD = dist[n]; u2 = n; } });
+        if (u2 === null || dist[u2] === Infinity) break;
+        unv.delete(u2);
+        for (var v2 in adyacencia[u2]) {
+            if (unv.has(v2)) {
+                var alt = dist[u2] + getPeso(u2, v2);
+                if (alt < dist[v2]) { dist[v2] = alt; prev[v2] = u2; }
+            }
+        }
+    }
+    var dCosto = dist[dst];
+    var path = [], curr = dst;
+    while (curr) { path.unshift(curr); curr = prev[curr]; }
+    if (path[0] !== src) path = [];
+
+    // Kruskal
+    var edges = [], procK = {};
+    Object.keys(adyacencia).forEach(function(u) {
+        Object.keys(adyacencia[u]).forEach(function(v) {
+            var k = [u, v].sort().join('-');
+            if (!procK[k]) { procK[k] = true; edges.push({u:u, v:v, w:getPeso(u, v)}); }
+        });
+    });
+    edges.sort(function(a, b) { return a.w - b.w; });
+    var par = {}; Object.keys(redSalud).forEach(function(n) { par[n] = n; });
+    function find(x) { while (par[x] !== x) { par[x] = par[par[x]]; x = par[x]; } return x; }
+    var kTotal = 0, kMST = 0;
+    edges.forEach(function(e) {
+        var ra = find(e.u), rb = find(e.v);
+        if (ra !== rb) { par[ra] = rb; kTotal += e.w; kMST++; }
+    });
+
+    // Prim
+    var pV = new Set([src]), pTotal = 0, pMST = 0;
+    while (pV.size < V) {
+        var minE = null;
+        pV.forEach(function(u) {
+            for (var v in adyacencia[u]) {
+                if (!pV.has(v)) {
+                    var w = getPeso(u, v);
+                    if (!minE || w < minE.w) minE = {u:u, v:v, w:w};
+                }
+            }
+        });
+        if (!minE) break;
+        pV.add(minE.v); pTotal += minE.w; pMST++;
+    }
+
+    var u3 = getUnidad();
+
+    // ============ PÁGINA 1: PORTADA ============
+    doc.setFillColor(AZUL[0], AZUL[1], AZUL[2]);
+    doc.rect(0, 0, W, H, 'F');
+
+    // Franja dorada
+    doc.setFillColor(DORADO[0], DORADO[1], DORADO[2]);
+    doc.rect(0, 0, W, 6, 'F');
+    doc.rect(0, H - 6, W, 6, 'F');
+
+    // Círculo logo
+    doc.setFillColor(255, 255, 255);
+    doc.circle(W/2, 70, 20, 'F');
+    doc.setFillColor(DORADO[0], DORADO[1], DORADO[2]);
+    doc.circle(W/2, 70, 17, 'F');
+
     doc.setTextColor(255, 255, 255);
+    doc.setFontSize(36); doc.setFont('helvetica', 'bold');
+    doc.text('CEASS', W/2, 78, { align: 'center' });
+
     doc.setFontSize(28);
-    doc.text('Red Sanitaria Bolivia', 105, 100, {align:'center'});
-    doc.setFontSize(16);
-    doc.text('CEASS', 105, 115, {align:'center'});
-    doc.save('reporte_ceass_' + Date.now() + '.pdf');
-    mostrarToast('PDF generado', 'success');
+    doc.text('Red Sanitaria Bolivia', W/2, 115, { align: 'center' });
+
+    doc.setDrawColor(DORADO[0], DORADO[1], DORADO[2]);
+    doc.setLineWidth(0.8);
+    doc.line(60, 122, 150, 122);
+
+    doc.setFontSize(14); doc.setFont('helvetica', 'normal');
+    doc.setTextColor(251, 211, 141);
+    doc.text('Reporte de Optimizacion Logistica', W/2, 135, { align: 'center' });
+
+    doc.setFontSize(10); doc.setTextColor(200, 210, 220);
+    doc.text('Central de Abastecimiento y Suministros en Salud', W/2, 145, { align: 'center' });
+
+    // Caja de datos
+    doc.setFillColor(255, 255, 255, 0.1);
+    doc.roundedRect(40, 175, 130, 50, 4, 4, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(11);
+    doc.text('Fecha: ' + new Date().toLocaleString('es-BO'), 45, 190);
+    doc.text('Criterio: ' + criterioActual.toUpperCase(), 45, 200);
+    doc.text('Nodos: ' + V + '  |  Aristas: ' + E, 45, 210);
+    doc.text('Origen: ' + src + '  ->  Destino: ' + dst, 45, 220);
+
+    doc.setFontSize(9); doc.setTextColor(150, 160, 180);
+    doc.text('Reporte generado automaticamente por el sistema CEASS', W/2, 270, { align: 'center' });
+
+    // ============ PÁGINA 2: KPIs + RESUMEN ============
+    doc.addPage(); pagina++;
+
+    // Header
+    doc.setFillColor(AZUL[0], AZUL[1], AZUL[2]);
+    doc.rect(0, 0, W, 18, 'F');
+    doc.setTextColor(255, 255, 255); doc.setFontSize(14); doc.setFont('helvetica', 'bold');
+    doc.text('1.  Resumen General de la Red', 12, 12);
+
+    // Tarjetas KPI (4 cuadros de colores)
+    var kpis = [
+        { label: 'NODOS', valor: V, color: AZUL, icon: 'N' },
+        { label: 'ARISTAS', valor: E, color: VERDE, icon: 'A' },
+        { label: 'DENSIDAD', valor: (densidad * 100).toFixed(1) + '%', color: DORADO, icon: 'D' },
+        { label: 'CRITERIO', valor: criterioActual.toUpperCase(), color: MORADO, icon: 'C' }
+    ];
+    kpis.forEach(function(k, i) {
+        var x = 12 + i * 47;
+        doc.setFillColor(k.color[0], k.color[1], k.color[2]);
+        doc.roundedRect(x, 30, 43, 28, 3, 3, 'F');
+        doc.setTextColor(255, 255, 255); doc.setFontSize(8); doc.setFont('helvetica', 'bold');
+        doc.text(k.label, x + 21.5, 38, { align: 'center' });
+        doc.setFontSize(16);
+        doc.text(String(k.valor), x + 21.5, 52, { align: 'center' });
+    });
+
+    // Tipos de nodo
+    var tipos = {};
+    Object.values(redSalud).forEach(function(n) { tipos[n.tipo] = (tipos[n.tipo] || 0) + 1; });
+
+    doc.setTextColor(AZUL[0], AZUL[1], AZUL[2]); doc.setFontSize(12); doc.setFont('helvetica', 'bold');
+    doc.text('Distribucion por Tipo de Nodo', 12, 78);
+    doc.setDrawColor(DORADO[0], DORADO[1], DORADO[2]); doc.setLineWidth(0.5);
+    doc.line(12, 80, 198, 80);
+
+    doc.setFillColor(247, 250, 252);
+    doc.rect(12, 84, 186, 8, 'F');
+    doc.setTextColor(AZUL[0], AZUL[1], AZUL[2]); doc.setFontSize(9); doc.setFont('helvetica', 'bold');
+    doc.text('TIPO', 16, 90);
+    doc.text('CANTIDAD', 130, 90);
+    doc.text('%', 175, 90);
+
+    var y = 92;
+    var tipoColores = {
+        'Hub CEASS': AZUL, 'SEDES': VERDE, 'Frontera': ROJO,
+        'Hospital 3er Nivel': MORADO, 'Hospital 2do Nivel': NARANJA,
+        'Centro Salud': DORADO
+    };
+    doc.setFont('helvetica', 'normal');
+    Object.keys(tipos).forEach(function(t, i) {
+        if (i % 2 === 1) { doc.setFillColor(250, 252, 255); doc.rect(12, y, 186, 7, 'F'); }
+        var col = tipoColores[t] || GRIS;
+        doc.setFillColor(col[0], col[1], col[2]);
+        doc.rect(14, y + 1.5, 3, 4, 'F');
+        doc.setTextColor(50, 50, 60); doc.setFontSize(9);
+        doc.text(t, 20, y + 5);
+        doc.text(String(tipos[t]), 130, y + 5);
+        doc.text(((tipos[t]/V)*100).toFixed(1) + '%', 175, y + 5);
+        y += 7;
+    });
+
+    // ============ PÁGINA 3: COMPARACIÓN ============
+    doc.addPage(); pagina++;
+    doc.setFillColor(AZUL[0], AZUL[1], AZUL[2]);
+    doc.rect(0, 0, W, 18, 'F');
+    doc.setTextColor(255, 255, 255); doc.setFontSize(14); doc.setFont('helvetica', 'bold');
+    doc.text('2.  Comparacion de Algoritmos', 12, 12);
+
+    // Tarjetas resultado
+    var results = [
+        { label: 'BFS', val: bfsCount + ' nodos', color: [49, 130, 206] },
+        { label: 'DFS', val: dfsCount + ' nodos', color: VERDE },
+        { label: 'Dijkstra', val: dCosto.toFixed(2) + u3, color: NARANJA },
+        { label: 'Kruskal', val: kTotal.toFixed(2) + u3, color: MORADO },
+        { label: 'Prim', val: pTotal.toFixed(2) + u3, color: ROJO }
+    ];
+    results.forEach(function(r, i) {
+        var x = 10 + i * 39;
+        doc.setFillColor(r.color[0], r.color[1], r.color[2]);
+        doc.roundedRect(x, 28, 36, 26, 3, 3, 'F');
+        doc.setTextColor(255, 255, 255); doc.setFontSize(8); doc.setFont('helvetica', 'bold');
+        doc.text(r.label.toUpperCase(), x + 18, 36, { align: 'center' });
+        doc.setFontSize(13);
+        doc.text(String(r.val), x + 18, 48, { align: 'center' });
+    });
+
+    // Tabla comparativa
+    doc.setTextColor(AZUL[0], AZUL[1], AZUL[2]); doc.setFontSize(12); doc.setFont('helvetica', 'bold');
+    doc.text('Tabla Comparativa Detallada', 12, 70);
+    doc.setDrawColor(DORADO[0], DORADO[1], DORADO[2]); doc.line(12, 72, 198, 72);
+
+    // Header tabla
+    doc.setFillColor(AZUL[0], AZUL[1], AZUL[2]);
+    doc.rect(12, 76, 186, 9, 'F');
+    doc.setTextColor(255, 255, 255); doc.setFontSize(9); doc.setFont('helvetica', 'bold');
+    doc.text('ALGORITMO', 16, 82);
+    doc.text('TIPO', 60, 82);
+    doc.text('RESULTADO', 100, 82);
+    doc.text('UNIDAD', 140, 82);
+    doc.text('USO RECOMENDADO', 160, 82);
+
+    var filas = [
+        { color: [49, 130, 206], datos: ['BFS', 'Amplitud', String(bfsCount), 'nodos', 'Explorar red'] },
+        { color: VERDE, datos: ['DFS', 'Profundidad', String(dfsCount), 'nodos', 'Buscar caminos'] },
+        { color: NARANJA, datos: ['Dijkstra', 'Ruta minima', dCosto.toFixed(2), u3, 'Ruta optima'] },
+        { color: MORADO, datos: ['Kruskal', 'MST global', kTotal.toFixed(2), u3, 'Red global'] },
+        { color: ROJO, datos: ['Prim', 'MST local', pTotal.toFixed(2), u3, 'Red desde origen'] }
+    ];
+    var ty = 85;
+    filas.forEach(function(f, i) {
+        if (i % 2 === 0) { doc.setFillColor(247, 250, 252); doc.rect(12, ty, 186, 9, 'F'); }
+        doc.setFillColor(f.color[0], f.color[1], f.color[2]);
+        doc.rect(12, ty, 3, 9, 'F');
+        doc.setTextColor(50, 50, 60); doc.setFontSize(9); doc.setFont('helvetica', 'normal');
+        doc.text(f.datos[0], 18, ty + 6);
+        doc.text(f.datos[1], 60, ty + 6);
+        doc.setFont('helvetica', 'bold');
+        doc.text(f.datos[2], 100, ty + 6);
+        doc.setFont('helvetica', 'normal');
+        doc.text(f.datos[3], 140, ty + 6);
+        doc.text(f.datos[4], 160, ty + 6);
+        ty += 9;
+    });
+
+    // Conclusión MST
+    doc.setFillColor(240, 253, 244);
+    doc.roundedRect(12, ty + 8, 186, 30, 3, 3, 'F');
+    doc.setFillColor(VERDE[0], VERDE[1], VERDE[2]);
+    doc.rect(12, ty + 8, 2, 30, 'F');
+    doc.setTextColor(22, 101, 52); doc.setFontSize(11); doc.setFont('helvetica', 'bold');
+    doc.text('CONCLUSION', 18, ty + 16);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+    var diff = Math.abs(kTotal - pTotal);
+    if (diff < 0.01) {
+        doc.text('Ambos algoritmos (Kruskal y Prim) dan el mismo resultado: ' + kTotal.toFixed(2) + ' ' + u3, 18, ty + 23);
+        doc.text('La red actual es OPTIMA.', 18, ty + 28);
+    } else {
+        doc.text('Diferencia entre Kruskal y Prim: ' + diff.toFixed(2) + ' ' + u3, 18, ty + 23);
+        doc.text(kTotal < pTotal ? 'Kruskal obtiene el menor costo.' : 'Prim obtiene el menor costo.', 18, ty + 28);
+    }
+
+    // ============ PÁGINA 4: RUTA ÓPTIMA ============
+    doc.addPage(); pagina++;
+    doc.setFillColor(AZUL[0], AZUL[1], AZUL[2]);
+    doc.rect(0, 0, W, 18, 'F');
+    doc.setTextColor(255, 255, 255); doc.setFontSize(14); doc.setFont('helvetica', 'bold');
+    doc.text('3.  Ruta Optima (Dijkstra)', 12, 12);
+
+    doc.setFillColor(255, 247, 237);
+    doc.roundedRect(12, 26, 186, 40, 3, 3, 'F');
+    doc.setFillColor(NARANJA[0], NARANJA[1], NARANJA[2]);
+    doc.rect(12, 26, 2, 40, 'F');
+
+    doc.setTextColor(124, 45, 18); doc.setFontSize(10); doc.setFont('helvetica', 'bold');
+    doc.text('Origen:', 18, 34);
+    doc.text('Destino:', 18, 42);
+    doc.text('Costo total:', 18, 50);
+    doc.text('Nodos en ruta:', 18, 58);
+
+    doc.setFont('helvetica', 'normal');
+    doc.text(src, 45, 34);
+    doc.text(dst, 45, 42);
+    doc.setTextColor(NARANJA[0], NARANJA[1], NARANJA[2]);
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(12);
+    doc.text(dCosto.toFixed(2) + ' ' + u3, 45, 50);
+    doc.setTextColor(124, 45, 18); doc.setFontSize(10);
+    doc.text(String(path.length) + ' nodos', 45, 58);
+
+    if (path.length > 0) {
+        doc.setTextColor(AZUL[0], AZUL[1], AZUL[2]); doc.setFontSize(11); doc.setFont('helvetica', 'bold');
+        doc.text('Detalle del recorrido:', 12, 78);
+
+        var py = 85;
+        for (var i = 0; i < path.length - 1; i++) {
+            if (py > 260) { doc.addPage(); py = 30; }
+            doc.setFillColor(i % 2 === 0 ? 255 : 255, i % 2 === 0 ? 255 : 250, i % 2 === 0 ? 255 : 240);
+            doc.rect(12, py - 4, 186, 7, 'F');
+            doc.setTextColor(50, 50, 60); doc.setFontSize(9); doc.setFont('helvetica', 'normal');
+            doc.text((i+1) + '.', 16, py);
+            doc.text(path[i], 24, py);
+            doc.setTextColor(NARANJA[0], NARANJA[1], NARANJA[2]);
+            doc.text('->', 55, py);
+            doc.setTextColor(50, 50, 60);
+            doc.text(path[i+1], 65, py);
+            doc.setFont('helvetica', 'bold');
+            doc.text(getPeso(path[i], path[i+1]).toFixed(2) + ' ' + u3, 160, py);
+            py += 7;
+        }
+    } else {
+        doc.setTextColor(ROJO[0], ROJO[1], ROJO[2]); doc.setFontSize(11);
+        doc.text('No hay ruta disponible entre estos nodos.', 12, 85);
+    }
+
+    // ============ PÁGINA 5: TOP NODOS + RECOMENDACIONES ============
+    doc.addPage(); pagina++;
+    doc.setFillColor(AZUL[0], AZUL[1], AZUL[2]);
+    doc.rect(0, 0, W, 18, 'F');
+    doc.setTextColor(255, 255, 255); doc.setFontSize(14); doc.setFont('helvetica', 'bold');
+    doc.text('4.  Analisis y Recomendaciones', 12, 12);
+
+    // Top nodos críticos
+    var nodos = Object.keys(redSalud).map(function(k) {
+        return { codigo: k, nombre: redSalud[k].nombre, grado: Object.keys(adyacencia[k] || {}).length };
+    }).sort(function(a, b) { return b.grado - a.grado; });
+
+    doc.setTextColor(AZUL[0], AZUL[1], AZUL[2]); doc.setFontSize(11); doc.setFont('helvetica', 'bold');
+    doc.text('Top 5 Nodos Mas Conectados', 12, 32);
+    doc.setDrawColor(DORADO[0], DORADO[1], DORADO[2]); doc.line(12, 34, 198, 34);
+
+    doc.setFillColor(AZUL[0], AZUL[1], AZUL[2]);
+    doc.rect(12, 38, 186, 8, 'F');
+    doc.setTextColor(255, 255, 255); doc.setFontSize(9); doc.setFont('helvetica', 'bold');
+    doc.text('#', 16, 43);
+    doc.text('CODIGO', 25, 43);
+    doc.text('NOMBRE', 50, 43);
+    doc.text('CONEXIONES', 170, 43);
+
+    var ny = 46;
+    nodos.slice(0, 5).forEach(function(n, i) {
+        if (i % 2 === 1) { doc.setFillColor(250, 252, 255); doc.rect(12, ny, 186, 7, 'F'); }
+        doc.setTextColor(50, 50, 60); doc.setFontSize(9); doc.setFont('helvetica', 'normal');
+        doc.text(String(i+1), 17, ny + 5);
+        doc.setFont('helvetica', 'bold');
+        doc.text(n.codigo, 25, ny + 5);
+        doc.setFont('helvetica', 'normal');
+        doc.text(n.nombre.substring(0, 55), 50, ny + 5);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(DORADO[0], DORADO[1], DORADO[2]);
+        doc.text(String(n.grado), 180, ny + 5);
+        ny += 7;
+    });
+
+    // Recomendaciones
+    doc.setTextColor(AZUL[0], AZUL[1], AZUL[2]); doc.setFontSize(11); doc.setFont('helvetica', 'bold');
+    doc.text('Recomendaciones Estrategicas', 12, ny + 15);
+    doc.setDrawColor(DORADO[0], DORADO[1], DORADO[2]); doc.line(12, ny + 17, 198, ny + 17);
+
+    var recos = [
+        'La red cuenta con ' + V + ' nodos distribuidos en ' + Object.keys(tipos).length + ' tipos de instalaciones.',
+        'El MST optimo tiene un costo total de ' + kTotal.toFixed(2) + ' ' + u3 + '.',
+        'La ruta mas economica entre ' + src + ' y ' + dst + ' es de ' + dCosto.toFixed(2) + ' ' + u3 + '.',
+        'Se recomienda priorizar el mantenimiento de los nodos con mayor grado de conexion.',
+        'La densidad de la red es del ' + (densidad * 100).toFixed(1) + '%, ' + (densidad > 0.3 ? 'lo que indica buena interconectividad.' : 'lo que sugiere ampliar conexiones.')
+    ];
+
+    var ry = ny + 25;
+    recos.forEach(function(r) {
+        doc.setFillColor(VERDE[0], VERDE[1], VERDE[2]);
+        doc.circle(16, ry - 1, 1.2, 'F');
+        doc.setTextColor(50, 50, 60); doc.setFontSize(9); doc.setFont('helvetica', 'normal');
+        var lines = doc.splitTextToSize(r, 175);
+        doc.text(lines, 22, ry);
+        ry += lines.length * 5 + 3;
+    });
+
+    // Footer en cada página
+    for (var p = 2; p <= pagina; p++) {
+        doc.setPage(p);
+        doc.setDrawColor(220, 220, 220);
+        doc.setLineWidth(0.3);
+        doc.line(12, 285, 198, 285);
+        doc.setTextColor(150, 150, 150); doc.setFontSize(8);
+        doc.text('CEASS Bolivia  |  Red Sanitaria  |  ' + new Date().toLocaleDateString('es-BO'), 12, 290);
+        doc.text('Pagina ' + p + ' de ' + pagina, 198, 290, { align: 'right' });
+    }
+
+    doc.save('Reporte_CEASS_' + new Date().toISOString().slice(0,10) + '.pdf');
+    mostrarToast('PDF profesional generado', 'success');
+    agregarAlHistorial('PDF exportado: ' + pagina + ' paginas', 'info');
 }
 
 // EDITOR
