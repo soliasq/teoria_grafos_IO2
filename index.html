@@ -12,7 +12,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
-/* ... (todo el CSS del index actual + los estilos nuevos) ... */
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Inter',sans-serif;background:#f0f4f8;color:#1a2634;min-height:100vh;padding:10px;overflow-x:hidden}
 body.dark-mode{background:#0f172a;color:#e2e8f0}
@@ -37,6 +36,7 @@ body.dark-mode{background:#0f172a;color:#e2e8f0}
 .btn-doc.dark{background:linear-gradient(135deg,#1a202c,#2d3748)}
 .btn-doc.teal{background:linear-gradient(135deg,#285e61,#38b2ac)}
 .btn-doc.indigo{background:linear-gradient(135deg,#3730a3,#6366f1)}
+.btn-doc.orange{background:linear-gradient(135deg,#c05621,#ed8936)}
 .header-right{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .badge{padding:4px 12px;border-radius:16px;font-size:0.65rem;font-weight:600;background:rgba(255,255,255,0.75);color:#4a5568;border:1px solid rgba(255,255,255,0.8);display:inline-flex;align-items:center;gap:4px}
 .badge.primary{background:rgba(219,234,254,0.9);color:#1a365d}
@@ -66,6 +66,15 @@ body.dark-mode{background:#0f172a;color:#e2e8f0}
 .kpi-mini-card .value .gold{color:#d69e2e}
 .kpi-mini-card .value .green{color:#38a169}
 .kpi-mini-card .value .blue{color:#1a365d}
+.kpi-mst-panel{background:linear-gradient(135deg,rgba(136,0,255,0.08),rgba(255,0,51,0.05));border:2px solid rgba(136,0,255,0.25);border-radius:10px;padding:12px}
+.kpi-mst-title{font-size:11px;font-weight:800;color:#8800FF;text-transform:uppercase;display:flex;align-items:center;gap:6px;margin-bottom:10px}
+.kpi-mst-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:12px;border-bottom:1px dashed rgba(136,0,255,0.15)}
+.kpi-mst-row:last-of-type{border-bottom:none}
+.kpi-mst-label{display:flex;align-items:center;gap:6px;font-weight:700;color:#4a5568}
+.kpi-mst-value{font-weight:800;color:#1a2634;font-size:14px;font-family:monospace}
+.kpi-mst-diff{margin-top:8px;padding:6px 10px;background:rgba(255,255,255,0.7);border-radius:6px;font-size:10px;font-weight:700;color:#4a5568;text-align:center}
+.kpi-mst-diff.ok{background:rgba(56,161,105,0.15);color:#2f855a}
+.kpi-mst-diff.warn{background:rgba(214,158,46,0.15);color:#92400e}
 .algo-list{display:flex;flex-direction:column;gap:4px}
 .algo-item{display:flex;align-items:center;padding:7px 10px;border-radius:8px;cursor:pointer;transition:all 0.2s ease;border:1px solid transparent;background:rgba(255,255,255,0.5)}
 .algo-item:hover{background:rgba(255,255,255,0.9);transform:translateX(3px)}
@@ -83,8 +92,6 @@ body.dark-mode{background:#0f172a;color:#e2e8f0}
 .btn-primary{background:linear-gradient(135deg,#1a365d,#2b6cb0);color:white}
 .btn-outline{background:rgba(255,255,255,0.7);color:#4a5568;border:1px solid rgba(0,0,0,0.1)}
 .btn-sm{padding:8px 12px;flex:none}
-.btn-test{background:linear-gradient(135deg,#97266d,#d53f8c);color:white}
-.btn-download{background:linear-gradient(135deg,#276749,#48bb78);color:white}
 .pond-section{background:linear-gradient(135deg,rgba(214,158,46,0.1),rgba(26,54,93,0.08));border:2px solid rgba(214,158,46,0.3);border-radius:10px;padding:12px}
 .pond-title{font-size:11px;font-weight:800;color:#d69e2e;text-transform:uppercase;display:flex;align-items:center;gap:6px;margin-bottom:10px}
 .pond-options{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:10px}
@@ -101,7 +108,7 @@ body.dark-mode{background:#0f172a;color:#e2e8f0}
 #map-container{height:75vh;min-height:650px;width:100%;background:#e2e8f0;border-radius:12px;border:2px solid rgba(255,255,255,0.7);overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.1);position:relative}
 #map{width:100%;height:100%;z-index:1}
 body.mapa-grande #map-container{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9998;border-radius:0;border:none}
-body.mapa-grande .header,body.mapa-grande .panel-left,body.mapa-grande .mini-maps-section,body.mapa-grande .structures-section,body.mapa-grande .analysis-section,body.mapa-grande .activity-section,body.mapa-grande .bottom-bar{display:none!important}
+body.mapa-grande .header,body.mapa-grande .panel-left,body.mapa-grande .mini-maps-section,body.mapa-grande .structures-section,body.mapa-grande .analysis-section,body.mapa-grande .activity-section,body.mapa-grande .bottom-bar,body.mapa-grande .footer{display:none!important}
 body.mapa-grande .main-content{display:block}
 .btn-cerrar-expandido{display:none;position:fixed;top:20px;left:20px;z-index:9999;background:linear-gradient(135deg,#9b2c2c,#e53e3e);color:white;border:none;padding:12px 20px;border-radius:10px;font-weight:700;cursor:pointer;align-items:center;gap:8px;font-size:14px;box-shadow:0 6px 25px rgba(0,0,0,0.4)}
 body.mapa-grande .btn-cerrar-expandido{display:flex}
@@ -109,8 +116,8 @@ body.mapa-grande .btn-cerrar-expandido{display:flex}
 .map-controls button{border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:10px;font-weight:700;background:#f0f4f8;color:#4a5568;transition:all 0.2s ease;display:flex;align-items:center;gap:5px}
 .map-controls button:hover{background:#3182ce;color:white}
 .map-controls button.active{background:#3182ce;color:white}
-.mini-maps-section{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
-@media(max-width:1200px){.mini-maps-section{grid-template-columns:repeat(3,1fr)}}
+.mini-maps-section{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+@media(max-width:1400px){.mini-maps-section{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:800px){.mini-maps-section{grid-template-columns:repeat(2,1fr)}}
 .mini-map-card{background:rgba(255,255,255,0.9);border-radius:12px;border:1px solid rgba(255,255,255,0.7);padding:10px;display:flex;flex-direction:column;box-shadow:0 4px 20px rgba(0,0,0,0.05);height:280px}
 .mini-map-header{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:800;color:#1a2634;text-transform:uppercase;padding:4px 6px 8px 6px;border-bottom:1px solid rgba(0,0,0,0.06);margin-bottom:8px}
@@ -169,6 +176,27 @@ table.matriz td.vacio{color:#cbd5e1}
 .decision-list .item .highlight{color:#1a2634;font-weight:800}
 .decision-box{background:rgba(240,255,244,0.85);border-radius:8px;padding:10px;border-left:4px solid #38a169;font-size:11px;color:#2d3748;line-height:1.5}
 .decision-box .icono{color:#d69e2e;margin-right:6px}
+.footer{background:linear-gradient(135deg,#1a365d 0%,#2b6cb0 100%);color:white;border-radius:12px;padding:24px 30px 16px 30px;box-shadow:0 8px 40px rgba(26,54,93,0.3);margin-top:10px}
+.footer-content{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:24px;margin-bottom:20px}
+@media(max-width:1000px){.footer-content{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.footer-content{grid-template-columns:1fr}}
+.footer-col{display:flex;flex-direction:column;gap:8px}
+.footer-logo{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.footer-logo i{font-size:28px;color:#fbd38d}
+.footer-title{font-weight:800;font-size:15px;color:white}
+.footer-sub{font-size:10px;color:rgba(255,255,255,0.75);font-weight:600}
+.footer-desc{font-size:11px;color:rgba(255,255,255,0.85);line-height:1.6}
+.footer-heading{font-size:11px;font-weight:800;color:#fbd38d;text-transform:uppercase;letter-spacing:0.5px;display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.footer-list{list-style:none;display:flex;flex-direction:column;gap:6px}
+.footer-list li{font-size:11px;color:rgba(255,255,255,0.9);display:flex;align-items:center;gap:6px;line-height:1.4}
+.footer-list li i{color:#fbd38d;width:12px;flex-shrink:0}
+.footer-list.footer-links li a{color:rgba(255,255,255,0.9);cursor:pointer;transition:all 0.2s ease;display:flex;align-items:center;gap:6px;font-weight:600}
+.footer-list.footer-links li a:hover{color:#fbd38d;transform:translateX(3px)}
+.footer-bottom{border-top:1px solid rgba(255,255,255,0.15);padding-top:14px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.footer-copy{font-size:10px;color:rgba(255,255,255,0.75);font-weight:600}
+.footer-tech{display:flex;gap:14px;flex-wrap:wrap}
+.footer-tech span{font-size:10px;color:rgba(255,255,255,0.85);display:flex;align-items:center;gap:5px;font-weight:600}
+.footer-tech span i{color:#fbd38d}
 .splash-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#1a365d 0%,#2b6cb0 50%,#d69e2e 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:99999;transition:opacity 0.8s ease,visibility 0.8s ease;color:white}
 .splash-screen.hidden{opacity:0;visibility:hidden;pointer-events:none}
 .splash-logo{width:110px;height:110px;background:rgba(255,255,255,0.2);backdrop-filter:blur(10px);border-radius:28px;display:flex;align-items:center;justify-content:center;font-size:54px;margin-bottom:24px;animation:splashPulse 2s infinite;border:2px solid rgba(255,255,255,0.3)}
@@ -282,12 +310,30 @@ body.modo-agregar-nodo #map{cursor:crosshair!important}
 body.modo-agregar-nodo #map::before{content:'';position:absolute;top:0;left:0;width:100%;height:100%;border:4px dashed #805ad5;pointer-events:none;z-index:999;box-sizing:border-box;animation:borderPulse 1.5s infinite}
 @keyframes borderPulse{0%,100%{opacity:1}50%{opacity:0.4}}
 @media(max-width:768px){body{padding:6px}.main-content{flex-direction:column}.panel-left{width:100%;max-height:400px}#map-container{height:60vh;min-height:400px}.bottom-bar{grid-template-columns:1fr;height:auto}.editor-panel{width:100%}}
+
+/* ========== ANIMACIONES MODAL EQUIPO ========== */
+#modalAcercaDe .modal-content { animation: modalEqIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+@keyframes modalEqIn { from { opacity: 0; transform: scale(0.85) translateY(40px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+#modalAcercaDe div[style*="grid-template-columns:1fr 1fr"] > div { animation: equipoCardIn 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both; transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); }
+#modalAcercaDe div[style*="grid-template-columns:1fr 1fr"] > div:nth-child(1) { animation-delay: 0.10s; }
+#modalAcercaDe div[style*="grid-template-columns:1fr 1fr"] > div:nth-child(2) { animation-delay: 0.15s; }
+#modalAcercaDe div[style*="grid-template-columns:1fr 1fr"] > div:nth-child(3) { animation-delay: 0.20s; }
+#modalAcercaDe div[style*="grid-template-columns:1fr 1fr"] > div:nth-child(4) { animation-delay: 0.25s; }
+#modalAcercaDe div[style*="grid-template-columns:1fr 1fr"] > div:nth-child(5) { animation-delay: 0.30s; }
+#modalAcercaDe div[style*="grid-template-columns:1fr 1fr"] > div:nth-child(6) { animation-delay: 0.35s; }
+#modalAcercaDe div[style*="grid-template-columns:1fr 1fr"] > div:nth-child(7) { animation-delay: 0.40s; }
+#modalAcercaDe div[style*="grid-template-columns:1fr 1fr"] > div:nth-child(8) { animation-delay: 0.45s; }
+@keyframes equipoCardIn { from { opacity: 0; transform: translateY(25px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
+#modalAcercaDe div[style*="grid-template-columns:1fr 1fr"] > div:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 12px 35px rgba(26,54,93,0.18); border-color: #d69e2e !important; }
+#modalAcercaDe div[style*="grid-template-columns:1fr 1fr"] > div:hover div[style*="border-radius:50%"] { transform: scale(1.12) rotate(-6deg); box-shadow: 0 10px 28px rgba(214,158,46,0.55); }
+#modalAcercaDe div[style*="border-radius:50%"] { transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+#modalAcercaDe .fa-star { animation: estrellaPulse 2s ease-in-out infinite; }
+@keyframes estrellaPulse { 0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; } 50% { transform: scale(1.2) rotate(20deg); opacity: 0.8; } }
 </style>
 </head>
-<body>
+<body><canvas id="bgCanvas"></canvas>
 
-<canvas id="bgCanvas"></canvas>
-
+<!-- SPLASH -->
 <div class="splash-screen" id="splashScreen">
     <div class="splash-logo"><i class="fas fa-truck-medical"></i></div>
     <div class="splash-title">Red <span>Sanitaria</span> Bolivia</div>
@@ -302,6 +348,7 @@ body.modo-agregar-nodo #map::before{content:'';position:absolute;top:0;left:0;wi
 
 <div class="toast-container" id="toastContainer"></div>
 
+<!-- MODAL COMPARACION -->
 <div class="modal-overlay" id="modalComparacion">
     <div class="modal-content" style="max-width:1000px;padding:0;overflow:hidden;">
         <div style="padding:22px 30px 14px 30px;border-bottom:3px solid #d69e2e;">
@@ -316,42 +363,55 @@ body.modo-agregar-nodo #map::before{content:'';position:absolute;top:0;left:0;wi
             </div>
         </div>
         <div style="padding:16px 30px;border-top:1px solid #e2e8f0;text-align:right;background:#f7fafc;">
-            <button class="close-btn" onclick="cerrarModal('modalComparacion')">
-                <i class="fas fa-times"></i> Cerrar
-            </button>
+            <button class="close-btn" onclick="cerrarModal('modalComparacion')"><i class="fas fa-times"></i> Cerrar</button>
         </div>
     </div>
 </div>
 
-<div class="modal-overlay" id="modalAcercaDe">
-    <div class="modal-content" style="max-width:950px;padding:0;overflow:hidden;">
+<!-- MODAL TSP -->
+<div class="modal-overlay" id="modalTSP">
+    <div class="modal-content" style="max-width:900px;padding:0;overflow:hidden;">
+        <div style="padding:22px 30px 14px 30px;border-bottom:3px solid #d69e2e;background:linear-gradient(135deg,#97266d,#d53f8c);">
+            <h2 style="margin:0;border:none;padding:0;color:white;font-size:20px;display:flex;align-items:center;gap:12px;">
+                <i class="fas fa-route"></i> Ruta de Reparto (TSP)
+            </h2>
+        </div>
+        <div style="padding:20px 30px;max-height:70vh;overflow-y:auto;">
+            <p style="font-size:12px;color:#4a5568;margin-bottom:12px;">Selecciona las paradas a visitar. El sistema calculara la ruta optima con vecino mas cercano + 2-opt.</p>
+            <div style="margin-bottom:12px;">
+                <button onclick="tspSeleccionarTodos()" style="padding:6px 12px;background:#d53f8c;color:white;border:none;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;margin-right:6px;">Todos</button>
+                <button onclick="tspLimpiarSeleccion()" style="padding:6px 12px;background:#718096;color:white;border:none;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;">Ninguno</button>
+            </div>
+            <div id="tsp-paradas" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;max-height:350px;overflow-y:auto;padding:8px;background:#f7fafc;border-radius:8px;"></div>
+            <button onclick="ejecutarTSP()" style="margin-top:16px;width:100%;padding:14px;background:linear-gradient(135deg,#97266d,#d53f8c);color:white;border:none;border-radius:8px;font-size:14px;font-weight:800;cursor:pointer;"><i class="fas fa-play"></i> CALCULAR RUTA OPTIMA</button>
+            <div id="tsp-resultado" style="margin-top:16px;"></div>
+        </div>
+        <div style="padding:16px 30px;border-top:1px solid #e2e8f0;text-align:right;background:#f7fafc;">
+            <button class="close-btn" onclick="cerrarModal('modalTSP')"><i class="fas fa-times"></i> Cerrar</button>
+        </div>
+    </div>
+</div>
 
-        <!-- HEADER -->
+<!-- MODAL ACERCA DE -->
+<div class="modal-overlay" id="modalAcercaDe">
+    <div class="modal-content" style="max-width:1050px;padding:0;overflow:hidden;">
         <div style="padding:24px 32px 16px 32px;border-bottom:3px solid #d69e2e;">
             <h2 style="margin:0;border:none;padding:0;color:#1a365d;font-size:22px;display:flex;align-items:center;gap:12px;">
                 <i class="fas fa-users" style="color:#d69e2e;"></i> Acerca del Equipo
             </h2>
         </div>
-
         <div style="padding:20px 32px 28px 32px;max-height:75vh;overflow-y:auto;">
-
-            <!-- FOTO GRUPAL -->
             <div style="margin-bottom:20px;">
                 <div style="position:relative;width:100%;height:230px;background:linear-gradient(135deg,#1a365d,#2b6cb0);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;overflow:hidden;box-shadow:0 8px 25px rgba(26,54,93,0.25);">
-                    <img src="equipo.jpg" alt="Foto grupal del equipo"
-                         style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;border-radius:12px;"
-                         onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                    <img src="equipo.jpg" alt="Foto grupal del equipo" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;border-radius:12px;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
                     <div style="display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:20px;z-index:1;">
                         <i class="fas fa-users" style="font-size:64px;color:#fbd38d;opacity:0.9;"></i>
                         <div style="font-size:14px;font-weight:700;color:rgba(255,255,255,0.9);line-height:1.5;">
-                            Coloca la foto como <span style="background:#fbd38d;color:#1a365d;padding:3px 10px;border-radius:6px;font-family:monospace;">equipo.jpg</span><br>
-                            en la misma carpeta
+                            Coloca la foto como <span style="background:#fbd38d;color:#1a365d;padding:3px 10px;border-radius:6px;font-family:monospace;">equipo.jpg</span><br>en la misma carpeta
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- INFO INSTITUCIONAL -->
             <div style="background:linear-gradient(135deg,rgba(214,158,46,0.08),rgba(26,54,93,0.05));border-radius:12px;padding:16px 20px;margin-bottom:24px;border-left:4px solid #d69e2e;">
                 <div style="display:flex;justify-content:space-between;padding:8px 0;font-size:13px;border-bottom:1px dashed rgba(0,0,0,0.06);">
                     <span style="font-weight:800;color:#1a2634;display:flex;align-items:center;gap:8px;"><i class="fas fa-building" style="color:#d69e2e;"></i> Institucion:</span>
@@ -370,125 +430,108 @@ body.modo-agregar-nodo #map::before{content:'';position:absolute;top:0;left:0;wi
                     <span style="color:#4a5568;font-weight:600;">M.Sc. Ing. Juan Carlos Catunta Choquecalle</span>
                 </div>
             </div>
-
-            <!-- INTEGRANTES -->
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid #d69e2e;">
-                <h3 style="margin:0;color:#1a365d;font-size:15px;font-weight:800;display:flex;align-items:center;gap:10px;text-transform:uppercase;">
-                    <i class="fas fa-users" style="color:#d69e2e;"></i> Integrantes del Equipo
-                </h3>
+                <h3 style="margin:0;color:#1a365d;font-size:15px;font-weight:800;display:flex;align-items:center;gap:10px;text-transform:uppercase;"><i class="fas fa-users" style="color:#d69e2e;"></i> Integrantes del Equipo</h3>
                 <span style="background:#1a365d;color:white;padding:4px 14px;border-radius:20px;font-size:12px;font-weight:800;">8</span>
             </div>
-
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
 
-                <!-- INTEGRANTE 1 - ELIAS (destacado) -->
                 <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:linear-gradient(135deg,#fef9e7,#fef3c7);border:2px solid #d69e2e;border-radius:12px;position:relative;">
                     <i class="fas fa-star" style="position:absolute;top:10px;right:12px;color:#d69e2e;font-size:14px;"></i>
-                    <div style="width:52px;height:52px;border-radius:50%;overflow:hidden;flex-shrink:0;border:3px solid #1a365d;">
-                        <img src="elias.jpg" alt="Elias" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<div style=&quot;width:100%;height:100%;background:#1a365d;color:white;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;&quot;>EQ</div>';">
+                    <div style="width:60px;height:60px;border-radius:50%;overflow:hidden;flex-shrink:0;border:3px solid #d69e2e;">
+                        <img src="foto6.jpg" alt="Porfirio Quispe" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<div style=&quot;width:100%;height:100%;background:#d69e2e;color:white;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;&quot;>QQ</div>';">
                     </div>
                     <div style="flex:1;min-width:0;">
-                        <div style="font-weight:800;color:#1a365d;font-size:13px;">Elias Quispe Quispe</div>
+                        <div style="font-weight:800;color:#1a365d;font-size:13px;">PORFIRIO ELIAS QUISPE QUISPE</div>
                         <div style="font-size:10px;color:#d69e2e;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;">LIDER DE PROYECTO</div>
                         <div style="font-size:11px;color:#4a5568;margin-top:2px;"><i class="fas fa-code" style="color:#3182ce;"></i> Desarrollo Full-Stack</div>
                     </div>
                 </div>
 
-                <!-- INTEGRANTE 2 -->
                 <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:#f7fafc;border:2px solid #e2e8f0;border-radius:12px;">
-                    <div style="width:52px;height:52px;border-radius:50%;overflow:hidden;flex-shrink:0;border:3px solid #38a169;">
-                        <img src="integrante2.jpg" alt="Integrante 2" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<div style=&quot;width:100%;height:100%;background:#38a169;color:white;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;&quot;>I2</div>';">
+                    <div style="width:60px;height:60px;border-radius:50%;overflow:hidden;flex-shrink:0;border:3px solid #38a169;">
+                        <img src="foto2.jpg" alt="Huanca Clares" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<div style=&quot;width:100%;height:100%;background:#38a169;color:white;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;&quot;>HC</div>';">
                     </div>
                     <div style="flex:1;min-width:0;">
-                        <div style="font-weight:800;color:#1a365d;font-size:13px;">Juan Perez Mamani</div>
+                        <div style="font-weight:800;color:#1a365d;font-size:13px;">HUANCA CLARES LESLY MELODY</div>
                         <div style="font-size:10px;color:#38a169;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;">ALGORITMOS</div>
                         <div style="font-size:11px;color:#4a5568;margin-top:2px;"><i class="fas fa-project-diagram" style="color:#38a169;"></i> BFS / DFS / Dijkstra</div>
                     </div>
                 </div>
 
-                <!-- INTEGRANTE 3 -->
                 <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:#f7fafc;border:2px solid #e2e8f0;border-radius:12px;">
-                    <div style="width:52px;height:52px;border-radius:50%;overflow:hidden;flex-shrink:0;border:3px solid #d53f8c;">
-                        <img src="integrante3.jpg" alt="Integrante 3" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<div style=&quot;width:100%;height:100%;background:#d53f8c;color:white;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;&quot;>I3</div>';">
+                    <div style="width:60px;height:60px;border-radius:50%;overflow:hidden;flex-shrink:0;border:3px solid #d53f8c;">
+                        <img src="foto3.jpg" alt="Huarachi Villca" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<div style=&quot;width:100%;height:100%;background:#d53f8c;color:white;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;&quot;>HV</div>';">
                     </div>
                     <div style="flex:1;min-width:0;">
-                        <div style="font-weight:800;color:#1a365d;font-size:13px;">Maria Lopez Condori</div>
+                        <div style="font-weight:800;color:#1a365d;font-size:13px;">HUARACHI VILLCA VIDAL JUAN</div>
                         <div style="font-size:10px;color:#d53f8c;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;">MST</div>
                         <div style="font-size:11px;color:#4a5568;margin-top:2px;"><i class="fas fa-tree" style="color:#d53f8c;"></i> Kruskal / Prim</div>
                     </div>
                 </div>
 
-                <!-- INTEGRANTE 4 -->
                 <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:#f7fafc;border:2px solid #e2e8f0;border-radius:12px;">
-                    <div style="width:52px;height:52px;border-radius:50%;overflow:hidden;flex-shrink:0;border:3px solid #d69e2e;">
-                        <img src="integrante4.jpg" alt="Integrante 4" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<div style=&quot;width:100%;height:100%;background:#d69e2e;color:white;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;&quot;>I4</div>';">
+                    <div style="width:60px;height:60px;border-radius:50%;overflow:hidden;flex-shrink:0;border:3px solid #d69e2e;">
+                        <img src="foto4.jpg" alt="Limachi Maydana" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<div style=&quot;width:100%;height:100%;background:#d69e2e;color:white;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;&quot;>LM</div>';">
                     </div>
                     <div style="flex:1;min-width:0;">
-                        <div style="font-weight:800;color:#1a365d;font-size:13px;">Carlos Flores Quispe</div>
+                        <div style="font-weight:800;color:#1a365d;font-size:13px;">LIMACHI MAYDANA YHONNY</div>
                         <div style="font-size:10px;color:#d69e2e;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;">FRONTEND</div>
                         <div style="font-size:11px;color:#4a5568;margin-top:2px;"><i class="fas fa-palette" style="color:#d69e2e;"></i> UI / UX Design</div>
                     </div>
                 </div>
 
-                <!-- INTEGRANTE 5 -->
                 <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:#f7fafc;border:2px solid #e2e8f0;border-radius:12px;">
-                    <div style="width:52px;height:52px;border-radius:50%;overflow:hidden;flex-shrink:0;border:3px solid #805ad5;">
-                        <img src="integrante5.jpg" alt="Integrante 5" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<div style=&quot;width:100%;height:100%;background:#805ad5;color:white;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;&quot;>I5</div>';">
+                    <div style="width:60px;height:60px;border-radius:50%;overflow:hidden;flex-shrink:0;border:3px solid #805ad5;">
+                        <img src="foto5.jpg" alt="Mamani Quispe" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<div style=&quot;width:100%;height:100%;background:#805ad5;color:white;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;&quot;>MQ</div>';">
                     </div>
                     <div style="flex:1;min-width:0;">
-                        <div style="font-weight:800;color:#1a365d;font-size:13px;">Nombre Integrante 5</div>
+                        <div style="font-weight:800;color:#1a365d;font-size:13px;">MAMANI QUISPE CRISTIAN</div>
                         <div style="font-size:10px;color:#805ad5;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;">BACKEND</div>
                         <div style="font-size:11px;color:#4a5568;margin-top:2px;"><i class="fas fa-database" style="color:#805ad5;"></i> Base de datos</div>
                     </div>
                 </div>
 
-                <!-- INTEGRANTE 6 -->
                 <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:#f7fafc;border:2px solid #e2e8f0;border-radius:12px;">
-                    <div style="width:52px;height:52px;border-radius:50%;overflow:hidden;flex-shrink:0;border:3px solid #3182ce;">
-                        <img src="integrante6.jpg" alt="Integrante 6" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<div style=&quot;width:100%;height:100%;background:#3182ce;color:white;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;&quot;>I6</div>';">
+                    <div style="width:60px;height:60px;border-radius:50%;overflow:hidden;flex-shrink:0;border:3px solid #3182ce;">
+                        <img src="foto1.jpg" alt="Añamuro Cusi" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<div style=&quot;width:100%;height:100%;background:#3182ce;color:white;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;&quot;>AC</div>';">
                     </div>
                     <div style="flex:1;min-width:0;">
-                        <div style="font-weight:800;color:#1a365d;font-size:13px;">Nombre Integrante 6</div>
+                        <div style="font-weight:800;color:#1a365d;font-size:13px;">AÑAMURO CUSI LIDER JHOJAN</div>
                         <div style="font-size:10px;color:#3182ce;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;">CARTOGRAFIA</div>
                         <div style="font-size:11px;color:#4a5568;margin-top:2px;"><i class="fas fa-map" style="color:#3182ce;"></i> Leaflet / SIG</div>
                     </div>
                 </div>
 
-                <!-- INTEGRANTE 7 -->
                 <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:#f7fafc;border:2px solid #e2e8f0;border-radius:12px;">
-                    <div style="width:52px;height:52px;border-radius:50%;overflow:hidden;flex-shrink:0;border:3px solid #e53e3e;">
-                        <img src="integrante7.jpg" alt="Integrante 7" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<div style=&quot;width:100%;height:100%;background:#e53e3e;color:white;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;&quot;>I7</div>';">
+                    <div style="width:60px;height:60px;border-radius:50%;overflow:hidden;flex-shrink:0;border:3px solid #e53e3e;">
+                        <img src="foto7.jpg" alt="Tito Huanca" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<div style=&quot;width:100%;height:100%;background:#e53e3e;color:white;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;&quot;>TH</div>';">
                     </div>
                     <div style="flex:1;min-width:0;">
-                        <div style="font-weight:800;color:#1a365d;font-size:13px;">Nombre Integrante 7</div>
+                        <div style="font-weight:800;color:#1a365d;font-size:13px;">TITO HUANCA MARIANA HELEN</div>
                         <div style="font-size:10px;color:#e53e3e;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;">DOCUMENTACION</div>
                         <div style="font-size:11px;color:#4a5568;margin-top:2px;"><i class="fas fa-file-alt" style="color:#e53e3e;"></i> Informes tecnicos</div>
                     </div>
                 </div>
 
-                <!-- INTEGRANTE 8 -->
                 <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:#f7fafc;border:2px solid #e2e8f0;border-radius:12px;">
-                    <div style="width:52px;height:52px;border-radius:50%;overflow:hidden;flex-shrink:0;border:3px solid #38b2ac;">
-                        <img src="integrante8.jpg" alt="Integrante 8" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<div style=&quot;width:100%;height:100%;background:#38b2ac;color:white;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;&quot;>I8</div>';">
+                    <div style="width:60px;height:60px;border-radius:50%;overflow:hidden;flex-shrink:0;border:3px solid #38b2ac;">
+                        <img src="foto8.jpg" alt="Yujra Quispe" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<div style=&quot;width:100%;height:100%;background:#38b2ac;color:white;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;&quot;>YQ</div>';">
                     </div>
                     <div style="flex:1;min-width:0;">
-                        <div style="font-weight:800;color:#1a365d;font-size:13px;">Nombre Integrante 8</div>
+                        <div style="font-weight:800;color:#1a365d;font-size:13px;">YUJRA QUISPE SEYMI NOEMI</div>
                         <div style="font-size:10px;color:#38b2ac;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;">TESTING</div>
                         <div style="font-size:11px;color:#4a5568;margin-top:2px;"><i class="fas fa-vial" style="color:#38b2ac;"></i> QA / Pruebas</div>
                     </div>
                 </div>
 
             </div>
-
-            <!-- BOTON CERRAR -->
-            <button class="close-btn" onclick="cerrarModal('modalAcercaDe')" style="margin-top:24px;width:100%;padding:14px;font-size:14px;">
-                <i class="fas fa-times"></i> Cerrar
-            </button>
-
+            <button class="close-btn" onclick="cerrarModal('modalAcercaDe')" style="margin-top:24px;width:100%;padding:14px;font-size:14px;"><i class="fas fa-times"></i> Cerrar</button>
         </div>
     </div>
 </div>
 
+<!-- MODAL ATAJOS -->
 <div class="modal-overlay" id="modalAtajos">
     <div class="modal-content">
         <h2><i class="fas fa-keyboard" style="color:#d69e2e;"></i> Atajos</h2>
@@ -501,6 +544,7 @@ body.modo-agregar-nodo #map::before{content:'';position:absolute;top:0;left:0;wi
     </div>
 </div>
 
+<!-- DASHBOARD -->
 <div class="dashboard">
     <header class="header">
         <div class="header-left">
@@ -516,6 +560,7 @@ body.modo-agregar-nodo #map::before{content:'';position:absolute;top:0;left:0;wi
             <button class="btn-doc green" onclick="descargarDatosEjemplo()"><i class="fas fa-download"></i> Plantillas</button>
             <button class="btn-doc primary" onclick="exportarMapaPNG()"><i class="fas fa-image"></i> PNG</button>
             <button class="btn-doc purple" onclick="abrirComparacion()"><i class="fas fa-balance-scale"></i> Comparar</button>
+            <button class="btn-doc pink" onclick="abrirTSP()"><i class="fas fa-route"></i> TSP</button>
             <button class="btn-doc dark" onclick="toggleModoPresentacion()"><i class="fas fa-tv"></i> Presentar</button>
             <button class="btn-doc warning" onclick="generarInforme()"><i class="fas fa-file-alt"></i> Informe</button>
             <button class="btn-doc red" onclick="exportarPDF()"><i class="fas fa-file-pdf"></i> PDF</button>
@@ -527,6 +572,7 @@ body.modo-agregar-nodo #map::before{content:'';position:absolute;top:0;left:0;wi
             <span class="badge primary" id="badge-nodos"><i class="fas fa-circle"></i> 0 Nodos</span>
             <span class="badge success" id="badge-aristas"><i class="fas fa-link"></i> 0 Aristas</span>
             <span class="badge warning" id="badge-data-status"><i class="fas fa-exclamation-triangle"></i> Sin Datos</span>
+            <span class="badge primary" id="badge-origen-datos"><i class="fas fa-database"></i> Sin origen</span>
         </div>
     </header>
 
@@ -560,11 +606,25 @@ body.modo-agregar-nodo #map::before{content:'';position:absolute;top:0;left:0;wi
                 <div class="kpi-mini-card"><div class="label"><i class="fas fa-network-wired"></i> MST</div><div class="value" id="mst-costo"><span class="gold">--</span></div></div>
             </div>
 
+            <div class="kpi-mst-panel">
+                <div class="kpi-mst-title"><i class="fas fa-tree"></i> Costo MST</div>
+                <div class="kpi-mst-row">
+                    <span class="kpi-mst-label"><i class="fas fa-circle" style="color:#8800FF;"></i> Kruskal</span>
+                    <span class="kpi-mst-value" id="kruskal-total">--</span>
+                </div>
+                <div class="kpi-mst-row">
+                    <span class="kpi-mst-label"><i class="fas fa-circle" style="color:#FF0033;"></i> Prim</span>
+                    <span class="kpi-mst-value" id="prim-total">--</span>
+                </div>
+                <div class="kpi-mst-diff" id="mst-diff">Ejecuta Kruskal y Prim para comparar</div>
+            </div>
+
             <div class="panel-title"><i class="fas fa-code-branch"></i> Algoritmos</div>
             <div class="algo-list">
                 <div class="algo-item active"><input type="radio" name="algoritmo" id="algo-bfs" value="bfs" checked><label for="algo-bfs"><i class="fas fa-layer-group" style="color:#3182ce;"></i> BFS</label><span class="tag">amplitud</span></div>
                 <div class="algo-item"><input type="radio" name="algoritmo" id="algo-dfs" value="dfs"><label for="algo-dfs"><i class="fas fa-sitemap" style="color:#38a169;"></i> DFS</label><span class="tag">profundidad</span></div>
                 <div class="algo-item"><input type="radio" name="algoritmo" id="algo-dijkstra" value="dijkstra"><label for="algo-dijkstra"><i class="fas fa-route" style="color:#d69e2e;"></i> Dijkstra</label><span class="tag">ruta min</span></div>
+                <div class="algo-item"><input type="radio" name="algoritmo" id="algo-astar" value="astar"><label for="algo-astar"><i class="fas fa-star" style="color:#f59e0b;"></i> A*</label><span class="tag">heuristica</span></div>
                 <div class="algo-item"><input type="radio" name="algoritmo" id="algo-kruskal" value="kruskal"><label for="algo-kruskal"><i class="fas fa-tree" style="color:#805ad5;"></i> Kruskal</label><span class="tag">MST global</span></div>
                 <div class="algo-item"><input type="radio" name="algoritmo" id="algo-prim" value="prim"><label for="algo-prim"><i class="fas fa-seedling" style="color:#e53e3e;"></i> Prim</label><span class="tag">MST local</span></div>
             </div>
@@ -604,31 +664,12 @@ body.modo-agregar-nodo #map::before{content:'';position:absolute;top:0;left:0;wi
             </div>
 
             <div class="mini-maps-section">
-                <div class="mini-map-card">
-                    <div class="mini-map-header"><span class="color-dot" style="background:#0066FF;"></span> BFS <span class="costo" id="costo-bfs">--</span></div>
-                    <div class="mini-map-body" id="minimap-bfs"></div>
-                    <div class="mini-map-footer" id="footer-mini-bfs">Ejecute BFS</div>
-                </div>
-                <div class="mini-map-card">
-                    <div class="mini-map-header"><span class="color-dot" style="background:#00CC44;"></span> DFS <span class="costo" id="costo-dfs">--</span></div>
-                    <div class="mini-map-body" id="minimap-dfs"></div>
-                    <div class="mini-map-footer" id="footer-mini-dfs">Ejecute DFS</div>
-                </div>
-                <div class="mini-map-card">
-                    <div class="mini-map-header"><span class="color-dot" style="background:#FF6600;"></span> Dijkstra <span class="costo" id="costo-dijkstra">--</span></div>
-                    <div class="mini-map-body" id="minimap-dijkstra"></div>
-                    <div class="mini-map-footer" id="footer-mini-dijkstra">Ejecute Dijkstra</div>
-                </div>
-                <div class="mini-map-card">
-                    <div class="mini-map-header"><span class="color-dot" style="background:#8800FF;"></span> Kruskal <span class="costo" id="costo-kruskal">--</span></div>
-                    <div class="mini-map-body" id="minimap-kruskal"></div>
-                    <div class="mini-map-footer" id="footer-mini-kruskal">Ejecute Kruskal</div>
-                </div>
-                <div class="mini-map-card">
-                    <div class="mini-map-header"><span class="color-dot" style="background:#FF0033;"></span> Prim <span class="costo" id="costo-prim">--</span></div>
-                    <div class="mini-map-body" id="minimap-prim"></div>
-                    <div class="mini-map-footer" id="footer-mini-prim">Ejecute Prim</div>
-                </div>
+                <div class="mini-map-card"><div class="mini-map-header"><span class="color-dot" style="background:#0066FF;"></span> BFS <span class="costo" id="costo-bfs">--</span></div><div class="mini-map-body" id="minimap-bfs"></div><div class="mini-map-footer" id="footer-mini-bfs">Ejecute BFS</div></div>
+                <div class="mini-map-card"><div class="mini-map-header"><span class="color-dot" style="background:#00CC44;"></span> DFS <span class="costo" id="costo-dfs">--</span></div><div class="mini-map-body" id="minimap-dfs"></div><div class="mini-map-footer" id="footer-mini-dfs">Ejecute DFS</div></div>
+                <div class="mini-map-card"><div class="mini-map-header"><span class="color-dot" style="background:#FF6600;"></span> Dijkstra <span class="costo" id="costo-dijkstra">--</span></div><div class="mini-map-body" id="minimap-dijkstra"></div><div class="mini-map-footer" id="footer-mini-dijkstra">Ejecute Dijkstra</div></div>
+                <div class="mini-map-card"><div class="mini-map-header"><span class="color-dot" style="background:#f59e0b;"></span> A* <span class="costo" id="costo-astar">--</span></div><div class="mini-map-body" id="minimap-astar"></div><div class="mini-map-footer" id="footer-mini-astar">Ejecute A*</div></div>
+                <div class="mini-map-card"><div class="mini-map-header"><span class="color-dot" style="background:#8800FF;"></span> Kruskal <span class="costo" id="costo-kruskal">--</span></div><div class="mini-map-body" id="minimap-kruskal"></div><div class="mini-map-footer" id="footer-mini-kruskal">Ejecute Kruskal</div></div>
+                <div class="mini-map-card"><div class="mini-map-header"><span class="color-dot" style="background:#FF0033;"></span> Prim <span class="costo" id="costo-prim">--</span></div><div class="mini-map-body" id="minimap-prim"></div><div class="mini-map-footer" id="footer-mini-prim">Ejecute Prim</div></div>
             </div>
 
             <div class="structures-section">
@@ -645,9 +686,12 @@ body.modo-agregar-nodo #map::before{content:'';position:absolute;top:0;left:0;wi
             <div class="analysis-section">
                 <div class="analysis-controls">
                     <button class="btn-analysis active" onclick="mostrarAnalisis('nodos-criticos', event)"><i class="fas fa-exclamation-triangle"></i> Nodos Criticos</button>
+                    <button class="btn-analysis" onclick="mostrarAnalisis('tarjan', event)"><i class="fas fa-cut"></i> Articulaciones</button>
                     <button class="btn-analysis" onclick="mostrarAnalisis('estadisticas', event)"><i class="fas fa-chart-pie"></i> Estadisticas</button>
                     <button class="btn-analysis" onclick="mostrarAnalisis('componentes', event)"><i class="fas fa-project-diagram"></i> Conectividad</button>
                     <button class="btn-analysis" onclick="mostrarAnalisis('top-rutas', event)"><i class="fas fa-trophy"></i> Top Rutas</button>
+                    <button class="btn-analysis" onclick="mostrarAnalisis('floyd', event)"><i class="fas fa-table"></i> Floyd</button>
+                    <button class="btn-analysis" onclick="mostrarAnalisis('mst', event)"><i class="fas fa-tree"></i> MST</button>
                     <button class="btn-analysis" onclick="mostrarAnalisis('aislados', event)"><i class="fas fa-unlink"></i> Aislados</button>
                 </div>
                 <div class="analysis-content" id="analysis-content"><div class="analysis-empty"><i class="fas fa-chart-line" style="font-size:40px;color:#cbd5e1;"></i><p>Cargue datos y seleccione un analisis</p></div></div>
@@ -687,6 +731,59 @@ body.modo-agregar-nodo #map::before{content:'';position:absolute;top:0;left:0;wi
             </div>
         </div>
     </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-col">
+                <div class="footer-logo">
+                    <i class="fas fa-truck-medical"></i>
+                    <div>
+                        <div class="footer-title">Red Sanitaria Bolivia</div>
+                        <div class="footer-sub">CEASS - Sistema de Optimizacion Logistica</div>
+                    </div>
+                </div>
+                <p class="footer-desc">Sistema de optimizacion de rutas y analisis de red sanitaria para la Central de Abastecimiento y Suministros en Salud de Bolivia.</p>
+            </div>
+            <div class="footer-col">
+                <div class="footer-heading"><i class="fas fa-code-branch"></i> Algoritmos</div>
+                <ul class="footer-list">
+                    <li><i class="fas fa-circle" style="color:#0066FF;"></i> BFS / DFS (recorrido)</li>
+                    <li><i class="fas fa-circle" style="color:#FF6600;"></i> Dijkstra / A* (ruta minima)</li>
+                    <li><i class="fas fa-circle" style="color:#8800FF;"></i> Kruskal / Prim (MST)</li>
+                    <li><i class="fas fa-circle" style="color:#e53e3e;"></i> Tarjan (articulaciones)</li>
+                    <li><i class="fas fa-circle" style="color:#3182ce;"></i> Floyd-Warshall (todos pares)</li>
+                    <li><i class="fas fa-circle" style="color:#d53f8c;"></i> TSP (ruta de reparto)</li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <div class="footer-heading"><i class="fas fa-info-circle"></i> Informacion</div>
+                <ul class="footer-list">
+                    <li><i class="fas fa-university"></i> UPEA - Ingenieria de Sistemas</li>
+                    <li><i class="fas fa-chalkboard-teacher"></i> M.Sc. Ing. Juan Carlos Catunta Choquecalle</li>
+                    <li><i class="fas fa-users"></i> 8 integrantes del equipo</li>
+                    <li><i class="fas fa-calendar"></i> Gestion 2024</li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <div class="footer-heading"><i class="fas fa-link"></i> Accesos Rapidos</div>
+                <ul class="footer-list footer-links">
+                    <li><a onclick="cargarDatosPrueba()"><i class="fas fa-flask"></i> Cargar datos prueba</a></li>
+                    <li><a onclick="abrirComparacion()"><i class="fas fa-balance-scale"></i> Comparar algoritmos</a></li>
+                    <li><a onclick="abrirTSP()"><i class="fas fa-route"></i> Ruta de reparto</a></li>
+                    <li><a onclick="mostrarAcercaDe()"><i class="fas fa-users"></i> Ver equipo</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-copy">© 2024 CEASS Bolivia - Sistema de Optimizacion Logistica - Todos los derechos reservados</div>
+            <div class="footer-tech">
+                <span><i class="fas fa-code"></i> HTML5 + CSS3 + JS</span>
+                <span><i class="fas fa-map"></i> Leaflet</span>
+                <span><i class="fas fa-chart-bar"></i> Chart.js</span>
+            </div>
+        </div>
+    </footer>
 </div>
 
 <div class="editor-overlay" id="editorOverlay" onclick="cerrarEditor()"></div>
@@ -694,7 +791,7 @@ body.modo-agregar-nodo #map::before{content:'';position:absolute;top:0;left:0;wi
 <div class="modo-mapa-hint" id="modoMapaHint">
     <i class="fas fa-mouse-pointer"></i>
     <span>Haz click en el mapa para ubicar el nodo</span>
-    <button onclick="cancelarModoMapa()" style="background:none;border:none;color:white;cursor:pointer;font-size:14px;margin-left:8px;">✖</button>
+    <button onclick="cancelarModoMapa()" style="background:none;border:none;color:white;cursor:pointer;font-size:14px;margin-left:8px;">X</button>
 </div>
 
 <button class="editor-fab" onclick="toggleEditor()" id="editorFab" title="Editor de Grafo">
@@ -730,14 +827,18 @@ body.modo-agregar-nodo #map::before{content:'';position:absolute;top:0;left:0;wi
                 <div class="editor-field"><label><i class="fas fa-map-pin"></i> Latitud</label><input type="number" id="ed-v-lat" placeholder="-16.5000" step="0.0001" autocomplete="off"></div>
                 <div class="editor-field"><label><i class="fas fa-map-pin"></i> Longitud</label><input type="number" id="ed-v-lng" placeholder="-68.1500" step="0.0001" autocomplete="off"></div>
             </div>
-            <button class="editor-btn editor-btn-map" onclick="activarModoMapa()" id="btnModoMapa">
-                <i class="fas fa-crosshairs"></i> Seleccionar en el mapa
-            </button>
+            <button class="editor-btn editor-btn-map" onclick="activarModoMapa()" id="btnModoMapa"><i class="fas fa-crosshairs"></i> Seleccionar en el mapa</button>
             <div class="editor-actions">
                 <button class="editor-btn editor-btn-add" onclick="edAgregarVertice()"><i class="fas fa-plus"></i> Agregar</button>
                 <button class="editor-btn editor-btn-del" onclick="edEliminarVertice()"><i class="fas fa-trash"></i> Eliminar</button>
             </div>
             <button class="editor-btn editor-btn-clear" onclick="edLimpiarNodo()"><i class="fas fa-eraser"></i> Limpiar</button>
+            <button class="editor-btn" onclick="descargarCSVActualizado()" style="background:linear-gradient(135deg,#276749,#48bb78);margin-top:10px;width:100%;color:white;padding:14px;border:none;border-radius:10px;font-size:13px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.3s ease;">
+                <i class="fas fa-download"></i> DESCARGAR CSV ACTUALIZADO
+            </button>
+            <p style="font-size:10px;color:#8899aa;text-align:center;margin-top:6px;line-height:1.4;">
+                Descarga <b>vertices.csv</b> y <b>aristas.csv</b><br>con todos los cambios que hiciste
+            </p>
             <div class="editor-lista">
                 <div class="editor-lista-titulo"><span><i class="fas fa-list"></i> Nodos</span><span class="count" id="ed-count-nodos">0</span></div>
                 <div id="ed-lista-nodos"></div>
@@ -761,8 +862,7 @@ body.modo-agregar-nodo #map::before{content:'';position:absolute;top:0;left:0;wi
     </div>
 </div>
 
-<script>
-// VARIABLES GLOBALES
+<script>// VARIABLES GLOBALES
 var redSalud = {};
 var adyacencia = {};
 var datosCargados = false;
@@ -778,12 +878,116 @@ var historialAcciones = [];
 var editorAbierto = false;
 var nodoSeleccionadoEd = null;
 var modoAgregarNodoMapa = false;
+var flotaCamiones = [];
 
 var capas = {
     'calles': 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
     'satelite': 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
     'terreno': 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}'
 };
+
+// ============================================================
+// EXPORTAR CSV ACTUALIZADO
+// ============================================================
+function descargarCSVActualizado() {
+    if (!datosCargados) {
+        mostrarToast('No hay datos para exportar', 'warning');
+        return;
+    }
+
+    var totalNodos = Object.keys(redSalud).length;
+    var totalAristas = Object.values(adyacencia).reduce(function(s, x) { return s + Object.keys(x).length; }, 0) / 2;
+
+    // ====== 1. GENERAR vertices.csv ======
+    var vertices = 'id,nombre,tipo,lat,lng\n';
+    Object.keys(redSalud).forEach(function(k) {
+        var n = redSalud[k];
+        var nombre = (n.nombre || '').replace(/,/g, ';');
+        var tipo = (n.tipo || '').replace(/,/g, ';');
+        vertices += k + ',' + nombre + ',' + tipo + ',' + n.lat + ',' + n.lng + '\n';
+    });
+
+    // ====== 2. GENERAR aristas.csv ======
+    var aristas = 'origen,destino,peso\n';
+    var procesadas = {};
+    Object.keys(adyacencia).forEach(function(u) {
+        Object.keys(adyacencia[u]).forEach(function(v) {
+            var key = [u, v].sort().join('-');
+            if (!procesadas[key]) {
+                procesadas[key] = true;
+                aristas += u + ',' + v + ',' + adyacencia[u][v] + '\n';
+            }
+        });
+    });
+
+    // ====== 3. DESCARGAR vertices.csv ======
+    var blobV = new Blob([vertices], {type:'text/csv;charset=utf-8;'});
+    var urlV = URL.createObjectURL(blobV);
+    var aV = document.createElement('a');
+    aV.href = urlV;
+    aV.download = 'vertices.csv';
+    document.body.appendChild(aV);
+    aV.click();
+    document.body.removeChild(aV);
+
+    // ====== 4. DESCARGAR aristas.csv ======
+    setTimeout(function() {
+        var blobA = new Blob([aristas], {type:'text/csv;charset=utf-8;'});
+        var urlA = URL.createObjectURL(blobA);
+        var aA = document.createElement('a');
+        aA.href = urlA;
+        aA.download = 'aristas.csv';
+        document.body.appendChild(aA);
+        aA.click();
+        document.body.removeChild(aA);
+
+        setTimeout(function() {
+            URL.revokeObjectURL(urlV);
+            URL.revokeObjectURL(urlA);
+        }, 1000);
+
+        mostrarToast('✓ Descargados: ' + totalNodos + ' nodos, ' + totalAristas + ' aristas', 'success', 6000);
+        agregarAlHistorial('CSV actualizado descargado: ' + totalNodos + ' nodos', 'info');
+    }, 600);
+}
+
+// ============================================================
+// LOCALSTORAGE
+// ============================================================
+function guardarEnLocalStorage() {
+    try {
+        localStorage.setItem('ceass_redSalud', JSON.stringify(redSalud));
+        localStorage.setItem('ceass_adyacencia', JSON.stringify(adyacencia));
+        localStorage.setItem('ceass_fecha', new Date().toISOString());
+    } catch(e) {
+        console.warn('No se pudo guardar en localStorage:', e);
+    }
+}
+
+function cargarDesdeLocalStorage() {
+    try {
+        var r = localStorage.getItem('ceass_redSalud');
+        var a = localStorage.getItem('ceass_adyacencia');
+        if (r && a) {
+            var data = JSON.parse(r);
+            if (Object.keys(data).length > 0) {
+                redSalud = data;
+                adyacencia = JSON.parse(a);
+                datosCargados = true;
+                generarPesosMultiples();
+                actualizarTodo();
+                actualizarSelectsEditor();
+                renderizarListaNodos();
+                renderizarListaAristas();
+                console.log('✓ Datos cargados desde localStorage: ' + Object.keys(redSalud).length + ' nodos');
+                return true;
+            }
+        }
+    } catch(e) {
+        console.warn('No se pudo cargar desde localStorage:', e);
+    }
+    return false;
+}
 
 // CANVAS DE FONDO
 function initBackgroundAnimation() {
@@ -952,6 +1156,14 @@ function getUnidad() {
     return u[criterioActual] || '';
 }
 
+function getPesoNodo(code) {
+    var vecinos = Object.keys(adyacencia[code] || {});
+    if (vecinos.length === 0) return 0;
+    var suma = 0;
+    vecinos.forEach(function(v) { suma += getPeso(code, v); });
+    return suma / vecinos.length;
+}
+
 function initPonderacion() {
     document.querySelectorAll('.pond-option').forEach(function(option) {
         option.addEventListener('click', function(e) {
@@ -968,6 +1180,7 @@ function initPonderacion() {
             if (datosCargados) {
                 actualizarMatriz();
                 actualizarLista();
+                actualizarTodo();
             }
             mostrarToast('Criterio: ' + textos[criterio], 'info');
         });
@@ -1023,6 +1236,7 @@ function toggleMapaGrande() {
     setTimeout(function() { if (mapPrincipal) mapPrincipal.invalidateSize(); }, 400);
 }
 
+// MAPAS
 function initMapPrincipal() {
     mapPrincipal = L.map('map', {zoomControl:true}).setView([-16.5, -64.5], 5);
     var layer = L.tileLayer(capas['calles'], {maxZoom:19, attribution:'Esri', crossOrigin:true});
@@ -1035,7 +1249,7 @@ function initMapPrincipal() {
 }
 
 function initMiniMaps() {
-    var algos = ['bfs','dfs','dijkstra','kruskal','prim'];
+    var algos = ['bfs','dfs','dijkstra','astar','kruskal','prim'];
     algos.forEach(function(algo) {
         var container = document.getElementById('minimap-' + algo);
         if (!container) return;
@@ -1062,7 +1276,7 @@ function toggleModoOscuro() {
     mostrarToast(modoOscuro ? 'Modo oscuro' : 'Modo claro', 'info');
 }
 
-// ACTUALIZAR - CON ARISTAS BASE VISIBLES
+// ACTUALIZAR
 function actualizarTodo() {
     if (!mapPrincipal) return;
     mapPrincipal.eachLayer(function(layer) {
@@ -1071,7 +1285,6 @@ function actualizarTodo() {
         }
     });
 
-    // Dibujar aristas base (gris punteado)
     var procesadas = {};
     Object.keys(adyacencia).forEach(function(u) {
         Object.keys(adyacencia[u]).forEach(function(v) {
@@ -1084,22 +1297,36 @@ function actualizarTodo() {
         });
     });
 
-    // Dibujar nodos
+    var pesosNodo = {};
+    Object.keys(redSalud).forEach(function(k) { pesosNodo[k] = getPesoNodo(k); });
+    var maxPN = 0, minPN = Infinity;
+    Object.values(pesosNodo).forEach(function(p) {
+        if (p > maxPN) maxPN = p;
+        if (p < minPN) minPN = p;
+    });
+    if (minPN === Infinity) minPN = 0;
+
     var keysR = Object.keys(redSalud);
     for (var m = 0; m < keysR.length; m++) {
         var code = keysR[m];
         var n = redSalud[code];
         var tipo = n.tipo || '';
-        var bg = '#d69e2e', iconFA = 'fa-hospital', size = 26;
-        if (tipo.indexOf('Hub CEASS') !== -1) { bg = '#1a365d'; iconFA = 'fa-warehouse'; size = 32; }
-        else if (tipo.indexOf('Frontera') !== -1) { bg = '#e53e3e'; iconFA = 'fa-passport'; }
-        else if (tipo.indexOf('SEDES') !== -1) { bg = '#38a169'; iconFA = 'fa-building'; size = 28; }
-        else if (tipo.indexOf('3er Nivel') !== -1) { bg = '#805ad5'; iconFA = 'fa-hospital'; size = 28; }
-        else if (tipo.indexOf('2do Nivel') !== -1) { bg = '#3182ce'; iconFA = 'fa-clinic-medical'; }
+        var pesoNodo = pesosNodo[code];
+        var ratio = maxPN > minPN ? (pesoNodo - minPN) / (maxPN - minPN) : 0.5;
+        var bg = ratio < 0.33 ? '#38a169' : ratio < 0.66 ? '#d69e2e' : '#e53e3e';
+        var iconFA = 'fa-hospital';
+        var size = 26 + ratio * 8;
+
+        if (tipo.indexOf('Hub CEASS') !== -1) iconFA = 'fa-warehouse';
+        else if (tipo.indexOf('Frontera') !== -1) iconFA = 'fa-passport';
+        else if (tipo.indexOf('SEDES') !== -1) iconFA = 'fa-building';
+        else if (tipo.indexOf('3er Nivel') !== -1) iconFA = 'fa-hospital';
+        else if (tipo.indexOf('2do Nivel') !== -1) iconFA = 'fa-clinic-medical';
 
         var htmlIcono = '<div style="background:' + bg + ';color:white;width:' + size + 'px;height:' + size + 'px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:' + Math.floor(size * 0.45) + 'px;border:2.5px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.3);"><i class="fas ' + iconFA + '"></i></div>';
         var icono = L.divIcon({className:'icono-nodo', html:htmlIcono, iconSize:[size, size], iconAnchor:[size/2, size/2]});
-        L.marker([n.lat, n.lng], {icon:icono}).addTo(mapPrincipal).bindTooltip('<b>' + n.nombre + '</b><br><span style="color:#d69e2e;font-size:10px;">' + n.tipo + '</span>', {direction:'top', sticky:true});
+        L.marker([n.lat, n.lng], {icon:icono}).addTo(mapPrincipal)
+            .bindTooltip('<b>' + n.nombre + '</b><br><span style="color:#d69e2e;font-size:10px;">' + n.tipo + '</span><br><b>Peso prom: ' + pesoNodo.toFixed(2) + getUnidad() + '</b>', {direction:'top', sticky:true});
     }
 
     actualizarSelects();
@@ -1196,7 +1423,7 @@ function getBounds() {
     return [[Math.min.apply(null, lats), Math.min.apply(null, lngs)], [Math.max.apply(null, lats), Math.max.apply(null, lngs)]];
 }
 
-// DATOS PRUEBA CON CARRETERAS REALES
+// DATOS PRUEBA
 function cargarDatosPrueba() {
     redSalud = {
         'LPZ': {nombre:'La Paz - CEASS Central', tipo:'Hub CEASS', lat:-16.5000, lng:-68.1500},
@@ -1256,7 +1483,7 @@ function cargarDatosPrueba() {
         'HGURQUIDI': {'CBB':0.4, 'HVIEDMA':0.3},
         'SRE': {'CBB':7.0, 'PTS':3.0, 'HSB':0.3, 'TJA':6.0, 'SCZ':9.0},
         'HSB': {'SRE':0.3, 'HSJD-TJA':6.0, 'HDB':3.5, 'CBB':7.0},
-        'SCZ': {'CBB':7.0, 'WAR':0.8, 'SRE':9.0, 'TJN':10.0, 'HMUJ':0.4, 'HSJD-SCZ':0.3, 'HNINOS':0.5, 'HCAMIRI':4.0, 'HVALLEGRANDE':4.5},
+        'SCZ': {'CBB':7.0, 'WAR':0.8, 'SRE':9.0, 'TJN':10.0, 'HMUJ':0.4, 'HSJD-SCZ':0.3, 'HNINOS':0.5, 'HCAMIRI':4.0, 'HVALLEGRANDE':4.5, 'PST':8.0},
         'WAR': {'SCZ':0.8},
         'HMUJ': {'SCZ':0.4, 'HSJD-SCZ':0.5, 'HNINOS':0.4},
         'HSJD-SCZ': {'SCZ':0.3, 'HMUJ':0.5, 'HNINOS':0.3},
@@ -1269,7 +1496,7 @@ function cargarDatosPrueba() {
         'HVALLEGRANDE': {'HCAMIRI':3.0, 'SCZ':4.5},
         'TJN': {'CBB':12.0, 'SCZ':10.0, 'HRIBERALTA':11.0, 'HTRINIDAD':0.3, 'HSANBORJA':3.0},
         'HTRINIDAD': {'TJN':0.3, 'HRIBERALTA':11.0},
-        'HRIBERALTA': {'HTRINIDAD':11.0, 'HGUAYARA':1.5, 'HCARANAVI':12.0, 'HSANBORJA':4.0},
+        'HRIBERALTA': {'HTRINIDAD':11.0, 'HGUAYARA':1.5, 'HCARANAVI':12.0, 'HSANBORJA':4.0, 'CIJ':8.0},
         'HGUAYARA': {'HRIBERALTA':1.5},
         'CIJ': {'HRIBERALTA':8.0},
         'HDB': {'PTS':0.3, 'HSB':3.5, 'HUYUNI':3.0},
@@ -1277,8 +1504,12 @@ function cargarDatosPrueba() {
         'HNORTE': {'EAL':0.4, 'HCL':0.3, 'LPZ':0.4},
         'HSJD-ORU': {'ORU':0.3},
         'HSANBORJA': {'TJN':3.0, 'HRIBERALTA':4.0, 'HRURREN':2.5, 'HCARANAVI':5.0, 'HACHACACHI':6.0},
-        'HRURREN': {'HSANBORJA':2.5}
+        'HRURREN': {'HSANBORJA':2.5},
+        'PST': {'SCZ':8.0}
     };
+    Object.keys(redSalud).forEach(function(k) {
+        if (!adyacencia[k]) adyacencia[k] = {};
+    });
     datosCargados = true;
     generarPesosMultiples();
     setTimeout(function() {
@@ -1288,8 +1519,11 @@ function cargarDatosPrueba() {
         renderizarListaAristas();
         if (mapPrincipal) mapPrincipal.fitBounds(getBounds(), {padding:[30,30]});
     }, 300);
-    mostrarToast('Datos prueba: 40 nodos, 60 aristas', 'success');
-    agregarAlHistorial('Datos prueba cargados: 40 nodos', 'info');
+    var nNodos = Object.keys(redSalud).length;
+    var nAristas = Object.values(adyacencia).reduce(function(s, x) { return s + Object.keys(x).length; }, 0) / 2;
+    mostrarToast('Datos de prueba cargados: ' + nNodos + ' nodos, ' + nAristas + ' aristas', 'success');
+    agregarAlHistorial('Datos de prueba: ' + nNodos + ' nodos', 'info');
+    document.getElementById('badge-origen-datos').innerHTML = '<i class="fas fa-flask"></i> Datos de prueba';
 }
 
 // CSV
@@ -1390,8 +1624,9 @@ function procesarCSV(csvV, csvA) {
         }, 400);
         var totalN = Object.keys(redSalud).length;
         var totalA = Object.values(adyacencia).reduce(function(s, x) { return s + Object.keys(x).length; }, 0) / 2;
-        mostrarToast('CSV: ' + totalN + ' nodos, ' + totalA + ' aristas', 'success', 5000);
-        agregarAlHistorial('CSV cargado: ' + totalN + ' nodos', 'info');
+        mostrarToast('Datos cargados desde CSV: ' + totalN + ' nodos, ' + totalA + ' aristas', 'success', 5000);
+        agregarAlHistorial('CSV cargado: ' + totalN + ' nodos, ' + totalA + ' aristas', 'info');
+        document.getElementById('badge-origen-datos').innerHTML = '<i class="fas fa-file-csv"></i> Datos CSV (' + totalN + ' nodos)';
         if (omitidas > 0) setTimeout(function() { mostrarToast(omitidas + ' aristas omitidas', 'warning', 5000); }, 1000);
     } catch (e) {
         mostrarToast('Error: ' + e.message, 'error', 5000);
@@ -1428,18 +1663,18 @@ function ejecutar() {
     var src = document.getElementById('origen').value;
     var dst = document.getElementById('destino').value;
     if (!src) { mostrarToast('Seleccione ORIGEN', 'warning'); return; }
-    if (algo === 'dijkstra' && !dst) { mostrarToast('Dijkstra requiere DESTINO', 'warning'); return; }
+    if ((algo === 'dijkstra' || algo === 'astar') && !dst) { mostrarToast(algo.toUpperCase() + ' requiere DESTINO', 'warning'); return; }
     mapPrincipal.eachLayer(function(l) { if (l instanceof L.Polyline && l.options.weight >= 3) mapPrincipal.removeLayer(l); });
     mapPrincipal.eachLayer(function(l) {
-        if (l instanceof L.Marker && l.options.icon && l.options.icon.options && (l.options.icon.options.className === 'nivel-label' || l.options.icon.options.className === 'orden-label')) mapPrincipal.removeLayer(l);
+        if (l instanceof L.Marker && l.options.icon && l.options.icon.options && (l.options.icon.options.className === 'nivel-label' || l.options.icon.options.className === 'orden-label' || l.options.icon.options.className === 'tsp-label')) mapPrincipal.removeLayer(l);
     });
     if (algo === 'bfs') runBFS(src);
     else if (algo === 'dfs') runDFS(src);
     else if (algo === 'dijkstra') runDijkstra(src, dst);
+    else if (algo === 'astar') runAStar(src, dst);
     else if (algo === 'kruskal') runKruskal();
     else if (algo === 'prim') runPrim(src);
-}
-
+}// BFS
 function runBFS(start) {
     var visitados = [];
     var niveles = {};
@@ -1500,10 +1735,12 @@ function runBFS(start) {
     out.innerHTML = html;
     document.getElementById('decision-box').innerHTML = '<i class="fas fa-lightbulb icono"></i> <strong>BFS:</strong> expande nivel por nivel.';
     actualizarGrafico('BFS', visitados.length);
+    generarRecomendaciones('BFS', {nodos: visitados.length});
     agregarAlHistorial('BFS desde ' + start + ' (' + visitados.length + ' nodos)', 'algorithm');
     mostrarToast('BFS: ' + visitados.length + ' nodos', 'success');
 }
 
+// DFS
 function runDFS(start) {
     var visitados = [];
     var visited = new Set();
@@ -1557,10 +1794,12 @@ function runDFS(start) {
     out.innerHTML = html;
     document.getElementById('decision-box').innerHTML = '<i class="fas fa-lightbulb icono"></i> <strong>DFS:</strong> profundiza y retrocede.';
     actualizarGrafico('DFS', visitados.length);
+    generarRecomendaciones('DFS', {nodos: visitados.length, profMax: profMax});
     agregarAlHistorial('DFS desde ' + start + ' (' + visitados.length + ' nodos)', 'algorithm');
     mostrarToast('DFS: ' + visitados.length + ' nodos', 'success');
 }
 
+// DIJKSTRA
 function runDijkstra(start, target) {
     var dist = {}, prev = {}, unvisited = new Set();
     Object.keys(redSalud).forEach(function(n) { dist[n] = Infinity; prev[n] = null; unvisited.add(n); });
@@ -1612,10 +1851,91 @@ function runDijkstra(start, target) {
     out.innerHTML = html;
     document.getElementById('decision-box').innerHTML = '<i class="fas fa-lightbulb icono"></i> <strong>Ruta:</strong> ' + path.length + ' nodos, ' + costo.toFixed(2) + u2;
     actualizarGrafico('Dijkstra', costo);
+    generarRecomendaciones('Dijkstra', {costo: costo, path: path, origen: start, destino: target});
     agregarAlHistorial('Dijkstra: ' + start + ' a ' + target + ' (' + costo.toFixed(2) + u2 + ')', 'algorithm');
     mostrarToast('Ruta: ' + costo.toFixed(2) + u2, 'success');
 }
 
+// A*
+function runAStar(start, target) {
+    if (!redSalud[target]) { mostrarToast('Destino invalido', 'warning'); return; }
+    function haversine(a, b) {
+        var R = 6371;
+        var dLat = (b.lat - a.lat) * Math.PI / 180;
+        var dLng = (b.lng - a.lng) * Math.PI / 180;
+        var lat1 = a.lat * Math.PI / 180;
+        var lat2 = b.lat * Math.PI / 180;
+        var x = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.sin(dLng/2) * Math.sin(dLng/2) * Math.cos(lat1) * Math.cos(lat2);
+        return 2 * R * Math.asin(Math.sqrt(x));
+    }
+    var g = {}, f = {}, prev = {}, openSet = new Set(), closedSet = new Set();
+    Object.keys(redSalud).forEach(function(n) { g[n] = Infinity; f[n] = Infinity; prev[n] = null; });
+    g[start] = 0;
+    f[start] = haversine(redSalud[start], redSalud[target]);
+    openSet.add(start);
+    var expandidos = 0;
+    while (openSet.size > 0) {
+        var current = null, minF = Infinity;
+        openSet.forEach(function(n) { if (f[n] < minF) { minF = f[n]; current = n; } });
+        if (current === null) break;
+        expandidos++;
+        if (current === target) break;
+        openSet.delete(current);
+        closedSet.add(current);
+        var vecinos = Object.keys(adyacencia[current] || {});
+        for (var i = 0; i < vecinos.length; i++) {
+            var v = vecinos[i];
+            if (closedSet.has(v)) continue;
+            var tentG = g[current] + getPeso(current, v);
+            if (tentG < g[v]) {
+                prev[v] = current;
+                g[v] = tentG;
+                f[v] = g[v] + haversine(redSalud[v], redSalud[target]);
+                openSet.add(v);
+            }
+        }
+    }
+    var path = [];
+    var curr = target;
+    while (curr) { path.unshift(curr); curr = prev[curr]; }
+    if (path.length === 0 || path[0] !== start) { mostrarToast('Sin ruta A*', 'warning'); return; }
+    for (var j = 0; j < path.length - 1; j++) {
+        L.polyline([[redSalud[path[j]].lat, redSalud[path[j]].lng], [redSalud[path[j+1]].lat, redSalud[path[j+1]].lng]], {color:'#f59e0b', weight:6, opacity:1}).addTo(mapPrincipal);
+    }
+    var m = miniMaps['astar'];
+    if (m) {
+        m.eachLayer(function(l) { if (!(l instanceof L.TileLayer)) m.removeLayer(l); });
+        for (var k = 0; k < path.length - 1; k++) {
+            L.polyline([[redSalud[path[k]].lat, redSalud[path[k]].lng], [redSalud[path[k+1]].lat, redSalud[path[k+1]].lng]], {color:'#f59e0b', weight:3}).addTo(m);
+        }
+        Object.keys(redSalud).forEach(function(code) {
+            var n = redSalud[code];
+            var vis = path.indexOf(code) !== -1;
+            L.circleMarker([n.lat, n.lng], {radius:vis ? 5 : 3, fillColor:vis ? '#f59e0b' : '#cbd5e1', color:'#fff', weight:1, fillOpacity:0.95}).addTo(m);
+        });
+        m.fitBounds(getBounds(), {padding:[10,10]});
+    }
+    var costo = g[target];
+    var u2 = getUnidad();
+    document.getElementById('costo-astar').textContent = costo.toFixed(2) + u2;
+    document.getElementById('footer-mini-astar').innerHTML = path.length + ' nodos (' + costo.toFixed(2) + u2 + ')';
+    var out = document.getElementById('resultados');
+    var html = '<div style="font-weight:800;color:#f59e0b;font-size:14px;"><i class="fas fa-star"></i> A* (A Estrella)</div>';
+    html += '<div style="font-size:11px;color:#8899aa;margin:4px 0;">Nodos expandidos: ' + expandidos + ' de ' + Object.keys(redSalud).length + '</div>';
+    html += '<div style="font-size:13px;font-weight:800;color:#f59e0b;margin:8px 0;">' + path.join(' - ') + '</div>';
+    for (var p = 0; p < path.length - 1; p++) {
+        html += '<div style="font-size:11px;">' + path[p] + ' -> ' + path[p+1] + ' = <b style="color:#f59e0b;">' + getPeso(path[p], path[p+1]).toFixed(2) + u2 + '</b></div>';
+    }
+    html += '<div style="margin-top:8px;padding:8px;background:rgba(245,158,11,0.15);border-radius:6px;"><b>Costo A*:</b> <span style="color:#f59e0b;font-weight:800;font-size:16px;">' + costo.toFixed(2) + u2 + '</span></div>';
+    out.innerHTML = html;
+    document.getElementById('decision-box').innerHTML = '<i class="fas fa-lightbulb icono"></i> <strong>A*:</strong> ' + path.length + ' nodos, ' + costo.toFixed(2) + u2 + ' (mas eficiente que Dijkstra)';
+    actualizarGrafico('A*', costo);
+    generarRecomendaciones('A*', {costo: costo, expandidos: expandidos, path: path});
+    agregarAlHistorial('A* desde ' + start + ' a ' + target + ' (' + costo.toFixed(2) + u2 + ')', 'algorithm');
+    mostrarToast('A*: ' + costo.toFixed(2) + u2, 'success');
+}
+
+// KRUSKAL
 function runKruskal() {
     var edges = [], proc = {};
     Object.keys(adyacencia).forEach(function(u) {
@@ -1651,6 +1971,8 @@ function runKruskal() {
     document.getElementById('costo-kruskal').textContent = total.toFixed(2) + u;
     document.getElementById('footer-mini-kruskal').innerHTML = mst.length + ' aristas (' + total.toFixed(2) + u + ')';
     document.getElementById('mst-costo').innerHTML = '<span class="gold">' + total.toFixed(1) + '</span>';
+    document.getElementById('kruskal-total').textContent = total.toFixed(2) + ' ' + u;
+    actualizarMSTDiff();
     var out = document.getElementById('resultados');
     var html = '<div style="font-weight:800;color:#8800FF;font-size:14px;"><i class="fas fa-tree"></i> Kruskal - MST</div>';
     html += '<div style="font-size:11px;color:#8899aa;margin:4px 0;">Aristas: ' + edges.length + ' - Aceptadas: ' + mst.length + ' - Rechazadas: ' + rechazadas.length + '</div>';
@@ -1659,12 +1981,14 @@ function runKruskal() {
     }
     html += '<div style="margin-top:8px;padding:8px;background:rgba(136,0,255,0.15);border-radius:6px;"><b>Costo MST:</b> <span style="color:#8800FF;font-weight:800;font-size:16px;">' + total.toFixed(2) + u + '</span></div>';
     out.innerHTML = html;
-    document.getElementById('decision-box').innerHTML = '<i class="fas fa-lightbulb icono"></i> <strong>Kruskal:</strong> MST global con ' + mst.length + ' aristas.';
+    document.getElementById('decision-box').innerHTML = '<i class="fas fa-lightbulb icono"></i> <strong>Kruskal:</strong> MST global con ' + mst.length + ' aristas. Costo: ' + total.toFixed(2) + u;
     actualizarGrafico('Kruskal', total);
+    generarRecomendaciones('Kruskal', {costo: total, aristas: mst.length});
     agregarAlHistorial('Kruskal MST: ' + total.toFixed(2) + u, 'algorithm');
     mostrarToast('Kruskal: ' + total.toFixed(2) + u, 'success');
 }
 
+// PRIM
 function runPrim(start) {
     var visited = new Set([start]);
     var mst = [], total = 0;
@@ -1699,6 +2023,8 @@ function runPrim(start) {
     var u = getUnidad();
     document.getElementById('costo-prim').textContent = total.toFixed(2) + u;
     document.getElementById('footer-mini-prim').innerHTML = mst.length + ' aristas (' + total.toFixed(2) + u + ')';
+    document.getElementById('prim-total').textContent = total.toFixed(2) + ' ' + u;
+    actualizarMSTDiff();
     var out = document.getElementById('resultados');
     var html = '<div style="font-weight:800;color:#FF0033;font-size:14px;"><i class="fas fa-seedling"></i> Prim - MST</div>';
     html += '<div style="font-size:11px;color:#8899aa;margin:4px 0;">Inicio: ' + start + '</div>';
@@ -1707,18 +2033,45 @@ function runPrim(start) {
     }
     html += '<div style="margin-top:8px;padding:8px;background:rgba(255,0,51,0.15);border-radius:6px;"><b>Costo MST:</b> <span style="color:#FF0033;font-weight:800;font-size:16px;">' + total.toFixed(2) + u + '</span></div>';
     out.innerHTML = html;
-    document.getElementById('decision-box').innerHTML = '<i class="fas fa-lightbulb icono"></i> <strong>Prim:</strong> desde ' + start + ', ' + mst.length + ' aristas.';
+    document.getElementById('decision-box').innerHTML = '<i class="fas fa-lightbulb icono"></i> <strong>Prim:</strong> desde ' + start + ', ' + mst.length + ' aristas. Costo: ' + total.toFixed(2) + u;
     actualizarGrafico('Prim', total);
+    generarRecomendaciones('Prim', {costo: total, aristas: mst.length});
     agregarAlHistorial('Prim MST desde ' + start + ': ' + total.toFixed(2) + u, 'algorithm');
     mostrarToast('Prim: ' + total.toFixed(2) + u, 'success');
 }
 
-// ANALISIS
+// COMPARA KRUSKAL VS PRIM
+function actualizarMSTDiff() {
+    var kEl = document.getElementById('kruskal-total');
+    var pEl = document.getElementById('prim-total');
+    var dEl = document.getElementById('mst-diff');
+    if (!kEl || !pEl || !dEl) return;
+    var kTxt = kEl.textContent;
+    var pTxt = pEl.textContent;
+    if (kTxt === '--' || pTxt === '--') {
+        dEl.textContent = 'Ejecuta Kruskal y Prim para comparar';
+        dEl.className = 'kpi-mst-diff';
+        return;
+    }
+    var kNum = parseFloat(kTxt);
+    var pNum = parseFloat(pTxt);
+    var diff = Math.abs(kNum - pNum);
+    if (diff < 0.01) {
+        dEl.textContent = '✓ Idénticos (óptimo global)';
+        dEl.className = 'kpi-mst-diff ok';
+    } else {
+        dEl.textContent = 'Diferencia: ' + diff.toFixed(2);
+        dEl.className = 'kpi-mst-diff warn';
+    }
+}
+
+// ========== ANALISIS ==========
 function mostrarAnalisis(tipo, event) {
     document.querySelectorAll('.btn-analysis').forEach(function(b) { b.classList.remove('active'); });
     if (event && event.target) { var btn = event.target.closest('.btn-analysis'); if (btn) btn.classList.add('active'); }
     var c = document.getElementById('analysis-content');
     if (!datosCargados) { c.innerHTML = '<div class="analysis-empty"><p>Cargue datos primero</p></div>'; return; }
+    
     if (tipo === 'nodos-criticos') {
         var nodos = Object.keys(redSalud).map(function(k) { return {codigo:k, nombre:redSalud[k].nombre, grado:Object.keys(adyacencia[k] || {}).length}; }).sort(function(a, b) { return b.grado - a.grado; });
         var maxG = nodos[0] ? nodos[0].grado : 1;
@@ -1778,9 +2131,290 @@ function mostrarAnalisis(tipo, event) {
         if (!a.length) html += '<div class="analysis-card ok"><div class="card-title"><i class="fas fa-check-circle"></i> Sin aislados</div><div class="card-detail">Todos conectados</div></div>';
         else a.forEach(function(k) { html += '<div class="analysis-card critico"><div class="card-title">' + k + '</div><div class="card-detail">' + redSalud[k].nombre + '</div></div>'; });
         c.innerHTML = html + '</div>';
+    } else if (tipo === 'mst') {
+        var edges = [], proc = {};
+        Object.keys(adyacencia).forEach(function(u) {
+            Object.keys(adyacencia[u]).forEach(function(v) {
+                var k = [u, v].sort().join('-');
+                if (!proc[k]) { proc[k] = true; edges.push({u:u, v:v, w:getPeso(u, v)}); }
+            });
+        });
+        edges.sort(function(a, b) { return a.w - b.w; });
+        var parent = {};
+        Object.keys(redSalud).forEach(function(n) { parent[n] = n; });
+        function find(x) { while (parent[x] !== x) { parent[x] = parent[parent[x]]; x = parent[x]; } return x; }
+        function union(a, b) { var ra = find(a), rb = find(b); if (ra === rb) return false; parent[ra] = rb; return true; }
+        var mstK = [], totalK = 0;
+        edges.forEach(function(e) { if (union(e.u, e.v)) { mstK.push(e); totalK += e.w; } });
+
+        var start = Object.keys(redSalud)[0];
+        var visited = new Set([start]);
+        var mstP = [], totalP = 0;
+        while (visited.size < Object.keys(redSalud).length) {
+            var minE = null;
+            visited.forEach(function(u) {
+                for (var v in adyacencia[u]) {
+                    if (!visited.has(v)) {
+                        var w = getPeso(u, v);
+                        if (!minE || w < minE.w) minE = {u:u, v:v, w:w};
+                    }
+                }
+            });
+            if (!minE) break;
+            visited.add(minE.v); mstP.push(minE); totalP += minE.w;
+        }
+
+        var u = getUnidad();
+        var html = '<div class="analysis-grid">';
+        html += '<div class="analysis-card purple"><div class="card-title"><i class="fas fa-tree"></i> Kruskal</div><div class="card-value">' + totalK.toFixed(2) + '</div><div class="card-label">' + u + ' - ' + mstK.length + ' aristas</div></div>';
+        html += '<div class="analysis-card critico"><div class="card-title"><i class="fas fa-seedling"></i> Prim (desde ' + start + ')</div><div class="card-value">' + totalP.toFixed(2) + '</div><div class="card-label">' + u + ' - ' + mstP.length + ' aristas</div></div>';
+        var diff = Math.abs(totalK - totalP);
+        html += '<div class="analysis-card ' + (diff < 0.01 ? 'ok' : 'warning') + '"><div class="card-title"><i class="fas fa-balance-scale"></i> Diferencia</div><div class="card-value">' + diff.toFixed(2) + '</div><div class="card-label">' + (diff < 0.01 ? 'IDENTICOS (optimo)' : 'DIFERENTES') + '</div></div>';
+        html += '</div>';
+
+        html += '<div style="margin-top:12px;background:white;border-radius:8px;padding:12px;border-left:4px solid #8800FF;">';
+        html += '<div style="font-size:12px;font-weight:800;color:#1a365d;margin-bottom:8px;">Aristas del MST (Kruskal)</div>';
+        html += '<div style="font-size:11px;color:#4a5568;line-height:1.8;">';
+        mstK.slice(0, 20).forEach(function(e, i) {
+            html += '<div>' + (i+1) + '. <b>' + e.u + '</b> → <b>' + e.v + '</b> : ' + e.w.toFixed(2) + u + '</div>';
+        });
+        html += '</div></div>';
+        c.innerHTML = html;
+    } else if (tipo === 'floyd') {
+        var keys = Object.keys(redSalud);
+        var n = keys.length;
+        var D = [];
+        for (var i = 0; i < n; i++) {
+            D[i] = [];
+            for (var j = 0; j < n; j++) {
+                if (i === j) D[i][j] = 0;
+                else if (adyacencia[keys[i]] && adyacencia[keys[i]][keys[j]]) D[i][j] = getPeso(keys[i], keys[j]);
+                else D[i][j] = Infinity;
+            }
+        }
+        for (var k = 0; k < n; k++) {
+            for (var a = 0; a < n; a++) {
+                for (var b = 0; b < n; b++) {
+                    if (D[a][k] + D[k][b] < D[a][b]) D[a][b] = D[a][k] + D[k][b];
+                }
+            }
+        }
+        var u = getUnidad();
+        var maxDist = 0, diametroDe = '', diametroA = '';
+        var maxValor = 0;
+        for (var x = 0; x < n; x++) {
+            for (var y = 0; y < n; y++) {
+                if (x !== y && D[x][y] !== Infinity) {
+                    if (D[x][y] > maxValor) maxValor = D[x][y];
+                    if (D[x][y] > maxDist) {
+                        maxDist = D[x][y];
+                        diametroDe = keys[x];
+                        diametroA = keys[y];
+                    }
+                }
+            }
+        }
+        var alcanzables = 0, noAlcanzables = 0;
+        for (var x2 = 0; x2 < n; x2++) {
+            for (var y2 = 0; y2 < n; y2++) {
+                if (x2 !== y2) {
+                    if (D[x2][y2] === Infinity) noAlcanzables++;
+                    else alcanzables++;
+                }
+            }
+        }
+        var visitados = new Set();
+        var comps = 0;
+        keys.forEach(function(nodo) {
+            if (!visitados.has(nodo)) {
+                comps++;
+                var stack = [nodo];
+                while (stack.length) {
+                    var z = stack.pop();
+                    if (visitados.has(z)) continue;
+                    visitados.add(z);
+                    Object.keys(adyacencia[z] || {}).forEach(function(v) {
+                        if (!visitados.has(v)) stack.push(v);
+                    });
+                }
+            }
+        });
+        var html = '<div class="analysis-grid">';
+        html += '<div class="analysis-card info"><div class="card-title"><i class="fas fa-cube"></i> Nodos</div><div class="card-value">' + n + '</div><div class="card-label">Matriz ' + n + '×' + n + '</div></div>';
+        html += '<div class="analysis-card purple"><div class="card-title"><i class="fas fa-network-wired"></i> Componentes</div><div class="card-value">' + comps + '</div><div class="card-label">' + (comps === 1 ? 'Red conectada' : 'Fragmentada') + '</div></div>';
+        html += '<div class="analysis-card warning"><div class="card-title"><i class="fas fa-ruler"></i> Diametro</div><div class="card-value">' + maxDist.toFixed(2) + '</div><div class="card-label">' + u + ' (' + diametroDe + ' → ' + diametroA + ')</div></div>';
+        html += '<div class="analysis-card ' + (noAlcanzables > 0 ? 'critico' : 'ok') + '"><div class="card-title"><i class="fas fa-route"></i> Pares</div><div class="card-value">' + alcanzables + '</div><div class="card-label">' + (noAlcanzables > 0 ? noAlcanzables + ' sin ruta' : 'Todos conectados') + '</div></div>';
+        html += '</div>';
+        html += '<div style="margin-top:16px;background:white;border-radius:8px;padding:12px;">';
+        html += '<div style="font-size:12px;font-weight:800;color:#1a365d;margin-bottom:8px;"><i class="fas fa-table" style="color:#d69e2e;"></i> Matriz de Distancias Mínimas (' + n + '×' + n + ')</div>';
+        html += '<div style="overflow:auto;max-height:500px;max-width:100%;border:1px solid #e2e8f0;border-radius:6px;">';
+        html += '<table style="border-collapse:collapse;font-size:10px;white-space:nowrap;">';
+        html += '<thead><tr>';
+        html += '<th style="position:sticky;top:0;left:0;background:#1a365d;color:white;padding:6px 8px;border:1px solid #cbd5e1;z-index:12;font-weight:800;">.</th>';
+        for (var h = 0; h < n; h++) {
+            html += '<th style="position:sticky;top:0;background:#1a365d;color:white;padding:6px 8px;border:1px solid #cbd5e1;z-index:10;font-weight:800;font-size:9px;">' + keys[h].substring(0, 8) + '</th>';
+        }
+        html += '</tr></thead><tbody>';
+        for (var r = 0; r < n; r++) {
+            html += '<tr>';
+            html += '<td style="position:sticky;left:0;background:#1a365d;color:white;padding:6px 8px;border:1px solid #cbd5e1;z-index:9;font-weight:800;font-size:9px;">' + keys[r].substring(0, 10) + '</td>';
+            for (var c2 = 0; c2 < n; c2++) {
+                var val = D[r][c2];
+                var cellStyle = 'padding:5px 7px;border:1px solid #e2e8f0;text-align:center;font-size:10px;';
+                if (r === c2) {
+                    cellStyle += 'background:#f0f4f8;color:#cbd5e1;font-weight:700;';
+                    html += '<td style="' + cellStyle + '">0</td>';
+                } else if (val === Infinity) {
+                    cellStyle += 'background:#fee2e2;color:#991b1b;font-weight:800;';
+                    html += '<td style="' + cellStyle + '">∞</td>';
+                } else {
+                    var ratio = maxValor > 0 ? val / maxValor : 0;
+                    var bg, color;
+                    if (ratio > 0.7) { bg = '#fee2e2'; color = '#991b1b'; }
+                    else if (ratio > 0.4) { bg = '#fef3c7'; color = '#92400e'; }
+                    else { bg = '#f0fdf4'; color = '#166534'; }
+                    cellStyle += 'background:' + bg + ';color:' + color + ';font-weight:600;';
+                    html += '<td style="' + cellStyle + '">' + val.toFixed(2) + '</td>';
+                }
+            }
+            html += '</tr>';
+        }
+        html += '</tbody></table></div></div>';
+        c.innerHTML = html;
+        agregarAlHistorial('Floyd-Warshall: ' + n + ' nodos, matriz ' + n + '×' + n, 'algorithm');
+        mostrarToast('Floyd: ' + n + ' nodos procesados', 'success');
+    } else if (tipo === 'tarjan') {
+        var disc = {}, low = {}, parent = {}, visited = {}, articulaciones = [], puentes = [];
+        var time = 0;
+        function dfsTarjan(u) {
+            visited[u] = true;
+            disc[u] = low[u] = ++time;
+            var children = 0;
+            var vecinos = Object.keys(adyacencia[u] || {});
+            for (var i = 0; i < vecinos.length; i++) {
+                var v = vecinos[i];
+                if (!visited[v]) {
+                    children++;
+                    parent[v] = u;
+                    dfsTarjan(v);
+                    low[u] = Math.min(low[u], low[v]);
+                    if (low[v] > disc[u]) puentes.push({u:u, v:v});
+                    if (parent[u] !== undefined && low[v] >= disc[u]) {
+                        if (articulaciones.indexOf(u) === -1) articulaciones.push(u);
+                    }
+                } else if (v !== parent[u]) {
+                    low[u] = Math.min(low[u], disc[v]);
+                }
+            }
+            if (parent[u] === undefined && children > 1) {
+                if (articulaciones.indexOf(u) === -1) articulaciones.push(u);
+            }
+        }
+        Object.keys(redSalud).forEach(function(n) {
+            if (!visited[n]) { parent[n] = undefined; dfsTarjan(n); }
+        });
+        articulaciones.forEach(function(code) {
+            var n = redSalud[code];
+            if (!n) return;
+            L.circleMarker([n.lat, n.lng], {radius:18, fillColor:'transparent', color:'#e53e3e', weight:3, dashArray:'5,5'}).addTo(mapPrincipal);
+        });
+        puentes.forEach(function(p) {
+            L.polyline([[redSalud[p.u].lat, redSalud[p.u].lng], [redSalud[p.v].lat, redSalud[p.v].lng]], {color:'#ed8936', weight:4, dashArray:'8,6'}).addTo(mapPrincipal);
+        });
+        var html = '<div class="analysis-grid">';
+        html += '<div class="analysis-card ' + (articulaciones.length > 0 ? 'critico' : 'ok') + '"><div class="card-title"><i class="fas fa-cut"></i> Puntos de Articulacion</div><div class="card-value">' + articulaciones.length + '</div><div class="card-label">nodos criticos</div></div>';
+        html += '<div class="analysis-card ' + (puentes.length > 0 ? 'warning' : 'ok') + '"><div class="card-title"><i class="fas fa-bridge"></i> Puentes</div><div class="card-value">' + puentes.length + '</div><div class="card-label">aristas criticas</div></div>';
+        html += '</div>';
+        html += '<div style="margin-top:12px;background:white;border-radius:8px;padding:12px;border-left:4px solid #e53e3e;">';
+        html += '<div style="font-size:12px;font-weight:800;color:#1a365d;margin-bottom:8px;">Nodos de Articulacion (si fallan, la red se divide)</div>';
+        html += '<div style="display:flex;flex-wrap:wrap;gap:6px;">';
+        if (articulaciones.length === 0) html += '<em style="color:#8899aa;">Ninguno</em>';
+        else articulaciones.forEach(function(a) {
+            html += '<span style="background:#fee2e2;color:#991b1b;padding:4px 10px;border-radius:8px;font-size:11px;font-weight:700;">' + a + ' - ' + redSalud[a].nombre + '</span>';
+        });
+        html += '</div></div>';
+        html += '<div style="margin-top:10px;background:white;border-radius:8px;padding:12px;border-left:4px solid #ed8936;">';
+        html += '<div style="font-size:12px;font-weight:800;color:#1a365d;margin-bottom:8px;">Puentes (aristas criticas)</div>';
+        html += '<div style="display:flex;flex-wrap:wrap;gap:6px;">';
+        if (puentes.length === 0) html += '<em style="color:#8899aa;">Ninguno</em>';
+        else puentes.forEach(function(p) {
+            html += '<span style="background:#ffedd5;color:#9a3412;padding:4px 10px;border-radius:8px;font-size:11px;font-weight:700;">' + p.u + ' ↔ ' + p.v + '</span>';
+        });
+        html += '</div></div>';
+        c.innerHTML = html;
+        agregarAlHistorial('Tarjan: ' + articulaciones.length + ' articulaciones, ' + puentes.length + ' puentes', 'algorithm');
+        mostrarToast('Tarjan: ' + articulaciones.length + ' articulaciones', 'success');
     }
 }
 
+// ========== RECOMENDACIONES INTELIGENTES ==========
+function generarRecomendaciones(algoritmo, datos) {
+    var contenedor = document.getElementById('decision-list');
+    if (!contenedor) return;
+    var recos = [];
+    var V = Object.keys(redSalud).length;
+    var E = Object.values(adyacencia).reduce(function(s, x) { return s + Object.keys(x).length; }, 0) / 2;
+    recos.push({icono: 'chart-line', texto: 'Red con <b>' + V + ' nodos</b> y <b>' + E + ' aristas</b> cargados.'});
+    if (algoritmo === 'BFS') {
+        recos.push({icono: 'layer-group', texto: 'BFS exploro <b>' + datos.nodos + '</b> nodos nivel por nivel.'});
+        recos.push({icono: 'lightbulb', texto: 'Util para ver como se propaga el abastecimiento desde un hub.'});
+    } else if (algoritmo === 'DFS') {
+        recos.push({icono: 'sitemap', texto: 'DFS visito <b>' + datos.nodos + '</b> nodos con profundidad max <b>' + datos.profMax + '</b>.'});
+        recos.push({icono: 'lightbulb', texto: 'Util para detectar ciclos o caminos alternativos.'});
+    } else if (algoritmo === 'Dijkstra') {
+        recos.push({icono: 'route', texto: 'Ruta optima de <b>' + datos.origen + '</b> a <b>' + datos.destino + '</b>:'});
+        recos.push({icono: 'dollar-sign', texto: 'Costo total: <b>' + datos.costo.toFixed(2) + getUnidad() + '</b> en <b>' + datos.path.length + ' nodos</b>.'});
+        if (datos.path.length > 3) recos.push({icono: 'info-circle', texto: 'Recorrido largo detectado. Considerar ruta alternativa directa.'});
+        else recos.push({icono: 'check-circle', texto: 'Ruta optima y eficiente.'});
+    } else if (algoritmo === 'A*') {
+        recos.push({icono: 'star', texto: 'A* expandio solo <b>' + datos.expandidos + '</b> de <b>' + V + '</b> nodos.'});
+        recos.push({icono: 'bolt', texto: 'Eficiencia: <b>' + ((1 - datos.expandidos/V) * 100).toFixed(1) + '%</b> mas rapido que Dijkstra.'});
+        recos.push({icono: 'route', texto: 'Ruta: <b>' + datos.path.join(' → ') + '</b>'});
+    } else if (algoritmo === 'Kruskal') {
+        recos.push({icono: 'tree', texto: 'MST global: <b>' + datos.costo.toFixed(2) + getUnidad() + '</b> con <b>' + datos.aristas + ' aristas</b>.'});
+        recos.push({icono: 'info-circle', texto: 'Representa la infraestructura minima para conectar toda la red.'});
+        recos.push({icono: 'lightbulb', texto: 'Comparar con Prim para verificar optimalidad.'});
+    } else if (algoritmo === 'Prim') {
+        recos.push({icono: 'seedling', texto: 'MST desde origen: <b>' + datos.costo.toFixed(2) + getUnidad() + '</b>.'});
+        recos.push({icono: 'info-circle', texto: 'Arbol de expansion creciendo desde un nodo especifico.'});
+        recos.push({icono: 'lightbulb', texto: 'Util para planificar expansion desde un hub.'});
+    }
+    var grados = Object.keys(redSalud).map(function(k) {
+        return {codigo: k, grado: Object.keys(adyacencia[k] || {}).length};
+    }).sort(function(a, b) { return b.grado - a.grado; });
+    if (grados[0] && grados[0].grado > 3) {
+        recos.push({icono: 'exclamation-triangle', texto: 'Nodo critico detectado: <b>' + grados[0].codigo + '</b> con <b>' + grados[0].grado + ' conexiones</b>.'});
+    }
+    var aislados = Object.keys(redSalud).filter(function(k) { return Object.keys(adyacencia[k] || {}).length === 0; });
+    if (aislados.length > 0) {
+        recos.push({icono: 'unlink', texto: '<b>' + aislados.length + ' nodo(s) aislado(s)</b>: ' + aislados.join(', ') + '. Requieren conexion.'});
+    }
+    var visitados = new Set();
+    var comps = 0;
+    Object.keys(redSalud).forEach(function(n) {
+        if (!visitados.has(n)) {
+            comps++;
+            var stack = [n];
+            while (stack.length) {
+                var a = stack.pop();
+                if (visitados.has(a)) continue;
+                visitados.add(a);
+                Object.keys(adyacencia[a] || {}).forEach(function(v) { if (!visitados.has(v)) stack.push(v); });
+            }
+        }
+    });
+    if (comps === 1) recos.push({icono: 'check-circle', texto: 'Red <b>100% conectada</b>. Todos los nodos son alcanzables.'});
+    else recos.push({icono: 'exclamation-triangle', texto: 'Red fragmentada en <b>' + comps + ' componentes</b>. Revisar conectividad.'});
+    var densidad = V > 1 ? (2 * E) / (V * (V - 1)) : 0;
+    if (densidad < 0.1) recos.push({icono: 'info-circle', texto: 'Densidad baja (<b>' + (densidad * 100).toFixed(1) + '%</b>). La red es dispersa.'});
+    else if (densidad < 0.3) recos.push({icono: 'info-circle', texto: 'Densidad moderada (<b>' + (densidad * 100).toFixed(1) + '%</b>).'});
+    else recos.push({icono: 'check-circle', texto: 'Densidad alta (<b>' + (densidad * 100).toFixed(1) + '%</b>). Excelente interconectividad.'});
+    var html = '';
+    recos.forEach(function(r) {
+        html += '<div class="item"><span class="icon"><i class="fas fa-' + r.icono + '"></i></span><span>' + r.texto + '</span></div>';
+    });
+    contenedor.innerHTML = html;
+}// ========== COMPARACION ==========
 function abrirComparacion() {
     if (!datosCargados) { mostrarToast('Cargue datos primero', 'warning'); return; }
     document.getElementById('modalComparacion').classList.add('active');
@@ -1791,7 +2425,6 @@ function abrirComparacion() {
         var src = document.getElementById('origen').value || Object.keys(redSalud)[0];
         var dst = document.getElementById('destino').value || Object.keys(redSalud)[Object.keys(redSalud).length - 1];
 
-        // BFS
         var bfsNiveles = {}, bfsVisited = new Set([src]), bfsQueue = [src], bfsCount = 0;
         bfsNiveles[src] = 0;
         while (bfsQueue.length > 0) {
@@ -1801,7 +2434,6 @@ function abrirComparacion() {
             });
         }
 
-        // DFS
         var dfsCount = 0, dfsVisited = new Set();
         function dfsRec(n) {
             dfsVisited.add(n); dfsCount++;
@@ -1809,7 +2441,6 @@ function abrirComparacion() {
         }
         dfsRec(src);
 
-        // Dijkstra
         var dist = {}, prev = {}, unvisited = new Set();
         Object.keys(redSalud).forEach(function(n) { dist[n] = Infinity; prev[n] = null; unvisited.add(n); });
         dist[src] = 0;
@@ -1830,7 +2461,44 @@ function abrirComparacion() {
         while (curr) { dijkstraPath.unshift(curr); curr = prev[curr]; }
         if (dijkstraPath[0] !== src) { dijkstraPath = []; dijkstraCosto = 0; }
 
-        // Kruskal
+        function haversine(a, b) {
+            var R = 6371;
+            var dLat = (b.lat - a.lat) * Math.PI / 180;
+            var dLng = (b.lng - a.lng) * Math.PI / 180;
+            var lat1 = a.lat * Math.PI / 180;
+            var lat2 = b.lat * Math.PI / 180;
+            var x = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.sin(dLng/2) * Math.sin(dLng/2) * Math.cos(lat1) * Math.cos(lat2);
+            return 2 * R * Math.asin(Math.sqrt(x));
+        }
+        var gA = {}, fA = {}, prevA = {}, openA = new Set(), closedA = new Set();
+        Object.keys(redSalud).forEach(function(n) { gA[n] = Infinity; fA[n] = Infinity; prevA[n] = null; });
+        gA[src] = 0;
+        fA[src] = haversine(redSalud[src], redSalud[dst]);
+        openA.add(src);
+        var expandidosA = 0;
+        while (openA.size > 0) {
+            var cur = null, minFA = Infinity;
+            openA.forEach(function(n) { if (fA[n] < minFA) { minFA = fA[n]; cur = n; } });
+            if (cur === null) break;
+            expandidosA++;
+            if (cur === dst) break;
+            openA.delete(cur); closedA.add(cur);
+            var vec = Object.keys(adyacencia[cur] || {});
+            for (var ii = 0; ii < vec.length; ii++) {
+                var vv = vec[ii];
+                if (closedA.has(vv)) continue;
+                var tg = gA[cur] + getPeso(cur, vv);
+                if (tg < gA[vv]) {
+                    prevA[vv] = cur;
+                    gA[vv] = tg;
+                    fA[vv] = gA[vv] + haversine(redSalud[vv], redSalud[dst]);
+                    openA.add(vv);
+                }
+            }
+        }
+        var astarCosto = gA[dst];
+        if (astarCosto === Infinity) astarCosto = 0;
+
         var edges = [], procK = {};
         Object.keys(adyacencia).forEach(function(u) {
             Object.keys(adyacencia[u]).forEach(function(v) {
@@ -1846,7 +2514,6 @@ function abrirComparacion() {
         var kruskalMST = [], kruskalTotal = 0;
         edges.forEach(function(e) { if (union(e.u, e.v)) { kruskalMST.push(e); kruskalTotal += e.w; } });
 
-        // Prim
         var visited2 = new Set([src]), primMST = [], primTotal = 0;
         while (visited2.size < Object.keys(redSalud).length) {
             var minE = null;
@@ -1863,105 +2530,227 @@ function abrirComparacion() {
         }
 
         var u3 = getUnidad();
-        var totalNodos = Object.keys(redSalud).length;
-        var totalAristas = edges.length;
         var html = '';
-
-        // Tarjetas
-        html += '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px;">';
-        html += '<div style="background:linear-gradient(135deg,#0066FF,#3182ce);color:white;padding:14px;border-radius:10px;text-align:center;"><div style="font-size:10px;text-transform:uppercase;font-weight:800;opacity:0.9;">BFS</div><div style="font-size:24px;font-weight:800;margin-top:4px;">' + bfsCount + '</div><div style="font-size:10px;opacity:0.8;">nodos</div></div>';
-        html += '<div style="background:linear-gradient(135deg,#00CC44,#38a169);color:white;padding:14px;border-radius:10px;text-align:center;"><div style="font-size:10px;text-transform:uppercase;font-weight:800;opacity:0.9;">DFS</div><div style="font-size:24px;font-weight:800;margin-top:4px;">' + dfsCount + '</div><div style="font-size:10px;opacity:0.8;">nodos</div></div>';
-        html += '<div style="background:linear-gradient(135deg,#FF6600,#dd6b20);color:white;padding:14px;border-radius:10px;text-align:center;"><div style="font-size:10px;text-transform:uppercase;font-weight:800;opacity:0.9;">Dijkstra</div><div style="font-size:24px;font-weight:800;margin-top:4px;">' + dijkstraCosto.toFixed(1) + '</div><div style="font-size:10px;opacity:0.8;">' + u3 + '</div></div>';
-        html += '<div style="background:linear-gradient(135deg,#8800FF,#805ad5);color:white;padding:14px;border-radius:10px;text-align:center;"><div style="font-size:10px;text-transform:uppercase;font-weight:800;opacity:0.9;">Kruskal</div><div style="font-size:24px;font-weight:800;margin-top:4px;">' + kruskalTotal.toFixed(1) + '</div><div style="font-size:10px;opacity:0.8;">' + u3 + '</div></div>';
-        html += '<div style="background:linear-gradient(135deg,#FF0033,#e53e3e);color:white;padding:14px;border-radius:10px;text-align:center;"><div style="font-size:10px;text-transform:uppercase;font-weight:800;opacity:0.9;">Prim</div><div style="font-size:24px;font-weight:800;margin-top:4px;">' + primTotal.toFixed(1) + '</div><div style="font-size:10px;opacity:0.8;">' + u3 + '</div></div>';
+        html += '<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:20px;">';
+        html += '<div style="background:linear-gradient(135deg,#0066FF,#3182ce);color:white;padding:12px 8px;border-radius:10px;text-align:center;"><div style="font-size:9px;text-transform:uppercase;font-weight:800;">BFS</div><div style="font-size:18px;font-weight:800;margin-top:4px;">' + bfsCount + '</div><div style="font-size:9px;opacity:0.8;">nodos</div></div>';
+        html += '<div style="background:linear-gradient(135deg,#00CC44,#38a169);color:white;padding:12px 8px;border-radius:10px;text-align:center;"><div style="font-size:9px;text-transform:uppercase;font-weight:800;">DFS</div><div style="font-size:18px;font-weight:800;margin-top:4px;">' + dfsCount + '</div><div style="font-size:9px;opacity:0.8;">nodos</div></div>';
+        html += '<div style="background:linear-gradient(135deg,#FF6600,#dd6b20);color:white;padding:12px 8px;border-radius:10px;text-align:center;"><div style="font-size:9px;text-transform:uppercase;font-weight:800;">Dijkstra</div><div style="font-size:18px;font-weight:800;margin-top:4px;">' + dijkstraCosto.toFixed(1) + '</div><div style="font-size:9px;opacity:0.8;">' + u3 + '</div></div>';
+        html += '<div style="background:linear-gradient(135deg,#f59e0b,#fbbf24);color:white;padding:12px 8px;border-radius:10px;text-align:center;"><div style="font-size:9px;text-transform:uppercase;font-weight:800;">A*</div><div style="font-size:18px;font-weight:800;margin-top:4px;">' + astarCosto.toFixed(1) + '</div><div style="font-size:9px;opacity:0.8;">' + u3 + '</div></div>';
+        html += '<div style="background:linear-gradient(135deg,#8800FF,#805ad5);color:white;padding:12px 8px;border-radius:10px;text-align:center;"><div style="font-size:9px;text-transform:uppercase;font-weight:800;">Kruskal</div><div style="font-size:18px;font-weight:800;margin-top:4px;">' + kruskalTotal.toFixed(1) + '</div><div style="font-size:9px;opacity:0.8;">' + u3 + '</div></div>';
+        html += '<div style="background:linear-gradient(135deg,#FF0033,#e53e3e);color:white;padding:12px 8px;border-radius:10px;text-align:center;"><div style="font-size:9px;text-transform:uppercase;font-weight:800;">Prim</div><div style="font-size:18px;font-weight:800;margin-top:4px;">' + primTotal.toFixed(1) + '</div><div style="font-size:9px;opacity:0.8;">' + u3 + '</div></div>';
         html += '</div>';
-
-        // Tabla
         html += '<h3 style="color:#1a365d;font-size:14px;margin:20px 0 10px 0;"><i class="fas fa-table" style="color:#d69e2e;"></i> Tabla Comparativa</h3>';
-        html += '<table style="width:100%;border-collapse:collapse;font-size:12px;background:white;border-radius:8px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.05);">';
-        html += '<thead><tr style="background:#1a365d;color:white;"><th style="padding:10px;text-align:left;">Algoritmo</th><th style="padding:10px;">Tipo</th><th style="padding:10px;">Resultado</th><th style="padding:10px;">Unidad</th><th style="padding:10px;">Uso</th></tr></thead><tbody>';
-        html += '<tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:10px;font-weight:800;color:#0066FF;">BFS</td><td style="padding:10px;text-align:center;">Amplitud</td><td style="padding:10px;text-align:center;font-weight:800;">' + bfsCount + '</td><td style="padding:10px;text-align:center;">nodos</td><td style="padding:10px;font-size:11px;color:#4a5568;">Explorar red</td></tr>';
-        html += '<tr style="border-bottom:1px solid #e2e8f0;background:#f7fafc;"><td style="padding:10px;font-weight:800;color:#00CC44;">DFS</td><td style="padding:10px;text-align:center;">Profundidad</td><td style="padding:10px;text-align:center;font-weight:800;">' + dfsCount + '</td><td style="padding:10px;text-align:center;">nodos</td><td style="padding:10px;font-size:11px;color:#4a5568;">Caminos alt.</td></tr>';
-        html += '<tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:10px;font-weight:800;color:#FF6600;">Dijkstra</td><td style="padding:10px;text-align:center;">Ruta min</td><td style="padding:10px;text-align:center;font-weight:800;">' + dijkstraCosto.toFixed(2) + '</td><td style="padding:10px;text-align:center;">' + u3 + '</td><td style="padding:10px;font-size:11px;color:#4a5568;">Ruta optima</td></tr>';
-        html += '<tr style="border-bottom:1px solid #e2e8f0;background:#f7fafc;"><td style="padding:10px;font-weight:800;color:#8800FF;">Kruskal</td><td style="padding:10px;text-align:center;">MST global</td><td style="padding:10px;text-align:center;font-weight:800;">' + kruskalTotal.toFixed(2) + '</td><td style="padding:10px;text-align:center;">' + u3 + '</td><td style="padding:10px;font-size:11px;color:#4a5568;">Red global</td></tr>';
-        html += '<tr><td style="padding:10px;font-weight:800;color:#FF0033;">Prim</td><td style="padding:10px;text-align:center;">MST local</td><td style="padding:10px;text-align:center;font-weight:800;">' + primTotal.toFixed(2) + '</td><td style="padding:10px;text-align:center;">' + u3 + '</td><td style="padding:10px;font-size:11px;color:#4a5568;">Red desde origen</td></tr>';
+        html += '<table style="width:100%;border-collapse:collapse;font-size:12px;background:white;border-radius:8px;overflow:hidden;">';
+        html += '<thead><tr style="background:#1a365d;color:white;"><th style="padding:8px;text-align:left;">Algoritmo</th><th style="padding:8px;">Tipo</th><th style="padding:8px;">Resultado</th><th style="padding:8px;">Unidad</th></tr></thead><tbody>';
+        html += '<tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:8px;font-weight:800;color:#0066FF;">BFS</td><td style="padding:8px;text-align:center;">Amplitud</td><td style="padding:8px;text-align:center;font-weight:800;">' + bfsCount + '</td><td style="padding:8px;text-align:center;">nodos</td></tr>';
+        html += '<tr style="border-bottom:1px solid #e2e8f0;background:#f7fafc;"><td style="padding:8px;font-weight:800;color:#00CC44;">DFS</td><td style="padding:8px;text-align:center;">Profundidad</td><td style="padding:8px;text-align:center;font-weight:800;">' + dfsCount + '</td><td style="padding:8px;text-align:center;">nodos</td></tr>';
+        html += '<tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:8px;font-weight:800;color:#FF6600;">Dijkstra</td><td style="padding:8px;text-align:center;">Ruta min</td><td style="padding:8px;text-align:center;font-weight:800;">' + dijkstraCosto.toFixed(2) + '</td><td style="padding:8px;text-align:center;">' + u3 + '</td></tr>';
+        html += '<tr style="border-bottom:1px solid #e2e8f0;background:#f7fafc;"><td style="padding:8px;font-weight:800;color:#f59e0b;">A*</td><td style="padding:8px;text-align:center;">Heuristica</td><td style="padding:8px;text-align:center;font-weight:800;">' + astarCosto.toFixed(2) + '</td><td style="padding:8px;text-align:center;">' + u3 + '</td></tr>';
+        html += '<tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:8px;font-weight:800;color:#8800FF;">Kruskal</td><td style="padding:8px;text-align:center;">MST global</td><td style="padding:8px;text-align:center;font-weight:800;">' + kruskalTotal.toFixed(2) + '</td><td style="padding:8px;text-align:center;">' + u3 + '</td></tr>';
+        html += '<tr><td style="padding:8px;font-weight:800;color:#FF0033;">Prim</td><td style="padding:8px;text-align:center;">MST local</td><td style="padding:8px;text-align:center;font-weight:800;">' + primTotal.toFixed(2) + '</td><td style="padding:8px;text-align:center;">' + u3 + '</td></tr>';
         html += '</tbody></table>';
-
-        // Ruta
-        html += '<h3 style="color:#1a365d;font-size:14px;margin:24px 0 10px 0;"><i class="fas fa-route" style="color:#d69e2e;"></i> Ruta Óptima (Dijkstra)</h3>';
-        if (dijkstraPath.length > 0) {
-            html += '<div style="background:linear-gradient(135deg,#fff7ed,#fed7aa);padding:16px;border-radius:10px;border-left:4px solid #FF6600;">';
-            html += '<div style="font-size:11px;color:#92400e;font-weight:700;margin-bottom:6px;">De ' + src + ' a ' + dst + '</div>';
-            html += '<div style="font-size:14px;font-weight:800;color:#7c2d12;line-height:1.6;word-break:break-word;">' + dijkstraPath.join(' → ') + '</div>';
-            html += '<div style="margin-top:10px;font-size:13px;color:#7c2d12;"><b>Nodos:</b> ' + dijkstraPath.length + ' | <b>Costo:</b> ' + dijkstraCosto.toFixed(2) + ' ' + u3 + '</div></div>';
-        } else {
-            html += '<div style="background:#f7fafc;padding:16px;border-radius:10px;color:#8899aa;text-align:center;">Sin ruta entre ' + src + ' y ' + dst + '</div>';
-        }
-
-        // MST
-        html += '<h3 style="color:#1a365d;font-size:14px;margin:24px 0 10px 0;"><i class="fas fa-tree" style="color:#d69e2e;"></i> MST: Kruskal vs Prim</h3>';
-        html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">';
-        html += '<div style="background:linear-gradient(135deg,#f3e8ff,#e9d8fd);padding:16px;border-radius:10px;border-left:4px solid #8800FF;"><div style="font-size:12px;font-weight:800;color:#553c9a;margin-bottom:8px;">🌳 KRUSKAL</div><div style="font-size:11px;color:#4a5568;line-height:1.8;"><b>Aristas MST:</b> ' + kruskalMST.length + '<br><b>Costo:</b> ' + kruskalTotal.toFixed(2) + ' ' + u3 + '<br><b>Evaluadas:</b> ' + edges.length + '<br><b>Descartadas:</b> ' + (edges.length - kruskalMST.length) + '</div></div>';
-        html += '<div style="background:linear-gradient(135deg,#fee2e2,#fecaca);padding:16px;border-radius:10px;border-left:4px solid #FF0033;"><div style="font-size:12px;font-weight:800;color:#991b1b;margin-bottom:8px;">🌱 PRIM (desde ' + src + ')</div><div style="font-size:11px;color:#4a5568;line-height:1.8;"><b>Aristas MST:</b> ' + primMST.length + '<br><b>Costo:</b> ' + primTotal.toFixed(2) + ' ' + u3 + '<br><b>Inicio:</b> ' + src + '<br><b>Iteraciones:</b> ' + primMST.length + '</div></div>';
-        html += '</div>';
-
-        // Conclusión
-        var diff = Math.abs(kruskalTotal - primTotal);
         html += '<div style="margin-top:20px;background:linear-gradient(135deg,#f0fdf4,#dcfce7);padding:16px;border-radius:10px;border-left:4px solid #38a169;">';
-        html += '<div style="font-size:12px;font-weight:800;color:#166534;margin-bottom:6px;">💡 CONCLUSIÓN</div>';
+        html += '<div style="font-size:12px;font-weight:800;color:#166534;margin-bottom:6px;">CONCLUSION</div>';
+        var diff = Math.abs(kruskalTotal - primTotal);
         html += '<div style="font-size:12px;color:#166534;line-height:1.6;">';
-        if (diff < 0.01) html += '<b>Ambos algoritmos dan el mismo resultado</b> (' + kruskalTotal.toFixed(2) + ' ' + u3 + '). La red es óptima.';
-        else {
-            html += 'Diferencia: <b>' + diff.toFixed(2) + ' ' + u3 + '</b>. ';
-            html += kruskalTotal < primTotal ? 'Kruskal obtiene menor costo.' : 'Prim obtiene menor costo.';
-        }
-        html += '<br><b>Total nodos:</b> ' + totalNodos + ' | <b>Total aristas:</b> ' + totalAristas;
+        if (diff < 0.01) html += 'Kruskal y Prim dan el mismo resultado (<b>' + kruskalTotal.toFixed(2) + ' ' + u3 + '</b>). La red es óptima.';
+        else html += 'Diferencia Kruskal vs Prim: <b>' + diff.toFixed(2) + ' ' + u3 + '</b>.';
+        if (Math.abs(dijkstraCosto - astarCosto) < 0.01) html += ' Dijkstra y A* dan la misma ruta óptima.';
         html += '</div></div>';
-
         body.innerHTML = html;
-
         actualizarGrafico('BFS', bfsCount);
         actualizarGrafico('DFS', dfsCount);
         actualizarGrafico('Dijkstra', dijkstraCosto);
+        actualizarGrafico('A*', astarCosto);
         actualizarGrafico('Kruskal', kruskalTotal);
         actualizarGrafico('Prim', primTotal);
-
-        mostrarToast('Comparación lista', 'success');
-        agregarAlHistorial('Comparación de 5 algoritmos ejecutada', 'algorithm');
+        mostrarToast('Comparacion lista', 'success');
+        agregarAlHistorial('Comparacion de 6 algoritmos ejecutada', 'algorithm');
     }, 400);
 }
 
+// ========== CHART ==========
 function initChart() {
     var ctx = document.getElementById('chartComparativa').getContext('2d');
     chartInstance = new Chart(ctx, {
         type: 'bar',
-        data: {labels:['BFS','DFS','Dijkstra','Kruskal','Prim'], datasets:[{label:'Valor', data:[0,0,0,0,0], backgroundColor:['#0066FF','#00CC44','#FF6600','#8800FF','#FF0033'], borderRadius:6}]},
-        options: {responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true}, x:{}}}
+        data: {
+            labels:['BFS','DFS','Dijkstra','A*','Kruskal','Prim'],
+            datasets:[{
+                label:'Valor',
+                data:[0,0,0,0,0,0],
+                backgroundColor:['#0066FF','#00CC44','#FF6600','#f59e0b','#8800FF','#FF0033'],
+                borderRadius:6
+            }]
+        },
+        options: {
+            responsive:true,
+            maintainAspectRatio:false,
+            plugins:{
+                legend:{display:false},
+                tooltip:{
+                    callbacks:{
+                        label:function(ctx) {
+                            var vals = ctx.chart.data.datasets[0].data;
+                            var max = Math.max.apply(null, vals);
+                            return ctx.parsed.y.toFixed(2) + ' (' + (max > 0 ? (ctx.parsed.y/max*100).toFixed(1) : 0) + '% del max)';
+                        }
+                    }
+                }
+            },
+            scales:{ y:{beginAtZero:true} }
+        }
     });
 }
 
 function actualizarGrafico(tipo, valor) {
     if (!chartInstance) return;
-    var idx = {BFS:0, DFS:1, Dijkstra:2, Kruskal:3, Prim:4}[tipo];
-    if (idx === undefined) idx = 0;
+    var idx = {BFS:0, DFS:1, Dijkstra:2, 'A*':3, Kruskal:4, Prim:5}[tipo];
+    if (idx === undefined) return;
     chartInstance.data.datasets[0].data[idx] = valor;
     chartInstance.update();
 }
 
+// ========== TSP ==========
+function abrirTSP() {
+    if (!datosCargados) { mostrarToast('Cargue datos primero', 'warning'); return; }
+    document.getElementById('modalTSP').classList.add('active');
+    var cont = document.getElementById('tsp-paradas');
+    var keys = Object.keys(redSalud);
+    var html = '';
+    keys.forEach(function(k) {
+        var n = redSalud[k];
+        html += '<label style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:white;border-radius:6px;cursor:pointer;border:1px solid #e2e8f0;font-size:12px;">';
+        html += '<input type="checkbox" class="tsp-check" value="' + k + '" checked style="accent-color:#d53f8c;">';
+        html += '<span style="font-weight:800;color:#1a365d;min-width:50px;">' + k + '</span>';
+        html += '<span style="color:#4a5568;font-size:11px;">' + n.nombre + '</span>';
+        html += '</label>';
+    });
+    cont.innerHTML = html;
+    document.getElementById('tsp-resultado').innerHTML = '';
+}
+
+function tspSeleccionarTodos() {
+    document.querySelectorAll('.tsp-check').forEach(function(c) { c.checked = true; });
+}
+function tspLimpiarSeleccion() {
+    document.querySelectorAll('.tsp-check').forEach(function(c) { c.checked = false; });
+}
+
+function ejecutarTSP() {
+    var seleccionados = [];
+    document.querySelectorAll('.tsp-check').forEach(function(c) {
+        if (c.checked) seleccionados.push(c.value);
+    });
+    if (seleccionados.length < 3) { mostrarToast('Selecciona al menos 3 paradas', 'warning'); return; }
+    var origen = document.getElementById('origen').value || seleccionados[0];
+    var paradas = seleccionados.filter(function(p) { return p !== origen; });
+    if (paradas.length < 2) { mostrarToast('Necesitas al menos 2 paradas aparte del origen', 'warning'); return; }
+    var keys = Object.keys(redSalud);
+    var n = keys.length;
+    var idx = {};
+    keys.forEach(function(k, i) { idx[k] = i; });
+    var D = [];
+    for (var i = 0; i < n; i++) {
+        D[i] = [];
+        for (var j = 0; j < n; j++) {
+            if (i === j) D[i][j] = 0;
+            else if (adyacencia[keys[i]] && adyacencia[keys[i]][keys[j]]) D[i][j] = getPeso(keys[i], keys[j]);
+            else D[i][j] = Infinity;
+        }
+    }
+    for (var k = 0; k < n; k++) {
+        for (var a = 0; a < n; a++) {
+            for (var b = 0; b < n; b++) {
+                if (D[a][k] + D[k][b] < D[a][b]) D[a][b] = D[a][k] + D[k][b];
+            }
+        }
+    }
+    function dist(u, v) { return D[idx[u]][idx[v]]; }
+    var ruta = [origen];
+    var pendientes = paradas.slice();
+    var actual = origen;
+    while (pendientes.length > 0) {
+        var mejor = null, mejorDist = Infinity;
+        for (var p = 0; p < pendientes.length; p++) {
+            var d = dist(actual, pendientes[p]);
+            if (d < mejorDist) { mejorDist = d; mejor = pendientes[p]; }
+        }
+        if (mejor === null) break;
+        ruta.push(mejor);
+        pendientes = pendientes.filter(function(x) { return x !== mejor; });
+        actual = mejor;
+    }
+    ruta.push(origen);
+    function costoRuta(r) {
+        var t = 0;
+        for (var i = 0; i < r.length - 1; i++) t += dist(r[i], r[i+1]);
+        return t;
+    }
+    var costoInicial = costoRuta(ruta);
+    var mejorado = true;
+    var iteraciones = 0;
+    while (mejorado && iteraciones < 200) {
+        mejorado = false;
+        iteraciones++;
+        for (var i2 = 1; i2 < ruta.length - 2; i2++) {
+            for (var j2 = i2 + 1; j2 < ruta.length - 1; j2++) {
+                var nueva = ruta.slice(0, i2).concat(ruta.slice(i2, j2+1).reverse()).concat(ruta.slice(j2+1));
+                if (costoRuta(nueva) < costoRuta(ruta)) {
+                    ruta = nueva;
+                    mejorado = true;
+                }
+            }
+        }
+    }
+    var costoFinal = costoRuta(ruta);
+    var u = getUnidad();
+    for (var m = 0; m < ruta.length - 1; m++) {
+        L.polyline([[redSalud[ruta[m]].lat, redSalud[ruta[m]].lng], [redSalud[ruta[m+1]].lat, redSalud[ruta[m+1]].lng]], {color:'#d53f8c', weight:5, opacity:0.9}).addTo(mapPrincipal);
+    }
+    ruta.slice(0, -1).forEach(function(code, i) {
+        var nodo = redSalud[code];
+        var icono = L.divIcon({
+            className: 'tsp-label',
+            html: '<div style="background:#d53f8c;color:white;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:800;border:2px solid white;">P' + (i+1) + '</div>',
+            iconSize: [30, 20], iconAnchor: [15, -15]
+        });
+        L.marker([nodo.lat, nodo.lng], {icon:icono}).addTo(mapPrincipal);
+    });
+    var html = '<div style="background:linear-gradient(135deg,#fdf2f8,#fce7f3);padding:16px;border-radius:10px;border-left:4px solid #d53f8c;">';
+    html += '<div style="font-size:12px;font-weight:800;color:#831843;margin-bottom:8px;">RUTA OPTIMA</div>';
+    html += '<div style="font-size:13px;font-weight:800;color:#831843;line-height:1.6;word-break:break-word;">' + ruta.join(' → ') + '</div>';
+    html += '<div style="margin-top:10px;font-size:12px;color:#831843;">';
+    html += '<b>Paradas:</b> ' + (ruta.length - 1) + ' | <b>Costo:</b> ' + costoFinal.toFixed(2) + ' ' + u + '<br>';
+    html += '<b>Mejora 2-opt:</b> ' + ((costoInicial - costoFinal) / costoInicial * 100).toFixed(1) + '%';
+    html += '</div></div>';
+    document.getElementById('tsp-resultado').innerHTML = html;
+    mostrarToast('TSP: ' + costoFinal.toFixed(2) + u + ' en ' + (ruta.length - 1) + ' paradas', 'success');
+    agregarAlHistorial('TSP: ' + (ruta.length - 1) + ' paradas, ' + costoFinal.toFixed(2) + u, 'algorithm');
+}
+
+// ========== REINICIAR ==========
 function reiniciar() {
     if (!datosCargados) return;
     mapPrincipal.eachLayer(function(l) {
         if (l instanceof L.Polyline && l.options.weight >= 3) mapPrincipal.removeLayer(l);
-        if (l instanceof L.Marker && l.options.icon && l.options.icon.options && (l.options.icon.options.className === 'nivel-label' || l.options.icon.options.className === 'orden-label')) mapPrincipal.removeLayer(l);
+        if (l instanceof L.Marker && l.options.icon && l.options.icon.options && (l.options.icon.options.className === 'nivel-label' || l.options.icon.options.className === 'orden-label' || l.options.icon.options.className === 'tsp-label')) mapPrincipal.removeLayer(l);
+        if (l instanceof L.CircleMarker) mapPrincipal.removeLayer(l);
     });
     document.getElementById('resultados').innerHTML = '<i class="fas fa-info-circle" style="color:#d69e2e;"></i> Listo';
-    ['bfs','dfs','dijkstra','kruskal','prim'].forEach(function(a) {
-        document.getElementById('costo-' + a).textContent = '--';
-        document.getElementById('footer-mini-' + a).innerHTML = 'Ejecute ' + a.toUpperCase();
+    ['bfs','dfs','dijkstra','astar','kruskal','prim'].forEach(function(a) {
+        var el = document.getElementById('costo-' + a);
+        if (el) el.textContent = '--';
+        var f = document.getElementById('footer-mini-' + a);
+        if (f) f.innerHTML = 'Ejecute ' + a.toUpperCase();
         var m = miniMaps[a];
         if (m) m.eachLayer(function(l) { if (!(l instanceof L.TileLayer)) m.removeLayer(l); });
     });
-    if (chartInstance) { chartInstance.data.datasets[0].data = [0,0,0,0,0]; chartInstance.update(); }
+    if (chartInstance) { chartInstance.data.datasets[0].data = [0,0,0,0,0,0]; chartInstance.update(); }
+    document.getElementById('kruskal-total').textContent = '--';
+    document.getElementById('prim-total').textContent = '--';
+    document.getElementById('mst-diff').textContent = 'Ejecuta Kruskal y Prim para comparar';
+    document.getElementById('mst-diff').className = 'kpi-mst-diff';
     actualizarTodo();
     agregarAlHistorial('Sistema reiniciado', 'info');
     mostrarToast('Reiniciado', 'info');
@@ -1988,28 +2777,13 @@ function exportarMapaPNG() {
     });
 }
 
+// ========== INFORME PDF ==========
 function generarInforme() {
-    if (!datosCargados) { mostrarToast('Cargue datos', 'warning'); return; }
-    var V = Object.keys(redSalud).length;
-    var E = Object.values(adyacencia).reduce(function(s, x) { return s + Object.keys(x).length; }, 0) / 2;
-    var informe = 'INFORME - RED SANITARIA BOLIVIA - CEASS\n=========================================\nFecha: ' + new Date().toLocaleString() + '\nCriterio: ' + criterioActual.toUpperCase() + '\nNodos: ' + V + '\nAristas: ' + E + '\n';
-    var b = new Blob([informe], {type:'text/plain'});
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(b);
-    a.download = 'informe_ceass_' + Date.now() + '.txt';
-    a.click();
-    mostrarToast('Informe generado', 'success');
-    agregarAlHistorial('Informe generado', 'info');
-}
-
-function exportarPDF() {
     if (!datosCargados) { mostrarToast('Cargue datos primero', 'warning'); return; }
     var jsPDF = window.jspdf.jsPDF;
     var doc = new jsPDF('p', 'mm', 'a4');
     var W = 210, H = 297;
     var pagina = 1;
-
-    // ===== COLORES =====
     var AZUL = [26, 54, 93];
     var DORADO = [214, 158, 46];
     var GRIS = [100, 116, 139];
@@ -2018,404 +2792,437 @@ function exportarPDF() {
     var MORADO = [128, 90, 213];
     var NARANJA = [237, 137, 54];
 
-    // ============ EJECUTAR ALGORITMOS ============
-    var src = document.getElementById('origen').value || Object.keys(redSalud)[0];
-    var dst = document.getElementById('destino').value || Object.keys(redSalud)[Object.keys(redSalud).length - 1];
+    function header(titulo) {
+        doc.setFillColor(AZUL[0], AZUL[1], AZUL[2]);
+        doc.rect(0, 0, W, 16, 'F');
+        doc.setFillColor(DORADO[0], DORADO[1], DORADO[2]);
+        doc.rect(0, 16, W, 1.2, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(13); doc.setFont('helvetica', 'bold');
+        doc.text(titulo, 12, 11);
+    }
+    function footer() {
+        doc.setDrawColor(220, 220, 220);
+        doc.setLineWidth(0.3);
+        doc.line(12, 285, W - 12, 285);
+        doc.setTextColor(150, 150, 150); doc.setFontSize(8); doc.setFont('helvetica', 'normal');
+        doc.text('Red Sanitaria Bolivia - CEASS  |  Informe generado automaticamente', 12, 290);
+        doc.text('Pagina ' + pagina, W - 12, 290, { align: 'right' });
+    }
+    function tituloSec(texto, y) {
+        doc.setTextColor(AZUL[0], AZUL[1], AZUL[2]);
+        doc.setFontSize(12); doc.setFont('helvetica', 'bold');
+        doc.text(texto, 14, y);
+        doc.setDrawColor(DORADO[0], DORADO[1], DORADO[2]);
+        doc.setLineWidth(0.5);
+        doc.line(14, y + 1.5, W - 14, y + 1.5);
+        return y + 8;
+    }
+
     var V = Object.keys(redSalud).length;
     var E = Object.values(adyacencia).reduce(function(s, x) { return s + Object.keys(x).length; }, 0) / 2;
     var densidad = V > 1 ? (2 * E) / (V * (V - 1)) : 0;
-
-    // BFS
-    var bfsV = new Set([src]), bfsQ = [src], bfsCount = 0, bfsNiveles = {};
-    bfsNiveles[src] = 0;
-    while (bfsQ.length > 0) {
-        var u = bfsQ.shift(); bfsCount++;
-        Object.keys(adyacencia[u] || {}).forEach(function(v) {
-            if (!bfsV.has(v)) { bfsV.add(v); bfsNiveles[v] = bfsNiveles[u] + 1; bfsQ.push(v); }
+    var u = getUnidad();
+    var tipos = {};
+    Object.values(redSalud).forEach(function(n) { tipos[n.tipo] = (tipos[n.tipo] || 0) + 1; });
+    var aristas = [], proc = {};
+    Object.keys(adyacencia).forEach(function(a) {
+        Object.keys(adyacencia[a]).forEach(function(b) {
+            var key = [a, b].sort().join('-');
+            if (!proc[key]) { proc[key] = true; aristas.push({u:a, v:b, w:getPeso(a, b)}); }
         });
-    }
-
-    // DFS
-    var dfsV = new Set(), dfsCount = 0;
-    (function dfsRec(n) {
-        dfsV.add(n); dfsCount++;
-        Object.keys(adyacencia[n] || {}).forEach(function(v) { if (!dfsV.has(v)) dfsRec(v); });
-    })(src);
-
-    // Dijkstra
-    var dist = {}, prev = {}, unv = new Set();
-    Object.keys(redSalud).forEach(function(n) { dist[n] = Infinity; prev[n] = null; unv.add(n); });
-    dist[src] = 0;
-    while (unv.size > 0) {
-        var u2 = null, minD = Infinity;
-        unv.forEach(function(n) { if (dist[n] < minD) { minD = dist[n]; u2 = n; } });
-        if (u2 === null || dist[u2] === Infinity) break;
-        unv.delete(u2);
-        for (var v2 in adyacencia[u2]) {
-            if (unv.has(v2)) {
-                var alt = dist[u2] + getPeso(u2, v2);
-                if (alt < dist[v2]) { dist[v2] = alt; prev[v2] = u2; }
+    });
+    aristas.sort(function(x, y) { return x.w - y.w; });
+    var nodosGrado = Object.keys(redSalud).map(function(k) {
+        return { codigo: k, nombre: redSalud[k].nombre, grado: Object.keys(adyacencia[k] || {}).length };
+    }).sort(function(a, b) { return b.grado - a.grado; });
+    var visitados = new Set();
+    var comps = [];
+    Object.keys(redSalud).forEach(function(n) {
+        if (!visitados.has(n)) {
+            var comp = [];
+            var stack = [n];
+            while (stack.length) {
+                var a = stack.pop();
+                if (visitados.has(a)) continue;
+                visitados.add(a); comp.push(a);
+                Object.keys(adyacencia[a] || {}).forEach(function(v) { if (!visitados.has(v)) stack.push(v); });
             }
+            comps.push(comp);
         }
-    }
-    var dCosto = dist[dst];
-    var path = [], curr = dst;
-    while (curr) { path.unshift(curr); curr = prev[curr]; }
-    if (path[0] !== src) path = [];
-
-    // Kruskal
-    var edges = [], procK = {};
-    Object.keys(adyacencia).forEach(function(u) {
-        Object.keys(adyacencia[u]).forEach(function(v) {
-            var k = [u, v].sort().join('-');
-            if (!procK[k]) { procK[k] = true; edges.push({u:u, v:v, w:getPeso(u, v)}); }
-        });
-    });
-    edges.sort(function(a, b) { return a.w - b.w; });
-    var par = {}; Object.keys(redSalud).forEach(function(n) { par[n] = n; });
-    function find(x) { while (par[x] !== x) { par[x] = par[par[x]]; x = par[x]; } return x; }
-    var kTotal = 0, kMST = 0;
-    edges.forEach(function(e) {
-        var ra = find(e.u), rb = find(e.v);
-        if (ra !== rb) { par[ra] = rb; kTotal += e.w; kMST++; }
     });
 
-    // Prim
-    var pV = new Set([src]), pTotal = 0, pMST = 0;
-    while (pV.size < V) {
-        var minE = null;
-        pV.forEach(function(u) {
-            for (var v in adyacencia[u]) {
-                if (!pV.has(v)) {
-                    var w = getPeso(u, v);
-                    if (!minE || w < minE.w) minE = {u:u, v:v, w:w};
-                }
-            }
-        });
-        if (!minE) break;
-        pV.add(minE.v); pTotal += minE.w; pMST++;
-    }
-
-    var u3 = getUnidad();
-
-    // ============ PÁGINA 1: PORTADA ============
+    // PORTADA
     doc.setFillColor(AZUL[0], AZUL[1], AZUL[2]);
     doc.rect(0, 0, W, H, 'F');
-
-    // Franja dorada
     doc.setFillColor(DORADO[0], DORADO[1], DORADO[2]);
     doc.rect(0, 0, W, 6, 'F');
     doc.rect(0, H - 6, W, 6, 'F');
-
-    // Círculo logo
     doc.setFillColor(255, 255, 255);
-    doc.circle(W/2, 70, 20, 'F');
+    doc.circle(W/2, 70, 22, 'F');
     doc.setFillColor(DORADO[0], DORADO[1], DORADO[2]);
-    doc.circle(W/2, 70, 17, 'F');
-
+    doc.circle(W/2, 70, 18, 'F');
     doc.setTextColor(255, 255, 255);
-    doc.setFontSize(36); doc.setFont('helvetica', 'bold');
+    doc.setFontSize(32); doc.setFont('helvetica', 'bold');
     doc.text('CEASS', W/2, 78, { align: 'center' });
-
-    doc.setFontSize(28);
-    doc.text('Red Sanitaria Bolivia', W/2, 115, { align: 'center' });
-
+    doc.setFontSize(26);
+    doc.text('Informe Tecnico', W/2, 115, { align: 'center' });
     doc.setDrawColor(DORADO[0], DORADO[1], DORADO[2]);
     doc.setLineWidth(0.8);
     doc.line(60, 122, 150, 122);
-
     doc.setFontSize(14); doc.setFont('helvetica', 'normal');
     doc.setTextColor(251, 211, 141);
-    doc.text('Reporte de Optimizacion Logistica', W/2, 135, { align: 'center' });
-
+    doc.text('Red Sanitaria Bolivia', W/2, 135, { align: 'center' });
     doc.setFontSize(10); doc.setTextColor(200, 210, 220);
     doc.text('Central de Abastecimiento y Suministros en Salud', W/2, 145, { align: 'center' });
-
-    // Caja de datos
-    doc.setFillColor(255, 255, 255, 0.1);
-    doc.roundedRect(40, 175, 130, 50, 4, 4, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(11);
-    doc.text('Fecha: ' + new Date().toLocaleString('es-BO'), 45, 190);
-    doc.text('Criterio: ' + criterioActual.toUpperCase(), 45, 200);
-    doc.text('Nodos: ' + V + '  |  Aristas: ' + E, 45, 210);
-    doc.text('Origen: ' + src + '  ->  Destino: ' + dst, 45, 220);
-
+    doc.setFillColor(50, 80, 120);
+    doc.roundedRect(40, 175, 130, 55, 4, 4, 'F');
+    doc.setTextColor(255, 255, 255); doc.setFontSize(10); doc.setFont('helvetica', 'bold');
+    doc.text('INFORMACION DEL INFORME', W/2, 187, { align: 'center' });
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+    doc.text('Fecha: ' + new Date().toLocaleString('es-BO'), 46, 200);
+    doc.text('Criterio: ' + criterioActual.toUpperCase(), 46, 210);
+    doc.text('Nodos: ' + V + '  |  Aristas: ' + E, 46, 220);
+    doc.text('Densidad: ' + (densidad * 100).toFixed(2) + '%', 46, 230);
+    doc.text('Generado por: Sistema CEASS', 46, 240);
     doc.setFontSize(9); doc.setTextColor(150, 160, 180);
-    doc.text('Reporte generado automaticamente por el sistema CEASS', W/2, 270, { align: 'center' });
+    doc.text('UPEA - Ingenieria de Sistemas', W/2, 268, { align: 'center' });
+    doc.text('M.Sc. Ing. Juan Carlos Catunta Choquecalle', W/2, 275, { align: 'center' });
 
-    // ============ PÁGINA 2: KPIs + RESUMEN ============
+    // PAGINA 2: RESUMEN
     doc.addPage(); pagina++;
-
-    // Header
-    doc.setFillColor(AZUL[0], AZUL[1], AZUL[2]);
-    doc.rect(0, 0, W, 18, 'F');
-    doc.setTextColor(255, 255, 255); doc.setFontSize(14); doc.setFont('helvetica', 'bold');
-    doc.text('1.  Resumen General de la Red', 12, 12);
-
-    // Tarjetas KPI (4 cuadros de colores)
+    header('1. Resumen General de la Red');
+    var y = 30;
+    y = tituloSec('Datos principales', y);
     var kpis = [
-        { label: 'NODOS', valor: V, color: AZUL, icon: 'N' },
-        { label: 'ARISTAS', valor: E, color: VERDE, icon: 'A' },
-        { label: 'DENSIDAD', valor: (densidad * 100).toFixed(1) + '%', color: DORADO, icon: 'D' },
-        { label: 'CRITERIO', valor: criterioActual.toUpperCase(), color: MORADO, icon: 'C' }
+        { label: 'NODOS', val: V, color: AZUL },
+        { label: 'ARISTAS', val: E, color: VERDE },
+        { label: 'DENSIDAD', val: (densidad * 100).toFixed(1) + '%', color: DORADO },
+        { label: 'CRITERIO', val: criterioActual.toUpperCase(), color: MORADO }
     ];
     kpis.forEach(function(k, i) {
         var x = 12 + i * 47;
         doc.setFillColor(k.color[0], k.color[1], k.color[2]);
-        doc.roundedRect(x, 30, 43, 28, 3, 3, 'F');
+        doc.roundedRect(x, y, 43, 26, 3, 3, 'F');
         doc.setTextColor(255, 255, 255); doc.setFontSize(8); doc.setFont('helvetica', 'bold');
-        doc.text(k.label, x + 21.5, 38, { align: 'center' });
-        doc.setFontSize(16);
-        doc.text(String(k.valor), x + 21.5, 52, { align: 'center' });
+        doc.text(k.label, x + 21.5, y + 8, { align: 'center' });
+        doc.setFontSize(15);
+        doc.text(String(k.val), x + 21.5, y + 20, { align: 'center' });
     });
-
-    // Tipos de nodo
-    var tipos = {};
-    Object.values(redSalud).forEach(function(n) { tipos[n.tipo] = (tipos[n.tipo] || 0) + 1; });
-
-    doc.setTextColor(AZUL[0], AZUL[1], AZUL[2]); doc.setFontSize(12); doc.setFont('helvetica', 'bold');
-    doc.text('Distribucion por Tipo de Nodo', 12, 78);
-    doc.setDrawColor(DORADO[0], DORADO[1], DORADO[2]); doc.setLineWidth(0.5);
-    doc.line(12, 80, 198, 80);
-
-    doc.setFillColor(247, 250, 252);
-    doc.rect(12, 84, 186, 8, 'F');
-    doc.setTextColor(AZUL[0], AZUL[1], AZUL[2]); doc.setFontSize(9); doc.setFont('helvetica', 'bold');
-    doc.text('TIPO', 16, 90);
-    doc.text('CANTIDAD', 130, 90);
-    doc.text('%', 175, 90);
-
-    var y = 92;
-    var tipoColores = {
-        'Hub CEASS': AZUL, 'SEDES': VERDE, 'Frontera': ROJO,
-        'Hospital 3er Nivel': MORADO, 'Hospital 2do Nivel': NARANJA,
-        'Centro Salud': DORADO
-    };
+    y += 36;
+    y = tituloSec('Distribucion por Tipo de Nodo', y);
+    doc.setFillColor(AZUL[0], AZUL[1], AZUL[2]);
+    doc.rect(14, y, 182, 8, 'F');
+    doc.setTextColor(255, 255, 255); doc.setFontSize(9); doc.setFont('helvetica', 'bold');
+    doc.text('TIPO DE INSTALACION', 18, y + 5.5);
+    doc.text('CANTIDAD', 120, y + 5.5);
+    doc.text('PORCENTAJE', 160, y + 5.5);
+    y += 9;
+    var tipoColores = { 'Hub CEASS': AZUL, 'SEDES': VERDE, 'Frontera': ROJO, 'Hospital 3er Nivel': MORADO, 'Hospital 2do Nivel': NARANJA, 'Centro Salud': DORADO };
     doc.setFont('helvetica', 'normal');
-    Object.keys(tipos).forEach(function(t, i) {
-        if (i % 2 === 1) { doc.setFillColor(250, 252, 255); doc.rect(12, y, 186, 7, 'F'); }
+    var i = 0;
+    Object.keys(tipos).forEach(function(t) {
+        if (i % 2 === 1) { doc.setFillColor(248, 250, 252); doc.rect(14, y, 182, 8, 'F'); }
         var col = tipoColores[t] || GRIS;
         doc.setFillColor(col[0], col[1], col[2]);
-        doc.rect(14, y + 1.5, 3, 4, 'F');
+        doc.rect(16, y + 2, 3, 4, 'F');
         doc.setTextColor(50, 50, 60); doc.setFontSize(9);
-        doc.text(t, 20, y + 5);
-        doc.text(String(tipos[t]), 130, y + 5);
-        doc.text(((tipos[t]/V)*100).toFixed(1) + '%', 175, y + 5);
-        y += 7;
-    });
-
-    // ============ PÁGINA 3: COMPARACIÓN ============
-    doc.addPage(); pagina++;
-    doc.setFillColor(AZUL[0], AZUL[1], AZUL[2]);
-    doc.rect(0, 0, W, 18, 'F');
-    doc.setTextColor(255, 255, 255); doc.setFontSize(14); doc.setFont('helvetica', 'bold');
-    doc.text('2.  Comparacion de Algoritmos', 12, 12);
-
-    // Tarjetas resultado
-    var results = [
-        { label: 'BFS', val: bfsCount + ' nodos', color: [49, 130, 206] },
-        { label: 'DFS', val: dfsCount + ' nodos', color: VERDE },
-        { label: 'Dijkstra', val: dCosto.toFixed(2) + u3, color: NARANJA },
-        { label: 'Kruskal', val: kTotal.toFixed(2) + u3, color: MORADO },
-        { label: 'Prim', val: pTotal.toFixed(2) + u3, color: ROJO }
-    ];
-    results.forEach(function(r, i) {
-        var x = 10 + i * 39;
-        doc.setFillColor(r.color[0], r.color[1], r.color[2]);
-        doc.roundedRect(x, 28, 36, 26, 3, 3, 'F');
-        doc.setTextColor(255, 255, 255); doc.setFontSize(8); doc.setFont('helvetica', 'bold');
-        doc.text(r.label.toUpperCase(), x + 18, 36, { align: 'center' });
-        doc.setFontSize(13);
-        doc.text(String(r.val), x + 18, 48, { align: 'center' });
-    });
-
-    // Tabla comparativa
-    doc.setTextColor(AZUL[0], AZUL[1], AZUL[2]); doc.setFontSize(12); doc.setFont('helvetica', 'bold');
-    doc.text('Tabla Comparativa Detallada', 12, 70);
-    doc.setDrawColor(DORADO[0], DORADO[1], DORADO[2]); doc.line(12, 72, 198, 72);
-
-    // Header tabla
-    doc.setFillColor(AZUL[0], AZUL[1], AZUL[2]);
-    doc.rect(12, 76, 186, 9, 'F');
-    doc.setTextColor(255, 255, 255); doc.setFontSize(9); doc.setFont('helvetica', 'bold');
-    doc.text('ALGORITMO', 16, 82);
-    doc.text('TIPO', 60, 82);
-    doc.text('RESULTADO', 100, 82);
-    doc.text('UNIDAD', 140, 82);
-    doc.text('USO RECOMENDADO', 160, 82);
-
-    var filas = [
-        { color: [49, 130, 206], datos: ['BFS', 'Amplitud', String(bfsCount), 'nodos', 'Explorar red'] },
-        { color: VERDE, datos: ['DFS', 'Profundidad', String(dfsCount), 'nodos', 'Buscar caminos'] },
-        { color: NARANJA, datos: ['Dijkstra', 'Ruta minima', dCosto.toFixed(2), u3, 'Ruta optima'] },
-        { color: MORADO, datos: ['Kruskal', 'MST global', kTotal.toFixed(2), u3, 'Red global'] },
-        { color: ROJO, datos: ['Prim', 'MST local', pTotal.toFixed(2), u3, 'Red desde origen'] }
-    ];
-    var ty = 85;
-    filas.forEach(function(f, i) {
-        if (i % 2 === 0) { doc.setFillColor(247, 250, 252); doc.rect(12, ty, 186, 9, 'F'); }
-        doc.setFillColor(f.color[0], f.color[1], f.color[2]);
-        doc.rect(12, ty, 3, 9, 'F');
-        doc.setTextColor(50, 50, 60); doc.setFontSize(9); doc.setFont('helvetica', 'normal');
-        doc.text(f.datos[0], 18, ty + 6);
-        doc.text(f.datos[1], 60, ty + 6);
+        doc.text(t, 22, y + 6);
         doc.setFont('helvetica', 'bold');
-        doc.text(f.datos[2], 100, ty + 6);
+        doc.text(String(tipos[t]), 130, y + 6);
         doc.setFont('helvetica', 'normal');
-        doc.text(f.datos[3], 140, ty + 6);
-        doc.text(f.datos[4], 160, ty + 6);
-        ty += 9;
+        doc.text(((tipos[t]/V)*100).toFixed(1) + '%', 168, y + 6);
+        y += 8;
+        i++;
     });
+    footer();
 
-    // Conclusión MST
-    doc.setFillColor(240, 253, 244);
-    doc.roundedRect(12, ty + 8, 186, 30, 3, 3, 'F');
-    doc.setFillColor(VERDE[0], VERDE[1], VERDE[2]);
-    doc.rect(12, ty + 8, 2, 30, 'F');
-    doc.setTextColor(22, 101, 52); doc.setFontSize(11); doc.setFont('helvetica', 'bold');
-    doc.text('CONCLUSION', 18, ty + 16);
-    doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
-    var diff = Math.abs(kTotal - pTotal);
-    if (diff < 0.01) {
-        doc.text('Ambos algoritmos (Kruskal y Prim) dan el mismo resultado: ' + kTotal.toFixed(2) + ' ' + u3, 18, ty + 23);
-        doc.text('La red actual es OPTIMA.', 18, ty + 28);
-    } else {
-        doc.text('Diferencia entre Kruskal y Prim: ' + diff.toFixed(2) + ' ' + u3, 18, ty + 23);
-        doc.text(kTotal < pTotal ? 'Kruskal obtiene el menor costo.' : 'Prim obtiene el menor costo.', 18, ty + 28);
-    }
-
-    // ============ PÁGINA 4: RUTA ÓPTIMA ============
+    // PAGINA 3: TOP NODOS
     doc.addPage(); pagina++;
+    header('2. Top 10 Nodos Mas Conectados');
+    y = 30;
+    doc.setTextColor(60, 60, 70); doc.setFontSize(10); doc.setFont('helvetica', 'normal');
+    doc.text('Nodos con mayor numero de conexiones. Son los puntos mas importantes para la distribucion.', 14, y);
+    y += 8;
     doc.setFillColor(AZUL[0], AZUL[1], AZUL[2]);
-    doc.rect(0, 0, W, 18, 'F');
-    doc.setTextColor(255, 255, 255); doc.setFontSize(14); doc.setFont('helvetica', 'bold');
-    doc.text('3.  Ruta Optima (Dijkstra)', 12, 12);
-
-    doc.setFillColor(255, 247, 237);
-    doc.roundedRect(12, 26, 186, 40, 3, 3, 'F');
-    doc.setFillColor(NARANJA[0], NARANJA[1], NARANJA[2]);
-    doc.rect(12, 26, 2, 40, 'F');
-
-    doc.setTextColor(124, 45, 18); doc.setFontSize(10); doc.setFont('helvetica', 'bold');
-    doc.text('Origen:', 18, 34);
-    doc.text('Destino:', 18, 42);
-    doc.text('Costo total:', 18, 50);
-    doc.text('Nodos en ruta:', 18, 58);
-
+    doc.rect(14, y, 182, 8, 'F');
+    doc.setTextColor(255, 255, 255); doc.setFontSize(9); doc.setFont('helvetica', 'bold');
+    doc.text('#', 18, y + 5.5);
+    doc.text('CODIGO', 28, y + 5.5);
+    doc.text('NOMBRE', 55, y + 5.5);
+    doc.text('CONEXIONES', 165, y + 5.5);
+    y += 9;
     doc.setFont('helvetica', 'normal');
-    doc.text(src, 45, 34);
-    doc.text(dst, 45, 42);
-    doc.setTextColor(NARANJA[0], NARANJA[1], NARANJA[2]);
-    doc.setFont('helvetica', 'bold'); doc.setFontSize(12);
-    doc.text(dCosto.toFixed(2) + ' ' + u3, 45, 50);
-    doc.setTextColor(124, 45, 18); doc.setFontSize(10);
-    doc.text(String(path.length) + ' nodos', 45, 58);
-
-    if (path.length > 0) {
-        doc.setTextColor(AZUL[0], AZUL[1], AZUL[2]); doc.setFontSize(11); doc.setFont('helvetica', 'bold');
-        doc.text('Detalle del recorrido:', 12, 78);
-
-        var py = 85;
-        for (var i = 0; i < path.length - 1; i++) {
-            if (py > 260) { doc.addPage(); py = 30; }
-            doc.setFillColor(i % 2 === 0 ? 255 : 255, i % 2 === 0 ? 255 : 250, i % 2 === 0 ? 255 : 240);
-            doc.rect(12, py - 4, 186, 7, 'F');
-            doc.setTextColor(50, 50, 60); doc.setFontSize(9); doc.setFont('helvetica', 'normal');
-            doc.text((i+1) + '.', 16, py);
-            doc.text(path[i], 24, py);
-            doc.setTextColor(NARANJA[0], NARANJA[1], NARANJA[2]);
-            doc.text('->', 55, py);
-            doc.setTextColor(50, 50, 60);
-            doc.text(path[i+1], 65, py);
-            doc.setFont('helvetica', 'bold');
-            doc.text(getPeso(path[i], path[i+1]).toFixed(2) + ' ' + u3, 160, py);
-            py += 7;
-        }
-    } else {
-        doc.setTextColor(ROJO[0], ROJO[1], ROJO[2]); doc.setFontSize(11);
-        doc.text('No hay ruta disponible entre estos nodos.', 12, 85);
-    }
-
-    // ============ PÁGINA 5: TOP NODOS + RECOMENDACIONES ============
-    doc.addPage(); pagina++;
-    doc.setFillColor(AZUL[0], AZUL[1], AZUL[2]);
-    doc.rect(0, 0, W, 18, 'F');
-    doc.setTextColor(255, 255, 255); doc.setFontSize(14); doc.setFont('helvetica', 'bold');
-    doc.text('4.  Analisis y Recomendaciones', 12, 12);
-
-    // Top nodos críticos
-    var nodos = Object.keys(redSalud).map(function(k) {
-        return { codigo: k, nombre: redSalud[k].nombre, grado: Object.keys(adyacencia[k] || {}).length };
-    }).sort(function(a, b) { return b.grado - a.grado; });
-
-    doc.setTextColor(AZUL[0], AZUL[1], AZUL[2]); doc.setFontSize(11); doc.setFont('helvetica', 'bold');
-    doc.text('Top 5 Nodos Mas Conectados', 12, 32);
-    doc.setDrawColor(DORADO[0], DORADO[1], DORADO[2]); doc.line(12, 34, 198, 34);
-
-    doc.setFillColor(AZUL[0], AZUL[1], AZUL[2]);
-    doc.rect(12, 38, 186, 8, 'F');
-    doc.setTextColor(255, 255, 255); doc.setFontSize(9); doc.setFont('helvetica', 'bold');
-    doc.text('#', 16, 43);
-    doc.text('CODIGO', 25, 43);
-    doc.text('NOMBRE', 50, 43);
-    doc.text('CONEXIONES', 170, 43);
-
-    var ny = 46;
-    nodos.slice(0, 5).forEach(function(n, i) {
-        if (i % 2 === 1) { doc.setFillColor(250, 252, 255); doc.rect(12, ny, 186, 7, 'F'); }
-        doc.setTextColor(50, 50, 60); doc.setFontSize(9); doc.setFont('helvetica', 'normal');
-        doc.text(String(i+1), 17, ny + 5);
-        doc.setFont('helvetica', 'bold');
-        doc.text(n.codigo, 25, ny + 5);
+    nodosGrado.slice(0, 10).forEach(function(n, idx) {
+        if (idx % 2 === 1) { doc.setFillColor(248, 250, 252); doc.rect(14, y, 182, 8, 'F'); }
+        var gradoRatio = n.grado / (nodosGrado[0].grado || 1);
+        var color = gradoRatio > 0.7 ? ROJO : gradoRatio > 0.4 ? DORADO : VERDE;
+        doc.setFillColor(color[0], color[1], color[2]);
+        doc.rect(14, y + 2, 2, 4, 'F');
+        doc.setTextColor(50, 50, 60); doc.setFontSize(9);
+        doc.text(String(idx + 1), 20, y + 6);
+        doc.setFont('helvetica', 'bold'); doc.text(n.codigo, 28, y + 6);
         doc.setFont('helvetica', 'normal');
-        doc.text(n.nombre.substring(0, 55), 50, ny + 5);
+        doc.text(n.nombre.substring(0, 55), 55, y + 6);
         doc.setFont('helvetica', 'bold');
-        doc.setTextColor(DORADO[0], DORADO[1], DORADO[2]);
-        doc.text(String(n.grado), 180, ny + 5);
-        ny += 7;
+        doc.setTextColor(color[0], color[1], color[2]);
+        doc.text(String(n.grado), 178, y + 6);
+        y += 8;
     });
+    y += 5;
+    doc.setFillColor(240, 253, 244);
+    doc.roundedRect(14, y, 182, 20, 3, 3, 'F');
+    doc.setFillColor(VERDE[0], VERDE[1], VERDE[2]);
+    doc.rect(14, y, 2, 20, 'F');
+    doc.setTextColor(22, 101, 52); doc.setFontSize(9); doc.setFont('helvetica', 'bold');
+    doc.text('Observacion:', 20, y + 7);
+    doc.setFont('helvetica', 'normal');
+    doc.text('El nodo ' + nodosGrado[0].codigo + ' tiene ' + nodosGrado[0].grado + ' conexiones, siendo el mas critico.', 20, y + 14);
+    footer();
 
-    // Recomendaciones
-    doc.setTextColor(AZUL[0], AZUL[1], AZUL[2]); doc.setFontSize(11); doc.setFont('helvetica', 'bold');
-    doc.text('Recomendaciones Estrategicas', 12, ny + 15);
-    doc.setDrawColor(DORADO[0], DORADO[1], DORADO[2]); doc.line(12, ny + 17, 198, ny + 17);
-
-    var recos = [
-        'La red cuenta con ' + V + ' nodos distribuidos en ' + Object.keys(tipos).length + ' tipos de instalaciones.',
-        'El MST optimo tiene un costo total de ' + kTotal.toFixed(2) + ' ' + u3 + '.',
-        'La ruta mas economica entre ' + src + ' y ' + dst + ' es de ' + dCosto.toFixed(2) + ' ' + u3 + '.',
-        'Se recomienda priorizar el mantenimiento de los nodos con mayor grado de conexion.',
-        'La densidad de la red es del ' + (densidad * 100).toFixed(1) + '%, ' + (densidad > 0.3 ? 'lo que indica buena interconectividad.' : 'lo que sugiere ampliar conexiones.')
-    ];
-
-    var ry = ny + 25;
-    recos.forEach(function(r) {
+    // PAGINA 4: RUTAS
+    doc.addPage(); pagina++;
+    header('3. Analisis de Rutas');
+    y = 30;
+    y = tituloSec('Top 10 Rutas Mas Cortas', y);
+    doc.setFillColor(AZUL[0], AZUL[1], AZUL[2]);
+    doc.rect(14, y, 182, 8, 'F');
+    doc.setTextColor(255, 255, 255); doc.setFontSize(9); doc.setFont('helvetica', 'bold');
+    doc.text('#', 18, y + 5.5); doc.text('RUTA', 28, y + 5.5); doc.text('COSTO (' + u + ')', 155, y + 5.5);
+    y += 9;
+    doc.setFont('helvetica', 'normal');
+    aristas.slice(0, 10).forEach(function(a, idx) {
+        if (idx % 2 === 1) { doc.setFillColor(248, 250, 252); doc.rect(14, y, 182, 8, 'F'); }
         doc.setFillColor(VERDE[0], VERDE[1], VERDE[2]);
-        doc.circle(16, ry - 1, 1.2, 'F');
-        doc.setTextColor(50, 50, 60); doc.setFontSize(9); doc.setFont('helvetica', 'normal');
-        var lines = doc.splitTextToSize(r, 175);
-        doc.text(lines, 22, ry);
-        ry += lines.length * 5 + 3;
+        doc.rect(14, y + 2, 2, 4, 'F');
+        doc.setTextColor(50, 50, 60); doc.setFontSize(9);
+        doc.text(String(idx + 1), 20, y + 6);
+        doc.setFont('helvetica', 'bold'); doc.text(a.u, 28, y + 6);
+        doc.setFont('helvetica', 'normal'); doc.text(' -> ', 42, y + 6);
+        doc.setFont('helvetica', 'bold'); doc.text(a.v, 52, y + 6);
+        doc.setTextColor(VERDE[0], VERDE[1], VERDE[2]);
+        doc.text(a.w.toFixed(2), 168, y + 6);
+        y += 8;
     });
+    y += 8;
+    y = tituloSec('Top 5 Rutas Mas Largas', y);
+    doc.setFillColor(AZUL[0], AZUL[1], AZUL[2]);
+    doc.rect(14, y, 182, 8, 'F');
+    doc.setTextColor(255, 255, 255); doc.setFontSize(9); doc.setFont('helvetica', 'bold');
+    doc.text('#', 18, y + 5.5); doc.text('RUTA', 28, y + 5.5); doc.text('COSTO (' + u + ')', 155, y + 5.5);
+    y += 9;
+    doc.setFont('helvetica', 'normal');
+    aristas.slice(-5).reverse().forEach(function(a, idx) {
+        if (idx % 2 === 1) { doc.setFillColor(254, 242, 242); doc.rect(14, y, 182, 8, 'F'); }
+        doc.setFillColor(ROJO[0], ROJO[1], ROJO[2]);
+        doc.rect(14, y + 2, 2, 4, 'F');
+        doc.setTextColor(50, 50, 60); doc.setFontSize(9);
+        doc.text(String(idx + 1), 20, y + 6);
+        doc.setFont('helvetica', 'bold'); doc.text(a.u, 28, y + 6);
+        doc.setFont('helvetica', 'normal'); doc.text(' -> ', 42, y + 6);
+        doc.setFont('helvetica', 'bold'); doc.text(a.v, 52, y + 6);
+        doc.setTextColor(ROJO[0], ROJO[1], ROJO[2]);
+        doc.text(a.w.toFixed(2), 168, y + 6);
+        y += 8;
+    });
+    footer();
 
-    // Footer en cada página
-    for (var p = 2; p <= pagina; p++) {
-        doc.setPage(p);
-        doc.setDrawColor(220, 220, 220);
-        doc.setLineWidth(0.3);
-        doc.line(12, 285, 198, 285);
-        doc.setTextColor(150, 150, 150); doc.setFontSize(8);
-        doc.text('CEASS Bolivia  |  Red Sanitaria  |  ' + new Date().toLocaleDateString('es-BO'), 12, 290);
-        doc.text('Pagina ' + p + ' de ' + pagina, 198, 290, { align: 'right' });
+    // PAGINA 5: CONECTIVIDAD
+    doc.addPage(); pagina++;
+    header('4. Analisis de Conectividad');
+    y = 30;
+    doc.setFillColor(comps.length === 1 ? 240 : 254, comps.length === 1 ? 253 : 242, comps.length === 1 ? 244 : 242);
+    doc.roundedRect(14, y, 182, 25, 3, 3, 'F');
+    doc.setFillColor(comps.length === 1 ? VERDE[0] : ROJO[0], comps.length === 1 ? VERDE[1] : ROJO[1], comps.length === 1 ? VERDE[2] : ROJO[2]);
+    doc.rect(14, y, 2, 25, 'F');
+    doc.setTextColor(comps.length === 1 ? 22 : 153, comps.length === 1 ? 101 : 27, comps.length === 1 ? 52 : 27);
+    doc.setFontSize(11); doc.setFont('helvetica', 'bold');
+    doc.text(comps.length === 1 ? 'RED 100% CONECTADA' : 'RED FRAGMENTADA', 20, y + 10);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+    doc.text('Componentes conexas detectadas: ' + comps.length, 20, y + 18);
+    y += 32;
+    y = tituloSec('Detalle de Componentes', y);
+    comps.forEach(function(c, idx) {
+        if (y > 250) { doc.addPage(); pagina++; header('4. Analisis de Conectividad (cont.)'); y = 30; }
+        doc.setFillColor(240, 240, 250);
+        doc.roundedRect(14, y, 182, 14, 2, 2, 'F');
+        doc.setFillColor(AZUL[0], AZUL[1], AZUL[2]);
+        doc.rect(14, y, 2, 14, 'F');
+        doc.setTextColor(50, 60, 70); doc.setFontSize(9); doc.setFont('helvetica', 'bold');
+        doc.text('Componente ' + (idx + 1) + ' - ' + c.length + ' nodos', 20, y + 6);
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(8);
+        doc.text(c.slice(0, 25).join(', ') + (c.length > 25 ? '...' : ''), 20, y + 11);
+        y += 16;
+    });
+    var aislados = Object.keys(redSalud).filter(function(k) { return Object.keys(adyacencia[k] || {}).length === 0; });
+    y += 3;
+    y = tituloSec('Nodos Aislados', y);
+    if (aislados.length === 0) {
+        doc.setFillColor(240, 253, 244);
+        doc.roundedRect(14, y, 182, 10, 2, 2, 'F');
+        doc.setTextColor(22, 101, 52); doc.setFontSize(9); doc.setFont('helvetica', 'bold');
+        doc.text('Sin nodos aislados - todos conectados.', 20, y + 6.5);
+    } else {
+        doc.setTextColor(153, 27, 27); doc.setFontSize(9); doc.setFont('helvetica', 'bold');
+        doc.text('Nodos sin conexiones (' + aislados.length + '):', 14, y);
+        y += 6;
+        doc.setFont('helvetica', 'normal'); doc.setTextColor(50, 60, 70);
+        aislados.forEach(function(k) {
+            doc.setFillColor(254, 226, 226);
+            doc.roundedRect(14, y, 182, 8, 2, 2, 'F');
+            doc.text('• ' + k + ' - ' + redSalud[k].nombre, 20, y + 5.5);
+            y += 9;
+        });
     }
+    footer();
 
-    doc.save('Reporte_CEASS_' + new Date().toISOString().slice(0,10) + '.pdf');
-    mostrarToast('PDF profesional generado', 'success');
-    agregarAlHistorial('PDF exportado: ' + pagina + ' paginas', 'info');
+    // PAGINA 6: MST
+    doc.addPage(); pagina++;
+    header('5. Analisis MST (Kruskal vs Prim)');
+    y = 30;
+    var kEl = document.getElementById('kruskal-total');
+    var pEl = document.getElementById('prim-total');
+    var kTxt = kEl ? kEl.textContent : '--';
+    var pTxt = pEl ? pEl.textContent : '--';
+    doc.setFillColor(MORADO[0], MORADO[1], MORADO[2]);
+    doc.roundedRect(14, y, 90, 30, 3, 3, 'F');
+    doc.setTextColor(255, 255, 255); doc.setFontSize(9); doc.setFont('helvetica', 'bold');
+    doc.text('KRUSKAL', 20, y + 8);
+    doc.setFontSize(14);
+    doc.text(kTxt, 20, y + 22);
+    doc.setFillColor(ROJO[0], ROJO[1], ROJO[2]);
+    doc.roundedRect(106, y, 90, 30, 3, 3, 'F');
+    doc.setTextColor(255, 255, 255); doc.setFontSize(9); doc.setFont('helvetica', 'bold');
+    doc.text('PRIM', 112, y + 8);
+    doc.setFontSize(14);
+    doc.text(pTxt, 112, y + 22);
+    y += 38;
+    if (kTxt !== '--' && pTxt !== '--') {
+        var diff = Math.abs(parseFloat(kTxt) - parseFloat(pTxt));
+        doc.setFillColor(240, 253, 244);
+        doc.roundedRect(14, y, 182, 20, 3, 3, 'F');
+        doc.setFillColor(VERDE[0], VERDE[1], VERDE[2]);
+        doc.rect(14, y, 2, 20, 'F');
+        doc.setTextColor(22, 101, 52); doc.setFontSize(9); doc.setFont('helvetica', 'bold');
+        doc.text('CONCLUSION:', 20, y + 7);
+        doc.setFont('helvetica', 'normal');
+        if (diff < 0.01) doc.text('Ambos dan el mismo resultado. La red es optima.', 20, y + 14);
+        else doc.text('Diferencia: ' + diff.toFixed(2) + ' ' + u, 20, y + 14);
+    }
+    footer();
+
+    // PAGINA 7: CONCLUSIONES
+    doc.addPage(); pagina++;
+    header('6. Criterios y Conclusiones');
+    y = 30;
+    y = tituloSec('Criterios de Ponderacion', y);
+    var criterios = [
+        { n: 'TIEMPO', desc: 'Horas estimadas de recorrido', color: NARANJA },
+        { n: 'DISTANCIA', desc: 'Kilometros aproximados', color: AZUL },
+        { n: 'COSTO', desc: 'Costo estimado en Bolivianos', color: VERDE },
+        { n: 'RIESGO', desc: 'Nivel de riesgo (1-10)', color: ROJO }
+    ];
+    criterios.forEach(function(c) {
+        doc.setFillColor(248, 250, 252);
+        doc.roundedRect(14, y, 182, 12, 2, 2, 'F');
+        doc.setFillColor(c.color[0], c.color[1], c.color[2]);
+        doc.rect(14, y, 2, 12, 'F');
+        doc.setTextColor(50, 60, 70); doc.setFontSize(9); doc.setFont('helvetica', 'bold');
+        doc.text(c.n, 20, y + 5);
+        doc.setFont('helvetica', 'normal');
+        doc.text(c.desc, 20, y + 10);
+        y += 14;
+    });
+    y += 8;
+    y = tituloSec('Conclusiones', y);
+    var conclusiones = [
+        'La red cuenta con ' + V + ' nodos distribuidos en ' + Object.keys(tipos).length + ' tipos de instalaciones.',
+        'Densidad de la red: ' + (densidad * 100).toFixed(2) + '%.',
+        'Nodo mas critico: ' + nodosGrado[0].codigo + ' con ' + nodosGrado[0].grado + ' conexiones.',
+        comps.length === 1 ? 'Red totalmente conectada.' : 'Red fragmentada en ' + comps.length + ' componentes.',
+        'Criterio activo: ' + criterioActual.toUpperCase()
+    ];
+    conclusiones.forEach(function(c) {
+        if (y > 260) { doc.addPage(); pagina++; header('6. Criterios y Conclusiones (cont.)'); y = 30; }
+        doc.setFillColor(DORADO[0], DORADO[1], DORADO[2]);
+        doc.circle(18, y - 1, 1.2, 'F');
+        doc.setTextColor(50, 60, 70); doc.setFontSize(9.5); doc.setFont('helvetica', 'normal');
+        var lines = doc.splitTextToSize(c, 175);
+        doc.text(lines, 23, y);
+        y += lines.length * 5 + 4;
+    });
+    y += 10;
+    doc.setFillColor(26, 54, 93);
+    doc.roundedRect(14, y, 182, 25, 3, 3, 'F');
+    doc.setTextColor(255, 255, 255); doc.setFontSize(11); doc.setFont('helvetica', 'bold');
+    doc.text('FIN DEL INFORME TECNICO', W/2, y + 10, { align: 'center' });
+    doc.setFontSize(8); doc.setFont('helvetica', 'normal');
+    doc.setTextColor(251, 211, 141);
+    doc.text('CEASS Bolivia - Gestion 2024 - UPEA', W/2, y + 18, { align: 'center' });
+    footer();
+
+    doc.save('Informe_CEASS_' + new Date().toISOString().slice(0, 10) + '.pdf');
+    mostrarToast('Informe PDF generado: ' + pagina + ' paginas', 'success');
+    agregarAlHistorial('Informe PDF: ' + pagina + ' paginas', 'info');
 }
 
-// EDITOR
+function exportarPDF() {
+    if (!datosCargados) { mostrarToast('Cargue datos primero', 'warning'); return; }
+    var jsPDF = window.jspdf.jsPDF;
+    var doc = new jsPDF();
+    doc.setFillColor(26, 54, 93);
+    doc.rect(0, 0, 210, 297, 'F');
+    doc.setFillColor(214, 158, 46);
+    doc.circle(105, 70, 22, 'F');
+    doc.setTextColor(26, 54, 93);
+    doc.setFontSize(30);
+    doc.text('CEASS', 105, 78, { align: 'center' });
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(26);
+    doc.text('Red Sanitaria Bolivia', 105, 120, { align: 'center' });
+    doc.setFontSize(14);
+    doc.setTextColor(251, 211, 141);
+    doc.text('Reporte de Optimizacion Logistica', 105, 132, { align: 'center' });
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(10);
+    doc.text('Central de Abastecimiento y Suministros en Salud', 105, 145, { align: 'center' });
+    doc.setFontSize(11);
+    doc.setTextColor(200, 200, 200);
+    doc.text('Fecha: ' + new Date().toLocaleString('es-BO'), 105, 250, { align: 'center' });
+    doc.text('Criterio: ' + criterioActual.toUpperCase(), 105, 257, { align: 'center' });
+    doc.addPage();
+    var V = Object.keys(redSalud).length;
+    var E = Object.values(adyacencia).reduce(function(s, x) { return s + Object.keys(x).length; }, 0) / 2;
+    var densidad = (2 * E) / (V * (V - 1));
+    doc.setFillColor(26, 54, 93);
+    doc.rect(0, 0, 210, 20, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(14);
+    doc.text('1. Resumen de la Red', 12, 14);
+    doc.setTextColor(26, 54, 93);
+    var y = 35;
+    doc.setFillColor(240, 244, 248);
+    doc.rect(10, y - 6, 190, 80, 'F');
+    doc.setFontSize(11);
+    doc.text('Total de Nodos:', 15, y); doc.text(String(V), 90, y); y += 10;
+    doc.text('Total de Aristas:', 15, y); doc.text(String(E), 90, y); y += 10;
+    doc.text('Densidad:', 15, y); doc.text((densidad * 100).toFixed(1) + '%', 90, y); y += 10;
+    doc.text('Criterio activo:', 15, y); doc.text(criterioActual.toUpperCase(), 90, y); y += 10;
+    doc.text('Unidad:', 15, y); doc.text(getUnidad(), 90, y); y += 10;
+    var tipos = {};
+    Object.values(redSalud).forEach(function(n) { tipos[n.tipo] = (tipos[n.tipo] || 0) + 1; });
+    y += 5;
+    doc.setTextColor(214, 158, 46);
+    doc.text('Distribucion por tipo:', 15, y); y += 8;
+    doc.setTextColor(26, 54, 93);
+    doc.setFontSize(10);
+    Object.keys(tipos).forEach(function(t) { doc.text('- ' + t + ': ' + tipos[t], 20, y); y += 7; });
+    doc.save('reporte_ceass_' + Date.now() + '.pdf');
+    mostrarToast('PDF generado', 'success');
+    agregarAlHistorial('PDF exportado', 'info');
+}
+
+// ========== EDITOR ==========
 function toggleEditor() {
     editorAbierto = !editorAbierto;
     var panel = document.getElementById('editorPanel');
@@ -2429,9 +3236,7 @@ function toggleEditor() {
         actualizarSelectsEditor();
         renderizarListaNodos();
         renderizarListaAristas();
-    } else {
-        cerrarEditor();
-    }
+    } else { cerrarEditor(); }
 }
 
 function cerrarEditor() {
@@ -2464,7 +3269,7 @@ function edAgregarVertice() {
     var lat = parseFloat(document.getElementById('ed-v-lat').value);
     var lng = parseFloat(document.getElementById('ed-v-lng').value);
     if (!code || code.length < 2) { mostrarToast('Codigo obligatorio', 'error'); return; }
-    if (redSalud[code]) { mostrarToast('El codigo ya existe', 'error'); return; }
+    if (redSalud[code]) { mostrarToast('Codigo ya existe', 'error'); return; }
     if (!nombre) { mostrarToast('Nombre obligatorio', 'error'); return; }
     if (isNaN(lat) || isNaN(lng)) { mostrarToast('Coordenadas invalidas', 'error'); return; }
     redSalud[code] = {nombre:nombre, tipo:tipo, lat:lat, lng:lng};
@@ -2475,16 +3280,16 @@ function edAgregarVertice() {
     actualizarSelectsEditor();
     renderizarListaNodos();
     edLimpiarNodo();
+    guardarEnLocalStorage();
     mostrarToast('Nodo ' + code + ' agregado', 'success');
-    agregarAlHistorial('Nodo: ' + code + ' - ' + nombre, 'node');
+    agregarAlHistorial('Nodo: ' + code, 'node');
 }
 
 function edEliminarVertice() {
     var code = document.getElementById('ed-v-code').value.toUpperCase().trim();
-    if (!code || !redSalud[code]) { mostrarToast('Codigo no existe', 'error'); return; }
+    if (!code || !redSalud[code]) { mostrarToast('No existe', 'error'); return; }
     var grado = Object.keys(adyacencia[code] || {}).length;
-    if (!confirm('Eliminar ' + code + '?\n' + grado + ' aristas conectadas.')) return;
-    var nombre = redSalud[code].nombre;
+    if (!confirm('Eliminar ' + code + '?\n' + grado + ' aristas.')) return;
     delete redSalud[code];
     delete adyacencia[code];
     Object.keys(adyacencia).forEach(function(u) { delete adyacencia[u][code]; });
@@ -2494,15 +3299,12 @@ function edEliminarVertice() {
     renderizarListaNodos();
     renderizarListaAristas();
     edLimpiarNodo();
-    mostrarToast('Nodo ' + code + ' eliminado', 'warning');
-    agregarAlHistorial('Nodo eliminado: ' + code, 'delete');
+    guardarEnLocalStorage();
+    mostrarToast('Nodo eliminado', 'warning');
 }
 
 function edLimpiarNodo() {
-    ['ed-v-code', 'ed-v-nombre', 'ed-v-lat', 'ed-v-lng'].forEach(function(id) {
-        var el = document.getElementById(id);
-        if (el) el.value = '';
-    });
+    ['ed-v-code','ed-v-nombre','ed-v-lat','ed-v-lng'].forEach(function(id) { var el = document.getElementById(id); if (el) el.value = ''; });
     document.getElementById('ed-v-tipo').value = 'Hub CEASS';
     nodoSeleccionadoEd = null;
     document.querySelectorAll('#ed-lista-nodos .editor-lista-item').forEach(function(item) { item.classList.remove('selected'); });
@@ -2514,27 +3316,15 @@ function renderizarListaNodos() {
     if (!contenedor) return;
     var keys = Object.keys(redSalud);
     if (count) count.textContent = keys.length;
-    if (!keys.length) {
-        contenedor.innerHTML = '<div style="padding:20px;text-align:center;color:#8899aa;font-size:12px;">Sin nodos</div>';
-        return;
-    }
-    var scrollTop = contenedor.scrollTop;
+    if (!keys.length) { contenedor.innerHTML = '<div style="padding:20px;text-align:center;color:#8899aa;font-size:12px;">Sin nodos</div>'; return; }
     var html = '';
     for (var i = 0; i < keys.length; i++) {
         var k = keys[i];
         var n = redSalud[k];
         var sel = nodoSeleccionadoEd === k ? 'selected' : '';
-        html += '<div class="editor-lista-item ' + sel + '" data-codigo="' + k + '" onclick="seleccionarNodoEd(\'' + k + '\')">';
-        html += '<span class="item-codigo">' + k + '</span>';
-        html += '<span class="item-nombre">' + n.nombre + '</span>';
-        html += '</div>';
+        html += '<div class="editor-lista-item ' + sel + '" data-codigo="' + k + '" onclick="seleccionarNodoEd(\'' + k + '\')"><span class="item-codigo">' + k + '</span><span class="item-nombre">' + n.nombre + '</span></div>';
     }
     contenedor.innerHTML = html;
-    contenedor.scrollTop = scrollTop;
-    if (nodoSeleccionadoEd) {
-        var seleccionado = contenedor.querySelector('[data-codigo="' + nodoSeleccionadoEd + '"]');
-        if (seleccionado) seleccionado.scrollIntoView({ block: 'nearest' });
-    }
 }
 
 function seleccionarNodoEd(code) {
@@ -2546,14 +3336,9 @@ function seleccionarNodoEd(code) {
     document.getElementById('ed-v-tipo').value = n.tipo || 'Hub CEASS';
     document.getElementById('ed-v-lat').value = n.lat;
     document.getElementById('ed-v-lng').value = n.lng;
-    var items = document.querySelectorAll('#ed-lista-nodos .editor-lista-item');
-    items.forEach(function(item) {
-        if (item.dataset.codigo === code) {
-            item.classList.add('selected');
-            item.scrollIntoView({ block: 'nearest' });
-        } else {
-            item.classList.remove('selected');
-        }
+    document.querySelectorAll('#ed-lista-nodos .editor-lista-item').forEach(function(item) {
+        if (item.dataset.codigo === code) item.classList.add('selected');
+        else item.classList.remove('selected');
     });
     if (mapPrincipal) mapPrincipal.setView([n.lat, n.lng], 8);
     if (!editorAbierto) toggleEditor();
@@ -2578,7 +3363,7 @@ function edAgregarArista() {
     var d = document.getElementById('ed-a-destino').value;
     var p = parseFloat(document.getElementById('ed-a-peso').value);
     if (!o || !d) { mostrarToast('Selecciona origen y destino', 'error'); return; }
-    if (o === d) { mostrarToast('Origen y destino iguales', 'error'); return; }
+    if (o === d) { mostrarToast('Origen = destino', 'error'); return; }
     if (!redSalud[o] || !redSalud[d]) { mostrarToast('Nodo no existe', 'error'); return; }
     if (isNaN(p) || p <= 0) { mostrarToast('Peso invalido', 'error'); return; }
     if (adyacencia[o] && adyacencia[o][d]) { mostrarToast('Arista ya existe', 'error'); return; }
@@ -2588,15 +3373,15 @@ function edAgregarArista() {
     actualizarTodo();
     renderizarListaAristas();
     edLimpiarArista();
-    mostrarToast('Arista ' + o + ' - ' + d + ' agregada', 'success');
-    agregarAlHistorial('Arista: ' + o + ' - ' + d, 'edge');
+    guardarEnLocalStorage();
+    mostrarToast('Arista agregada', 'success');
 }
 
 function edEliminarArista() {
     var o = document.getElementById('ed-a-origen').value;
     var d = document.getElementById('ed-a-destino').value;
     if (!o || !d) { mostrarToast('Selecciona origen y destino', 'warning'); return; }
-    if (!adyacencia[o] || !adyacencia[o][d]) { mostrarToast('Arista no existe', 'error'); return; }
+    if (!adyacencia[o] || !adyacencia[o][d]) { mostrarToast('No existe', 'error'); return; }
     if (!confirm('Eliminar ' + o + ' - ' + d + '?')) return;
     delete adyacencia[o][d];
     delete adyacencia[d][o];
@@ -2604,8 +3389,8 @@ function edEliminarArista() {
     actualizarTodo();
     renderizarListaAristas();
     edLimpiarArista();
+    guardarEnLocalStorage();
     mostrarToast('Arista eliminada', 'warning');
-    agregarAlHistorial('Arista eliminada: ' + o + ' - ' + d, 'delete');
 }
 
 function edLimpiarArista() {
@@ -2626,18 +3411,13 @@ function renderizarListaAristas() {
         });
     });
     if (count) count.textContent = aristas.length;
-    if (!aristas.length) {
-        contenedor.innerHTML = '<div style="padding:20px;text-align:center;color:#8899aa;font-size:12px;">Sin aristas</div>';
-        return;
-    }
-    var scrollTop = contenedor.scrollTop;
+    if (!aristas.length) { contenedor.innerHTML = '<div style="padding:20px;text-align:center;color:#8899aa;font-size:12px;">Sin aristas</div>'; return; }
     var html = '';
     for (var i = 0; i < Math.min(100, aristas.length); i++) {
         var a = aristas[i];
         html += '<div class="editor-lista-item" onclick="seleccionarAristaEd(\'' + a.u + '\', \'' + a.v + '\')"><span class="item-codigo">' + a.u + '</span><span style="color:#d69e2e;font-weight:800;">-</span><span class="item-codigo">' + a.v + '</span><span class="item-nombre" style="text-align:right;">' + a.w.toFixed(2) + 'h</span></div>';
     }
     contenedor.innerHTML = html;
-    contenedor.scrollTop = scrollTop;
 }
 
 function seleccionarAristaEd(u, v) {
@@ -2646,7 +3426,6 @@ function seleccionarAristaEd(u, v) {
     document.getElementById('ed-a-peso').value = adyacencia[u][v];
 }
 
-// MODO MAPA (NUEVO DEL VERSION 5)
 function activarModoMapa() {
     modoAgregarNodoMapa = true;
     document.body.classList.add('modo-agregar-nodo');
@@ -2655,7 +3434,7 @@ function activarModoMapa() {
     document.getElementById('btnModoMapa').innerHTML = '<i class="fas fa-mouse-pointer"></i> Click en el mapa activo';
     document.getElementById('editorPanel').classList.remove('abierto');
     document.getElementById('editorOverlay').classList.remove('active');
-    mostrarToast('Haz click en el mapa para ubicar el nodo', 'info', 5000);
+    mostrarToast('Haz click en el mapa', 'info', 5000);
 }
 
 function cancelarModoMapa() {
@@ -2685,11 +3464,11 @@ function hookMapaClickAgregarNodo() {
         document.getElementById('ed-v-lng').value = lng;
         setTimeout(function() { document.getElementById('ed-v-code').focus(); }, 400);
         cancelarModoMapa();
-        mostrarToast('Coordenadas: ' + lat + ', ' + lng + '. Completa los datos.', 'info', 4000);
+        mostrarToast('Coordenadas: ' + lat + ', ' + lng, 'info', 4000);
     });
 }
 
-// INICIALIZACION
+// ========== INICIALIZACION ==========
 window.addEventListener('load', function() {
     initBackgroundAnimation();
     var bar = document.getElementById('splashBar');
@@ -2723,7 +3502,9 @@ window.addEventListener('load', function() {
                 });
             });
             setTimeout(function() {
-                cargarDatosPrueba();
+                if (!cargarDesdeLocalStorage()) {
+                    cargarDatosPrueba();
+                }
                 setTimeout(function() {
                     mostrarToast('Ctrl+E ejecutar | Ctrl+K editor | Ctrl+D datos', 'info', 5000);
                 }, 800);
