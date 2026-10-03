@@ -531,7 +531,16 @@ Con los datos de prueba (25 nodos, 68 aristas):
 
 ## 👥 Autores
 
-**Elias Quispe Quispe**
+** Porfirio Elias Quispe Quispe**
+-AÑAMURO CUSI LIDER JHOJAN
+ - HUANCA CLARES LESLY MELODY
+ - HUARACHI VILLCA VIDAL JUAN
+ - LIMACHI MAYDANA YHONNY
+ - MAMANI QUISPE CRISTIAN
+
+ - TITO HUANCA MARIANA HELEN
+ - YUJRA QUISPE SEYMI NOEMI
+
 - 🎓 Universidad Pública de El Alto (UPEA)
 - 💻 Ingeniería de Sistemas
 - 📚 6to Semestre
