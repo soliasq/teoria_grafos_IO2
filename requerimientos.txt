@@ -1,0 +1,262 @@
+# ============================================================
+#  REQUERIMIENTOS DEL PROYECTO
+#  Red Sanitaria Bolivia - CEASS
+#  Sistema web de optimización logística con Teoría de Grafos
+# ============================================================
+#
+#  Este proyecto es 100% FRONTEND (HTML + CSS + JavaScript).
+#  NO requiere instalación con pip, npm, ni ningún gestor de
+#  paquetes. Todas las dependencias se cargan vía CDN.
+#
+#  Solo necesitas un navegador moderno y conexión a internet
+#  (para las librerías externas y los mapas).
+#
+# ============================================================
+#  1. REQUISITOS DEL SISTEMA
+# ============================================================
+#
+#  SISTEMA OPERATIVO:
+#    - Windows 10/11
+#    - macOS 10.15+
+#    - Linux (Ubuntu 20.04+, Debian, Fedora, etc.)
+#
+#  NAVEGADOR WEB (uno de los siguientes):
+#    - Google Chrome 90 o superior
+#    - Mozilla Firefox 88 o superior
+#    - Microsoft Edge 90 o superior
+#    - Safari 14 o superior
+#    - Opera 76 o superior
+#
+#  CONEXIÓN A INTERNET:
+#    - Requerida (para cargar CDNs y tiles de mapas)
+#    - Mínimo: 1 Mbps
+#    - Recomendado: 5 Mbps
+#
+#  RESOLUCIÓN DE PANTALLA:
+#    - Mínimo: 1280 x 720 px
+#    - Recomendado: 1920 x 1080 px
+#
+#  MEMORIA RAM:
+#    - Mínimo: 2 GB
+#    - Recomendado: 4 GB
+#
+# ============================================================
+#  2. LIBRERÍAS EXTERNAS (VIA CDN)
+# ============================================================
+#
+#  Todas las librerías se cargan automáticamente desde CDN
+#  al abrir el index.html. NO requieren instalación.
+#
+# ------------------------------------------------------------
+#  LEAFLEF.JS - v1.9.4
+# ------------------------------------------------------------
+#  URL CSS: https://unpkg.com/leaflet@1.9.4/dist/leaflet.css
+#  URL JS:  https://unpkg.com/leaflet@1.9.4/dist/leaflet.js
+#  Uso:     Mapa interactivo, marcadores, polilíneas
+#  Licencia: BSD-2-Clause
+#  Sitio:   https://leafletjs.com/
+#
+# ------------------------------------------------------------
+#  CHART.JS - Latest
+# ------------------------------------------------------------
+#  URL JS:  https://cdn.jsdelivr.net/npm/chart.js
+#  Uso:     Gráfico comparativo de algoritmos
+#  Licencia: MIT
+#  Sitio:   https://www.chartjs.org/
+#
+# ------------------------------------------------------------
+#  FONT AWESOME - v6.5.1
+# ------------------------------------------------------------
+#  URL CSS: https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css
+#  Uso:     Iconografía (hospitales, rutas, botones)
+#  Licencia: CC BY 4.0 / SIL OFL 1.1 / MIT
+#  Sitio:   https://fontawesome.com/
+#
+# ------------------------------------------------------------
+#  HTML2CANVAS - v1.4.1
+# ------------------------------------------------------------
+#  URL JS:  https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js
+#  Uso:     Exportar el mapa como imagen PNG
+#  Licencia: MIT
+#  Sitio:   https://html2canvas.hertzen.com/
+#
+# ------------------------------------------------------------
+#  JSPDF - v2.5.1
+# ------------------------------------------------------------
+#  URL JS:  https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js
+#  Uso:     Generar reportes PDF
+#  Licencia: MIT
+#  Sitio:   https://parall.ax/products/jspdf
+#
+# ------------------------------------------------------------
+#  GOOGLE FONTS - Inter
+# ------------------------------------------------------------
+#  URL CSS: https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap
+#  Uso:     Tipografía moderna en todo el sistema
+#  Licencia: SIL Open Font License 1.1
+#  Sitio:   https://fonts.google.com/specimen/Inter
+#
+# ------------------------------------------------------------
+#  OPENSTREETMAP TILES
+# ------------------------------------------------------------
+#  URL:     https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png
+#  Uso:     Tiles base del mapa (vista calles)
+#  Licencia: ODbL (Open Database License)
+#  Sitio:   https://www.openstreetmap.org/
+#
+# ------------------------------------------------------------
+#  ARCGIS WORLD IMAGERY (Esri)
+# ------------------------------------------------------------
+#  URL:     https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}
+#  Uso:     Tiles de satélite
+#  Licencia: Esri Terms of Use
+#  Sitio:   https://www.arcgis.com/
+#
+# ------------------------------------------------------------
+#  OPENTOPOMAP
+# ------------------------------------------------------------
+#  URL:     https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png
+#  Uso:     Tiles de terreno/topografía
+#  Licencia: CC-BY-SA 3.0
+#  Sitio:   https://opentopomap.org/
+#
+# ============================================================
+#  3. DEPENDENCIAS DE DESARROLLO (OPCIONALES)
+# ============================================================
+#
+#  Solo si deseas modificar o extender el proyecto:
+#
+# ------------------------------------------------------------
+#  GIT - Control de versiones
+# ------------------------------------------------------------
+#  Uso:     Clonar repo, hacer commits, push a GitHub
+#  Instalación:
+#    - Windows: https://git-scm.com/download/win
+#    - macOS:   brew install git
+#    - Linux:   sudo apt install git
+#
+# ------------------------------------------------------------
+#  EDITOR DE CÓDIGO (uno de los siguientes)
+# ------------------------------------------------------------
+#  - Visual Studio Code (RECOMENDADO)
+#      https://code.visualstudio.com/
+#      Extensiones útiles:
+#        - Live Server (ritwickdey.LiveServer)
+#        - Prettier (esbenp.prettier-vscode)
+#        - HTML CSS Support (ecmel.vscode-html-css)
+#
+#  - Sublime Text
+#      https://www.sublimetext.com/
+#
+#  - Atom (descontinuado pero funcional)
+#      https://atom.io/
+#
+#  - Notepad++ (Windows)
+#      https://notepad-plus-plus.org/
+#
+# ------------------------------------------------------------
+#  NODE.JS - Para correr las pruebas
+# ------------------------------------------------------------
+#  Versión: 14.x o superior
+#  Uso:     Ejecutar pruebas/test_algoritmos.js
+#  Instalación:
+#    - Windows/macOS: https://nodejs.org/
+#    - Linux: sudo apt install nodejs npm
+#  Comando: node pruebas/test_algoritmos.js
+#
+# ------------------------------------------------------------
+#  PYTHON - Para servidor local (opcional)
+# ------------------------------------------------------------
+#  Versión: 3.8 o superior
+#  Uso:     Servir el proyecto en localhost
+#  Comando:
+#    cd proyecto_grafos
+#    python -m http.server 8000
+#  Abrir: http://localhost:8000/app/index.html
+#
+# ============================================================
+#  4. INSTALACIÓN PASO A PASO
+# ============================================================
+#
+#  OPCIÓN A — USO DIRECTO (SIN INSTALAR NADA)
+#  -------------------------------------------
+#  1. Descarga el proyecto (ZIP o git clone)
+#  2. Descomprime si es necesario
+#  3. Abre app/index.html en tu navegador
+#  4. ¡Listo! No necesitas instalar nada
+#
+#  OPCIÓN B — SERVIDOR LOCAL CON PYTHON
+#  -------------------------------------------
+#  1. Instala Python 3.8+
+#  2. Abre una terminal en la carpeta del proyecto
+#  3. Ejecuta:
+#       python -m http.server 8000
+#  4. Abre: http://localhost:8000/app/index.html
+#
+#  OPCIÓN C — LIVE SERVER EN VSCODE
+#  -------------------------------------------
+#  1. Instala Visual Studio Code
+#  2. Instala la extensión "Live Server"
+#  3. Abre app/index.html en VSCode
+#  4. Click derecho → "Open with Live Server"
+#
+# ============================================================
+#  5. VERIFICACIÓN DE INSTALACIÓN
+# ============================================================
+#
+#  Abre app/index.html y verifica:
+#    ✅ El mapa se carga correctamente
+#    ✅ El panel de ponderación aparece
+#    ✅ Los botones funcionan
+#    ✅ Al presionar "Datos Prueba" cargan 25 nodos
+#    ✅ Al presionar "Ejecutar" se ejecuta el algoritmo
+#
+# ============================================================
+#  6. NOTAS IMPORTANTES
+# ============================================================
+#
+#  🔸 Este proyecto NO usa backend (servidor, base de datos).
+#  🔸 Todos los datos se procesan en el navegador.
+#  🔸 Los CSV son la única fuente externa de datos.
+#  🔸 El mapa requiere conexión a internet (tiles).
+#  🔸 Las librerías requieren conexión para cargar la 1ra vez.
+#
+#  🔸 Si no hay internet:
+#      - El mapa NO cargará los tiles
+#      - Las librerías NO cargarán
+#      - El sistema mostrará errores
+#      - Solución: Conectar a internet
+#
+# ============================================================
+#  7. COMPATIBILIDAD
+# ============================================================
+#
+#  SISTEMA            | NAVEGADOR      | ESTADO
+#  -------------------|----------------|----------
+#  Windows 10/11      | Chrome 90+     | ✅ Soporta
+#  Windows 10/11      | Edge 90+       | ✅ Soporta
+#  Windows 10/11      | Firefox 88+    | ✅ Soporta
+#  macOS 10.15+       | Safari 14+     | ✅ Soporta
+#  macOS 10.15+       | Chrome 90+     | ✅ Soporta
+#  Ubuntu 20.04+      | Firefox 88+    | ✅ Soporta
+#  Ubuntu 20.04+      | Chrome 90+     | ✅ Soporta
+#  Android 10+        | Chrome Mobile  | ✅ Soporta
+#  iOS 14+            | Safari Mobile  | ✅ Soporta
+#  Tablet/iPad        | Cualquiera     | ✅ Soporta
+#
+# ============================================================
+#  8. AUTOR
+# ============================================================
+#
+#  Nombre:    Elias Quispe Quispe
+#  Carrera:   Ingeniería de Sistemas
+#  Semestre:  6to Semestre
+#  Materia:   Investigación Operativa II
+#  Docente:   M.Sc. Ing. Juan Carlos Catunta Choquecalle
+#  UPEA:      Universidad Pública de El Alto
+#  Año:       2026
+#  GitHub:    https://github.com/soliasq
+#
+# ============================================================
+#  FIN DEL ARCHIVO
+# ============================================================
